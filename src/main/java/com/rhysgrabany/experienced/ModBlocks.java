@@ -19,11 +19,6 @@ public class ModBlocks {
 
     public static final Map<ExperienceBlock.Tier, RegistryObject<Block>> EXPERIENCE_BLOCKS = new EnumMap<>(ExperienceBlock.Tier.class);
 
-//    public static final RegistryObject<Block> EXPERIENCE_BLOCK_SMALL;
-//    public static final RegistryObject<Block> EXPERIENCE_BLOCK_MEDIUM;
-//    public static final RegistryObject<Block> EXPERIENCE_BLOCK_LARGE;
-//    public static final RegistryObject<Block> EXPERIENCE_BLOCK_CREATIVE;
-
 
     static{
 
@@ -31,12 +26,6 @@ public class ModBlocks {
             EXPERIENCE_BLOCKS.put(tier, BLOCKS.register("experience_block_" + tier.getName(),
                     () -> new ExperienceBlock(ExperienceBlock.Tier.valueOf(tier.name()))));
         }
-
-
-//        EXPERIENCE_BLOCK_SMALL = BLOCKS.register("experience_block_small", ()-> new ExperienceBlock(ExperienceBlock.Tier.SMALL));
-//        EXPERIENCE_BLOCK_MEDIUM = BLOCKS.register("experience_block_medium", ()-> new ExperienceBlock(ExperienceBlock.Tier.MEDIUM));
-//        EXPERIENCE_BLOCK_LARGE = BLOCKS.register("experience_block_large", ()-> new ExperienceBlock(ExperienceBlock.Tier.LARGE));
-//        EXPERIENCE_BLOCK_CREATIVE = BLOCKS.register("experience_block_creative", ()-> new ExperienceBlock(ExperienceBlock.Tier.CREATIVE));
     }
 
 

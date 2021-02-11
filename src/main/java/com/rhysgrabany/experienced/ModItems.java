@@ -24,19 +24,13 @@ public class ModItems {
     public static final RegistryObject<Item> EXPERIENCE_BOOK;
 
     static{
-        EXPERIENCE_BOOK = ITEMS.register("experience_book", ExperienceBookItem::new);
+        EXPERIENCE_BOOK = Registration.ITEMS.register("experience_book", ExperienceBookItem::new);
 
 
         for(RegistryObject<Block> block_tier : ModBlocks.EXPERIENCE_BLOCKS.values()){
             registerBlockItemFor(block_tier);
 
         }
-
-
-//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_SMALL);
-//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_MEDIUM);
-//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_LARGE);
-//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_CREATIVE);
     }
 
     public static void register(){
