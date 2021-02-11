@@ -1,5 +1,6 @@
 package com.rhysgrabany.experienced;
 
+import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.item.BaseBlockItem;
 import com.rhysgrabany.experienced.item.ExperienceBookItem;
@@ -24,7 +25,18 @@ public class ModItems {
 
     static{
         EXPERIENCE_BOOK = ITEMS.register("experience_book", ExperienceBookItem::new);
-        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK);
+
+
+        for(RegistryObject<Block> block_tier : ModBlocks.EXPERIENCE_BLOCKS.values()){
+            registerBlockItemFor(block_tier);
+
+        }
+
+
+//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_SMALL);
+//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_MEDIUM);
+//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_LARGE);
+//        registerBlockItemFor(ModBlocks.EXPERIENCE_BLOCK_CREATIVE);
     }
 
     public static void register(){
