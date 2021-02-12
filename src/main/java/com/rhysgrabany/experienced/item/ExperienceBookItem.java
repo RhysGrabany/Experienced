@@ -1,12 +1,17 @@
 package com.rhysgrabany.experienced.item;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
 public class ExperienceBookItem extends Item {
 
     public ExperienceBookItem() {
-        super(new Properties().maxStackSize(1));
+        super(new Properties().maxStackSize(1).group(ItemGroup.MISC));
     }
 
     @Override
@@ -14,4 +19,8 @@ public class ExperienceBookItem extends Item {
         return true;
     }
 
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
 }
