@@ -25,7 +25,7 @@ public class ModTags {
     }
 
     public static final class Items{
-        public static final ITag.INamedTag<Item> EXPERIENCE_BOOK = forge("books/experience");
+        public static final ITag.INamedTag<Item> EXPERIENCE_BOOK = forge("misc");
 
 
 

@@ -14,19 +14,17 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class DataGenerators {
 
-
     private DataGenerators(){}
-
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event){
 
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper eFileHelper = event.getExistingFileHelper();
-        //ModBlockTagsProvider blockTags = new ModBlockTagsProvider(gen, eFileHelper);
+        ModBlockTagsProvider blockTags = new ModBlockTagsProvider(generator, eFileHelper);
 
 //        generator.addProvider(new ModBlockTagsProvider(generator, eFileHelper));
-//        generator.addProvider(new ModItemTagsProvider(generator, eFileHelper));
+        generator.addProvider(new ModItemTagsProvider(generator, blockTags, eFileHelper));
 //
 //        generator.addProvider(new ModLootTables(generator));
         generator.addProvider(new ModRecipesProvider(generator));

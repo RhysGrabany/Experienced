@@ -6,6 +6,7 @@ import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.item.ExperienceBookItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -16,6 +17,7 @@ public class Registration {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
+    public static final DeferredRegister<IRecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MOD_ID);
 
 
     public static void register(){
@@ -24,9 +26,12 @@ public class Registration {
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        RECIPES.register(modEventBus);
 
         ModItems.register();
         ModBlocks.register();
+        ModRecipes.register();
+
 
 
 
