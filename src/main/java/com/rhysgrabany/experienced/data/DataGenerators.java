@@ -29,10 +29,10 @@ public final class DataGenerators {
 //        generator.addProvider(new ModItemTagsProvider(generator, eFileHelper));
 //
 //        generator.addProvider(new ModLootTables(generator));
-//        generator.addProvider(new ModRecipesProvider(generator));
+        generator.addProvider(new ModRecipesProvider(generator));
 //
 //        generator.addProvider(new ModBlockStateProvider(generator, eFileHelper));
-//        generator.addProvider(new ModItemModelProvider(generator, eFileHelper));
+        generator.addProvider(new ModItemModelProvider(generator, eFileHelper));
 
 
 

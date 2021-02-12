@@ -11,12 +11,19 @@ import net.minecraft.world.World;
 public class ExperienceBookItem extends Item {
 
     public ExperienceBookItem() {
-        super(new Properties().maxStackSize(1).group(ItemGroup.MISC));
+        super(new Properties()
+                .maxStackSize(1)
+                .group(ItemGroup.MISC));
     }
 
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return 0;
     }
 
     @Override
