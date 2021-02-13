@@ -1,5 +1,7 @@
 package com.rhysgrabany.experienced.item;
 
+import com.rhysgrabany.experienced.ModItems;
+import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +39,7 @@ public class ExperienceBookItem extends Item {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        return 1; // TODO:1 = drained, 0 = full; lmao what try and find a way to do this right
+        return 1 / (currentStoredExp + 1); // TODO:1 = drained, 0 = full; lmao what try and find a way to do this right
     }
 
 
@@ -45,36 +47,29 @@ public class ExperienceBookItem extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
-        ItemStack stack = playerIn.getHeldItem(handIn).getStack();
+        ItemStack stack = playerIn.getHeldItem(Hand.MAIN_HAND).getStack();
+
+        currentStoredExp = stack.getOrCreateTag().getInt("exp");
 
 
-        if((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND){
+
+        if((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND && currentStoredExp < MAX_EXP){
             int expTotal = ExperienceHelper.playerTotalExp(playerIn);
 
-            int expToStore = (expTotal < MAX_EXP) ? expTotal : MAX_EXP;
+            int expToStore = (expTotal < (MAX_EXP - currentStoredExp)) ? expTotal : (MAX_EXP - currentStoredExp);
 
             //TODO: not the way to remove exp from the player app
-            EnchantingTableBlock
             playerIn.experienceTotal -= expToStore;
 
-            stack.setTag(new CompoundNBT());
-
-            //TODO: Get int, add to int, put int back
+            expToStore += currentStoredExp;
             stack.getTag().putInt("exp", expToStore);
 
-
+            return new ActionResult<>(ActionResultType.SUCCESS, stack);
 
 
 
 
         }
-
-
-
-
-
-
-
 
 
 
