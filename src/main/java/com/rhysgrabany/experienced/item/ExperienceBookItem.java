@@ -46,19 +46,16 @@ public class ExperienceBookItem extends Item {
 
         ItemStack stack = playerIn.getHeldItem(Hand.MAIN_HAND).getStack();
 
+        // Get the stored exp from the book, or create the tag when it doesnt exist
         currentStoredExp = stack.getOrCreateTag().getInt("exp");
-        //int expLevel = ExperienceHelper.playerTotalExp(playerIn);
         int expLevel = playerIn.experienceTotal;
 
-
+        // Giving exp to the book
         if ((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND && currentStoredExp < MAX_EXP) {
 
             int expToStore = (expLevel < (MAX_EXP - currentStoredExp)) ? expLevel : (MAX_EXP - currentStoredExp);
 
-            //TODO: not the way to remove exp from the player app
             playerIn.giveExperiencePoints(-expToStore);
-            //playerIn.addExperienceLevel(-1);
-            //playerIn.experienceTotal -= expToStore;
 
             expToStore += currentStoredExp;
             stack.getTag().putInt("exp", expToStore);
@@ -66,23 +63,23 @@ public class ExperienceBookItem extends Item {
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
 
-
+        // Taking exp from the book
         if(playerIn.isSneaking() && handIn == Hand.MAIN_HAND && currentStoredExp > 0){
             int expToTake = ExperienceHelper.recieveExpToNextLevel(playerIn.experienceLevel);
 
+            // This is mostly for the dregs in the book that needs to be removed
+            if(expToTake > currentStoredExp && currentStoredExp > 0){
+                expToTake = currentStoredExp;
+            }
 
+            // Give the exp to the player and update the amount in the book
             playerIn.giveExperiencePoints(expToTake);
 
             int expStored = currentStoredExp - expToTake;
             stack.getTag().putInt("exp", expStored);
 
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
-
         }
-
-
-
-
 
         return new ActionResult<>(ActionResultType.PASS, stack);
     }
