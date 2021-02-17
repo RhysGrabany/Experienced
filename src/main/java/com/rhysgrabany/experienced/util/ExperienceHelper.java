@@ -20,5 +20,14 @@ public class ExperienceHelper {
         return (int)(4.5 * (level*level) - 162.5 * level + 2220);
     }
 
+    public static int recieveExpToNextLevel(int level){
+
+        if(level >= 0 && level < 16) return 2 * level + 7;
+        else if(level >= 16 && level < 31) return 5 * level - 38;
+        return 9 * level - 158;
+
+
+    }
+
 
 }
