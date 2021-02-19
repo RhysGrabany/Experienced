@@ -1,5 +1,6 @@
 package com.rhysgrabany.experienced.data.client;
 
+import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.config.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -16,11 +17,14 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+
+        for(ExperienceBlock.Tier tier : ExperienceBlock.Tier.values()){
+            withExistingParent("experience_block_" + tier.getName(), modLoc("block/experience_block_" + tier.getName()));
+        }
+
         ModelFile itemGen = getExistingFile(mcLoc("item/generated"));
 
         builder(itemGen, "experience_book");
-
-
     }
 
     private ItemModelBuilder builder(ModelFile itemGen, String name){
