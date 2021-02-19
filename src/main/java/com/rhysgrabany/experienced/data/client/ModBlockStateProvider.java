@@ -17,11 +17,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
 
-        simpleBlock(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get());
-        simpleBlock(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get());
-        simpleBlock(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.LARGE).get());
-        simpleBlock(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.LARGE).get());
-
+        for(ExperienceBlock.Tier tier : ExperienceBlock.Tier.values()){
+            simpleBlock(ModBlocks.EXPERIENCE_BLOCKS.get(tier).get());
+        }
     }
 
 
