@@ -8,7 +8,7 @@ public class ExperienceBlock extends Block {
 
     // The tiers of the experience block, this makes it easy to register the blocks and all that sort of stuff
     public static Tier BLOCK_TIER;
-    
+
     // Max Exp a block can hold
     private final int MAX_EXP;
 
