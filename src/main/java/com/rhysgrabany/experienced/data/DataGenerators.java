@@ -3,7 +3,7 @@ package com.rhysgrabany.experienced.data;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.data.client.ModBlockStateProvider;
 import com.rhysgrabany.experienced.data.client.ModItemModelProvider;
-import com.rhysgrabany.experienced.data.loot.ModLootTables;
+import com.rhysgrabany.experienced.data.loot.ModLootTablesProvider;
 import com.rhysgrabany.experienced.data.recipe.ModRecipesProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -11,6 +11,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 
+
+// Data Gen class that deals with the providers for different Mod Generators
+// This makes it easier to edit in the future
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class DataGenerators {
 
@@ -26,7 +29,7 @@ public final class DataGenerators {
 //        generator.addProvider(new ModBlockTagsProvider(generator, eFileHelper));
         generator.addProvider(new ModItemTagsProvider(generator, blockTags, eFileHelper));
 
-        generator.addProvider(new ModLootTables(generator));
+        generator.addProvider(new ModLootTablesProvider(generator));
         generator.addProvider(new ModRecipesProvider(generator));
 
         generator.addProvider(new ModBlockStateProvider(generator, eFileHelper));

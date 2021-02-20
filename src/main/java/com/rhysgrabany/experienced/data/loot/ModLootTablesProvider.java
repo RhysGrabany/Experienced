@@ -13,9 +13,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ModLootTables extends LootTableProvider {
+// Provider for DataGen based on the loot tables in the mod; use ModBlockLootTable for their drops
+public class ModLootTablesProvider extends LootTableProvider {
 
-    public ModLootTables(DataGenerator dataGeneratorIn) {
+    public ModLootTablesProvider(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
     }
 

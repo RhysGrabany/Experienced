@@ -9,11 +9,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Collectors;
 
+// Class that deals with the loot tables for blocks; what they drop when destroyed
 public class ModBlockLootTable extends BlockLootTables {
 
     @Override
     protected void addTables() {
 
+        //Each ExpBlock drops itself when broken
         for(ExperienceBlock.Tier tier : ExperienceBlock.Tier.values()){
             registerDropSelfLootTable(ModBlocks.EXPERIENCE_BLOCKS.get(tier).get());
         }
