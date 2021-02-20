@@ -29,6 +29,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModelFile itemGen = getExistingFile(mcLoc("item/generated"));
 
         builder(itemGen, "experience_book");
+        builder(itemGen, "experience_block_casing");
     }
 
     // This is used to point to a texture for an item and links it

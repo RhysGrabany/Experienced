@@ -3,6 +3,7 @@ package com.rhysgrabany.experienced;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.item.BaseBlockItem;
+import com.rhysgrabany.experienced.item.ExperienceBlockCasingItem;
 import com.rhysgrabany.experienced.item.ExperienceBookItem;
 import com.rhysgrabany.experienced.setup.Registration;
 import net.minecraft.block.Block;
@@ -23,9 +24,11 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
     public static final RegistryObject<Item> EXPERIENCE_BOOK;
+    public static final RegistryObject<Item> EXPERIENCE_BLOCK_CASING;
 
     static{
         EXPERIENCE_BOOK = Registration.ITEMS.register("experience_book", ExperienceBookItem::new);
+        EXPERIENCE_BLOCK_CASING = Registration.ITEMS.register("experience_block_casing", ExperienceBlockCasingItem::new);
 
         // All the blocks need their item equivalent otherwise loot tables wont work
         // A for each loop is great when used with Tier
@@ -37,7 +40,6 @@ public class ModItems {
 
     public static void register(){
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-
     }
 
     // Method used to register the BlockItem of each block, without this then there'd be no block drops

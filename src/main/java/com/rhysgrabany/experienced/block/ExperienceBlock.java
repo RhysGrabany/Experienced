@@ -32,7 +32,9 @@ public class ExperienceBlock extends Block {
 
 
     public ExperienceBlock(Tier tier) {
-        super(AbstractBlock.Properties.create(Material.ROCK)
+        super(AbstractBlock
+                .Properties
+                .create(Material.ROCK)
                 .harvestLevel(2));
         BLOCK_TIER = tier;
         MAX_EXP = initMaxValue(tier);
