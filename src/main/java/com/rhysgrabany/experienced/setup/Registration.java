@@ -13,6 +13,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+// This is the class that deals with the registration of different parts of the mod
+// Blocks, Items, Recipes, Tiles, etc etc
 public class Registration {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
@@ -24,10 +26,12 @@ public class Registration {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        // The deferred registries are registered before the registry objects are registered
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         RECIPES.register(modEventBus);
 
+        // Registry objects are registered
         ModItems.register();
         ModBlocks.register();
         ModRecipes.register();

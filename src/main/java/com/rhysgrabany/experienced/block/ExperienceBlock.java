@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 
 public class ExperienceBlock extends Block {
 
+    // The tiers of the experience block, this makes it easy to register the blocks and all that sort of stuff
     public static Tier BLOCK_TIER;
 
     public enum Tier {
@@ -29,7 +30,7 @@ public class ExperienceBlock extends Block {
 
     public ExperienceBlock(Tier tier) {
         super(AbstractBlock.Properties.create(Material.ROCK)
-                .harvestLevel(0));
+                .harvestLevel(2));
         BLOCK_TIER = tier;
     }
 

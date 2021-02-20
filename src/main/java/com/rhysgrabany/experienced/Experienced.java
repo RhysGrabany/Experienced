@@ -30,7 +30,6 @@ public class Experienced
 
     public Experienced() {
 
-
         Registration.register();
 
         // Register ourselves for server and other game events we are interested in

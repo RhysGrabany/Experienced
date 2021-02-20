@@ -8,6 +8,7 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
+// Item and Block Tags can be combined into their own central class
 public class ModTags {
 
     public static final class Blocks{

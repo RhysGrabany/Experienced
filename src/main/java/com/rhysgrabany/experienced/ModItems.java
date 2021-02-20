@@ -15,6 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+// Class that registers the items, and block items, of the mod
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
 
@@ -26,7 +27,8 @@ public class ModItems {
     static{
         EXPERIENCE_BOOK = Registration.ITEMS.register("experience_book", ExperienceBookItem::new);
 
-
+        // All the blocks need their item equivalent otherwise loot tables wont work
+        // A for each loop is great when used with Tier
         for(RegistryObject<Block> block_tier : ModBlocks.EXPERIENCE_BLOCKS.values()){
             registerBlockItemFor(block_tier);
 
@@ -38,6 +40,7 @@ public class ModItems {
 
     }
 
+    // Method used to register the BlockItem of each block, without this then there'd be no block drops
     private static <T extends Block> RegistryObject<BlockItem> registerBlockItemFor(RegistryObject<T> block){
         return ITEMS.register(block.getId().getPath(), ()-> new BaseBlockItem(block.get(), new Item.Properties().group(ItemGroup.MISC)));
     }

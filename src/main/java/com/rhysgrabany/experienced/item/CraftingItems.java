@@ -15,6 +15,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import javax.annotation.Nullable;
 import java.util.List;
 
+
+//TODO: I dont know what this does again
 public enum CraftingItems implements IItemProvider {
 
     EXPERIENCE_BOOK;

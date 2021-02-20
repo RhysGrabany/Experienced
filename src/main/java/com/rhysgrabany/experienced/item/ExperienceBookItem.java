@@ -18,6 +18,7 @@ import com.rhysgrabany.experienced.util.ExperienceHelper;
 
 import java.util.ArrayList;
 
+// This is the default ExperienceBook class
 public class ExperienceBookItem extends Item {
 
     public static final int MAX_EXP = 315;
@@ -29,18 +30,20 @@ public class ExperienceBookItem extends Item {
                 .group(ItemGroup.MISC));
     }
 
+    // This is needed to actually show the bar
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
         return true;
     }
 
+    // This is used for the progress bar for how much exp is in the Book
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         return 1 - (currentStoredExp / MAX_EXP); // TODO:1 = drained, 0 = full; lmao what try and find a way to do this right
     }
 
 
-
+    // What happens when you right click while using the item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
@@ -50,11 +53,15 @@ public class ExperienceBookItem extends Item {
         currentStoredExp = stack.getOrCreateTag().getInt("exp");
         int expLevel = playerIn.experienceTotal;
 
-        // Giving exp to the book
+        // Giving exp to the book while the player is standing upright
+        // TODO: Change this from ALL EXP AT ONCE to something like a level at time
         if ((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND && currentStoredExp < MAX_EXP) {
 
+            // Get all exp if it can fit, otherwise just put as much as you can
+            // TODO: This might not work so check it out for >15 exp level
             int expToStore = (expLevel < (MAX_EXP - currentStoredExp)) ? expLevel : (MAX_EXP - currentStoredExp);
 
+            // Take the exp away from the player, this updates the exp bar aswell
             playerIn.giveExperiencePoints(-expToStore);
 
             expToStore += currentStoredExp;
@@ -63,7 +70,7 @@ public class ExperienceBookItem extends Item {
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
 
-        // Taking exp from the book
+        // Taking exp from the book when the player is sneaking, and there is exp in the book
         if(playerIn.isSneaking() && handIn == Hand.MAIN_HAND && currentStoredExp > 0){
             int expToTake = ExperienceHelper.recieveExpToNextLevel(playerIn.experienceLevel);
 
@@ -81,6 +88,7 @@ public class ExperienceBookItem extends Item {
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
 
+        // If the previous two statements dont work then just pass the result
         return new ActionResult<>(ActionResultType.PASS, stack);
     }
 
