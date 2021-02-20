@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "igi",
+    "gbg",
+    "igi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "g": {
+      "item": "minecraft:glass"
+    },
+    "b": {
+      "item": "experienced:experience_book"
+    }
+  },
+  "result": {
+    "item": "experienced:experience_block_casing",
+    "count": 3
+  }
+}
