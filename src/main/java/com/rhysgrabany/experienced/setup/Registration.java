@@ -2,11 +2,14 @@ package com.rhysgrabany.experienced.setup;
 
 import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
+import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.item.ExperienceBookItem;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,6 +23,10 @@ public class Registration {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MOD_ID);
+    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
+
+
 
 
     public static void register(){
@@ -30,11 +37,13 @@ public class Registration {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         RECIPES.register(modEventBus);
+        TILES.register(modEventBus);
 
         // Registry objects are registered
         ModItems.register();
         ModBlocks.register();
         ModRecipes.register();
+        ModTiles.register();
 
 
 
