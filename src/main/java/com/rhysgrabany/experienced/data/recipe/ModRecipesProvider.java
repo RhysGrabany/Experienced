@@ -52,7 +52,7 @@ public class ModRecipesProvider extends RecipeProvider {
     private void registerBlockRecipes(Consumer<IFinishedRecipe> consumer){
 
         // Recipe for Small Experience Block
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get().asItem(), 1)
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get(), 1)
                 .key('d', Items.BLUE_DYE)
                 .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
                 .key('b', Items.LAPIS_BLOCK)
@@ -63,8 +63,8 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer);
 
         // Recipe for Medium Experience Block
-        // TODO: Find a suitable replacement for Redstone Block, I don't want to use emerald block that will mean they will need 18 emeralds for the next tier making this too expensive overall
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get().asItem(), 1)
+        // TODO: Find a suitable replacement for Redstone Block, I don't want to use emerald block that will mean they will need 18 emeralds just for the next tier making this too expensive overall
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get(), 1)
                 .key('d', Items.GREEN_DYE)
                 .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
                 .key('s', ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get())
@@ -76,7 +76,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .build(consumer);
 
         //Recipe for Large Experience Block
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.LARGE).get().asItem(), 1)
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.LARGE).get(), 1)
                 .key('d', Items.PURPLE_DYE)
                 .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
                 .key('m', ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get())
