@@ -19,7 +19,11 @@ import java.util.List;
 //TODO: I dont know what this does again
 public enum CraftingItems implements IItemProvider {
 
-    EXPERIENCE_BOOK;
+    EXPERIENCE_BOOK,
+    EXPERIENCE_BLOCK_SMALL,
+    EXPERIENCE_BLOCK_MEDIUM,
+    EXPERIENCE_BLOCK_LARGE,
+    ;
 
     private RegistryObject<ItemInternal> item = null;
 

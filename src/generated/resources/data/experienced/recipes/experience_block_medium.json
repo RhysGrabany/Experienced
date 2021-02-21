@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dcd",
+    "sbs",
+    "dcd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:red_dye"
+    },
+    "c": {
+      "item": "experienced:experience_block_casing"
+    },
+    "s": {
+      "item": "experienced:experience_block_small"
+    },
+    "b": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "item": "experienced:experience_block_medium"
+  }
+}

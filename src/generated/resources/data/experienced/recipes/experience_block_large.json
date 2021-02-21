@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dcd",
+    "mbm",
+    "dcd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:purple_dye"
+    },
+    "c": {
+      "item": "experienced:experience_block_casing"
+    },
+    "m": {
+      "item": "experienced:experience_block_medium"
+    },
+    "b": {
+      "item": "minecraft:purpur_block"
+    }
+  },
+  "result": {
+    "item": "experienced:experience_block_large"
+  }
+}

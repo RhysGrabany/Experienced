@@ -1,6 +1,9 @@
 package com.rhysgrabany.experienced.data.recipe;
 
+import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
+import com.rhysgrabany.experienced.block.ExperienceBlock;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -17,10 +20,12 @@ public class ModRecipesProvider extends RecipeProvider {
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         registerItemRecipes(consumer);
-        //registerBlockRecipes(consumer);
+        registerBlockRecipes(consumer);
     }
 
+    // Register the recipes for the Items in the Mod
     private void registerItemRecipes(Consumer<IFinishedRecipe> consumer){
+
         // Recipe for the Experience Book Item
         ShapelessRecipeBuilder.shapelessRecipe(ModItems.EXPERIENCE_BOOK.get(), 1)
                 .addIngredient(Items.BOOK)
@@ -39,10 +44,48 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("igi")
                 .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BOOK.get()))
                 .build(consumer);
+
     }
 
 
+    // Register the recipes for the Blocks in the Mod
     private void registerBlockRecipes(Consumer<IFinishedRecipe> consumer){
+
+        // Recipe for Small Experience Block
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get().asItem(), 1)
+                .key('d', Items.BLUE_DYE)
+                .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
+                .key('b', Items.LAPIS_BLOCK)
+                .patternLine("dcd")
+                .patternLine("cbc")
+                .patternLine("dcd")
+                .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BLOCK_CASING.get()))
+                .build(consumer);
+
+        // Recipe for Medium Experience Block
+        // TODO: Find a suitable replacement for Redstone Block, I don't want to use emerald block that will mean they will need 18 emeralds for the next tier making this too expensive overall
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get().asItem(), 1)
+                .key('d', Items.GREEN_DYE)
+                .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
+                .key('s', ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get())
+                .key('b', Items.REDSTONE_BLOCK)
+                .patternLine("dcd")
+                .patternLine("sbs")
+                .patternLine("dcd")
+                .addCriterion("has_item", hasItem(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.SMALL).get()))
+                .build(consumer);
+
+        //Recipe for Large Experience Block
+        ShapedRecipeBuilder.shapedRecipe(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.LARGE).get().asItem(), 1)
+                .key('d', Items.PURPLE_DYE)
+                .key('c', ModItems.EXPERIENCE_BLOCK_CASING.get())
+                .key('m', ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get())
+                .key('b', Items.PURPUR_BLOCK)
+                .patternLine("dcd")
+                .patternLine("mbm")
+                .patternLine("dcd")
+                .addCriterion("has_item", hasItem(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get()))
+                .build(consumer);
 
     }
 

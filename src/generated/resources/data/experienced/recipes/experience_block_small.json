@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dcd",
+    "cbc",
+    "dcd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:blue_dye"
+    },
+    "c": {
+      "item": "experienced:experience_block_casing"
+    },
+    "b": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "item": "experienced:experience_block_small"
+  }
+}
