@@ -1,7 +1,7 @@
 package com.rhysgrabany.experienced;
 
 import com.rhysgrabany.experienced.config.Constants;
-import com.rhysgrabany.experienced.gui.ExperienceBlockContainer;
+import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.setup.Registration;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -19,7 +19,7 @@ public class ModContainers {
 
     static{
 
-        Registration.CONTAINERS.register("experience_block_container",
+        EXPERIENCE_BLOCK_CONTAINER = Registration.CONTAINERS.register("experience_block_container",
                 () -> IForgeContainerType.create(ExperienceBlockContainer::createContainerClientSide));
 
     }
