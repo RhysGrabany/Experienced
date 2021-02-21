@@ -39,8 +39,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("igi")
                 .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BOOK.get()))
                 .build(consumer);
-
-
     }
 
 
