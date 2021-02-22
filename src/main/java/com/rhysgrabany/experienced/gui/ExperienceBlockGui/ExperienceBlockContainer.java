@@ -3,6 +3,7 @@ package com.rhysgrabany.experienced.gui.ExperienceBlockGui;
 import com.rhysgrabany.experienced.ModContainers;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -43,6 +44,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
 
+
     // Pos of Tile Label
     public static final int TILE_INV_YPOS = 20;
     public static final int PLAYER_INV_YPOS = 51;
@@ -55,14 +57,13 @@ public class ExperienceBlockContainer extends BaseContainer {
     private ExperienceBlockContents expBarContents;
 
 
-
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, ExperienceBlockContents inputZoneContents,
-                                    ExperienceBlockContents outputZoneContents,ExperienceBlockContents expBarZoneContents,
-                                    ExperienceBlockStateData experienceBlockStateData){
+                                    ExperienceBlockContents outputZoneContents, ExperienceBlockContents expBarZoneContents,
+                                    ExperienceBlockStateData experienceBlockStateData) {
 
         super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
 
-        if(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get() == null){
+        if (ModContainers.EXPERIENCE_BLOCK_CONTAINER.get() == null) {
             throw new IllegalStateException("Must Initialise ContainerType ExperienceBlockContainer before constructing a ExperienceBlockContainer!");
         }
 
@@ -83,13 +84,13 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int HOTBAR_YPOS = 142;
 
         // Adding the player's hotbar to the gui - (x,y) loc of each item
-        for(int x = 0; x < HOTBAR_SLOT_COUNT; x++){
+        for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
             addSlot(new Slot(playerIn, x, HOTBAR_XPOS + SLOT_SPACING_X * x, HOTBAR_YPOS));
         }
 
         // Adding the rest of the player's inventory
-        for(int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++){
-            for(int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++){
+        for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
+            for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
                 int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;
 
                 // Gets the location of the slot using the positions and slot spacing
@@ -97,9 +98,9 @@ public class ExperienceBlockContainer extends BaseContainer {
                 int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_SPACING_Y;
 
                 addSlot(new Slot(playerIn, slotNumber, xpos, ypos));
+
             }
         }
-
 
 
         // Input Slot
@@ -107,7 +108,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int INPUT_SLOT_YPOS = 15;
 
         // This looks stupid just for one slot but it gives the chance to upgrade in the future if I really want to
-        for(int i = 0; i < INPUT_SLOTS; i++) {
+        for (int i = 0; i < INPUT_SLOTS; i++) {
             addSlot(new SlotInput(inputZoneContents, i, INPUT_SLOT_XPOS + SLOT_SPACING_X * i, INPUT_SLOT_YPOS));
         }
 
@@ -116,7 +117,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int OUTPUT_SLOT_XPOS = 44;
         final int OUTPUT_SLOT_YPOS = 50;
 
-        for(int i = 0; i < OUTPUT_SLOTS; i++) {
+        for (int i = 0; i < OUTPUT_SLOTS; i++) {
             addSlot(new SlotOutput(outputZoneContents, i, OUTPUT_SLOT_XPOS + SLOT_SPACING_X * i, OUTPUT_SLOT_YPOS));
         }
 
@@ -127,11 +128,16 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int EXP_SLOT_XPOS = 8;
         final int EXP_SLOT_YPOS = 7;
 
-//        for(int i = 0; i < EXP_BAR_SLOT; i++) {
+        //for(int i = 0; i < EXP_BAR_SLOT; i++) {
 //            addSlot(new SlotExp(expBarZoneContents, i, EXP_SLOT_XPOS + EXP_SLOT_SPACING_X * i, EXP_SLOT_YPOS));
 //        }
-    }
 
+
+
+
+
+
+    }
 
 
     private ExperienceBlockContainer(int windowId, PlayerInventory playerIn) {
@@ -142,12 +148,12 @@ public class ExperienceBlockContainer extends BaseContainer {
                                                                      ExperienceBlockContents inputZoneContents,
                                                                      ExperienceBlockContents outputZoneContents,
                                                                      ExperienceBlockContents expBarZoneContents,
-                                                                     ExperienceBlockStateData experienceBlockStateData){
+                                                                     ExperienceBlockStateData experienceBlockStateData) {
 
         return new ExperienceBlockContainer(windowId, playerInventory, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
     }
 
-    public static ExperienceBlockContainer createContainerClientSide(int windowId, PlayerInventory playerInventory, PacketBuffer extraData){
+    public static ExperienceBlockContainer createContainerClientSide(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
 //        ChestContents chestContents = ChestContents.createForClientSideContainer(ModChestTileEntity.NUMBER_OF_SLOTS);
 
         ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
@@ -165,7 +171,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         return inputContents.isUsableByPlayer(playerIn) && outputContents.isUsableByPlayer(playerIn);
     }
 
-    public class SlotInput extends Slot{
+    public class SlotInput extends Slot {
 
         public SlotInput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
@@ -177,41 +183,19 @@ public class ExperienceBlockContainer extends BaseContainer {
 //        }
     }
 
-    public class SlotOutput extends Slot{
+    public class SlotOutput extends Slot {
 
         public SlotOutput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
         }
     }
 
-    public class SlotExp extends Slot{
+    public class SlotExp extends Slot {
 
         public SlotExp(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
