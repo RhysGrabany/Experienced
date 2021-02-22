@@ -1,13 +1,16 @@
 package com.rhysgrabany.experienced;
 
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.setup.ClientSetup;
 import com.rhysgrabany.experienced.setup.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -29,6 +32,8 @@ public class Experienced
     private static final Logger LOGGER = LogManager.getLogger();
 
     public Experienced() {
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
 
         Registration.register();
 

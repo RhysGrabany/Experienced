@@ -13,6 +13,13 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Constants.MOD_ID,
             "textures/gui/experience_block_gui.png");
 
+    // Coords for the graphical elements of the gui
+    final static int ARROW_BAR_XPOS = 199;
+    final static int ARROW_BAR_YPOS = 4;
+
+    final static int EXP_BAR_XPOS = 177;
+    final static int EXP_BAR_YPOS = 4;
+
 
 
     public ExperienceBlockScreen(BaseContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -24,7 +31,9 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

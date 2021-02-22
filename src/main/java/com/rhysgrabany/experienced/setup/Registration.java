@@ -1,6 +1,7 @@
 package com.rhysgrabany.experienced.setup;
 
 import com.rhysgrabany.experienced.ModBlocks;
+import com.rhysgrabany.experienced.ModContainers;
 import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.config.Constants;
@@ -44,6 +45,7 @@ public class Registration {
         ModBlocks.register();
         ModRecipes.register();
         ModTiles.register();
+        ModContainers.register();
 
 
 

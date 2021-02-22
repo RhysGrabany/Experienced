@@ -3,6 +3,7 @@ package com.rhysgrabany.experienced.tile;
 import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
+import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,6 +31,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private ExperienceBlockContents inputContents;
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
+
+    private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
 
     // Constructor that creates the tile and the input/output contents
@@ -59,7 +62,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
         return ExperienceBlockContainer.createContainerServerSide(p_createMenu_1_,
-                p_createMenu_2_, p_createMenu_3_, inputContents, outputContents, expBarContents);
+                p_createMenu_2_, inputContents, outputContents, expBarContents, experienceBlockStateData);
     }
 
     // Basically just checks to see if the player is within range, true if they are
