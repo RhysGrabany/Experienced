@@ -43,6 +43,10 @@ public class ExperienceBlockContainer extends BaseContainer {
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
 
+    // Pos of Tile Label
+    public static final int TILE_INV_YPOS = 20;
+    public static final int PLAYER_INV_YPOS = 51;
+
 
     private World world;
 
@@ -96,6 +100,8 @@ public class ExperienceBlockContainer extends BaseContainer {
             }
         }
 
+
+
         // Input Slot
         final int INPUT_SLOT_XPOS = 44;
         final int INPUT_SLOT_YPOS = 15;
@@ -121,9 +127,9 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int EXP_SLOT_XPOS = 8;
         final int EXP_SLOT_YPOS = 7;
 
-        for(int i = 0; i < EXP_BAR_SLOT; i++) {
-            addSlot(new SlotExp(expBarZoneContents, i, EXP_SLOT_XPOS + EXP_SLOT_SPACING_X * i, EXP_SLOT_YPOS));
-        }
+//        for(int i = 0; i < EXP_BAR_SLOT; i++) {
+//            addSlot(new SlotExp(expBarZoneContents, i, EXP_SLOT_XPOS + EXP_SLOT_SPACING_X * i, EXP_SLOT_YPOS));
+//        }
     }
 
 
