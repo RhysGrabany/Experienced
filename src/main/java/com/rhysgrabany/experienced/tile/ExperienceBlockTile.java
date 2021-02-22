@@ -13,6 +13,13 @@ import javax.annotation.Nullable;
 
 public class ExperienceBlockTile extends BaseTile implements INamedContainerProvider, ITickableTileEntity {
 
+
+    public static final int INPUT_SLOTS = 1;
+    public static final int OUTPUT_SLOTS = 1;
+    public static final int TOTAL_SLOTS = INPUT_SLOTS + OUTPUT_SLOTS;
+
+
+
     public ExperienceBlockTile() {
         super(ModTiles.EXPERIENCE_BLOCK_TILE);
     }

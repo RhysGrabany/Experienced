@@ -91,6 +91,7 @@ public class ExperienceBlock extends Block {
             return ActionResultType.SUCCESS;
         }
 
+        // If the selected block has no container then one will be made for it
         INamedContainerProvider nmContainer = this.getContainer(state, worldIn, pos);
         if(nmContainer != null){
 
@@ -100,7 +101,6 @@ public class ExperienceBlock extends Block {
         }
 
         return ActionResultType.SUCCESS;
-
 
     }
 
