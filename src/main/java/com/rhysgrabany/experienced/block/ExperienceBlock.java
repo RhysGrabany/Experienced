@@ -1,8 +1,23 @@
 package com.rhysgrabany.experienced.block;
 
+import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nullable;
 
 public class ExperienceBlock extends Block {
 
@@ -43,29 +58,54 @@ public class ExperienceBlock extends Block {
 
     }
 
+    //region Gui Functions
+
+    //region Tile Entity
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new ExperienceBlockTile();
+    }
+
+    //endregion
+
+    @Nullable
+    @Override
+    public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        return tile instanceof INamedContainerProvider ? (INamedContainerProvider) tile : null;
+    }
+
+    //endregion
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+
+        if(worldIn.isRemote){
+            return ActionResultType.SUCCESS;
+        }
+
+        INamedContainerProvider nmContainer = this.getContainer(state, worldIn, pos);
+        if(nmContainer != null){
+
+            TileEntity tile = worldIn.getTileEntity(pos);
+            NetworkHooks.openGui((ServerPlayerEntity) player, nmContainer, (packetBuffer -> {}));
+
+        }
+
+        return ActionResultType.SUCCESS;
 
 
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //region Helper Methods for Block
 
     // Method used to initialize the max amount of exp a certain block can hold
     // For now; Small = 30, Medium = 60, Large = 100, Creative = MAX_VALUE, and default is 0 cause that might not happen
@@ -83,5 +123,7 @@ public class ExperienceBlock extends Block {
                 return 0;
         }
     }
+
+    //endregion
 
 }
