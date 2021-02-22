@@ -24,17 +24,17 @@ public class ModTiles {
         EXPERIENCE_BLOCK_TILE = TileEntityType.Builder.create(ExperienceBlockTile::new).build(null);
     }
 
-    @SubscribeEvent
-    public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> e){
-        IForgeRegistry<TileEntityType<?>> r = e.getRegistry();
-
-        for(ExperienceBlock.Tier tier : ExperienceBlock.Tier.values()){
-            r.register(EXPERIENCE_BLOCK_TILE
-                    .setRegistryName(ModBlocks.EXPERIENCE_BLOCKS
-                            .get(tier)
-                            .getId()));
-        }
-    }
+//    @SubscribeEvent
+//    public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> e){
+//        IForgeRegistry<TileEntityType<?>> r = e.getRegistry();
+//
+//        for(ExperienceBlock.Tier tier : ExperienceBlock.Tier.values()){
+//            r.register(EXPERIENCE_BLOCK_TILE
+//                    .setRegistryName(ModBlocks.EXPERIENCE_BLOCKS
+//                            .get(tier)
+//                            .getId()));
+//        }
+//    }
 
     public static void register(){
         TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
