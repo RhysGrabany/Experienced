@@ -16,7 +16,9 @@ public class ModContainers {
 
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
 
-    public static final RegistryObject<ContainerType<ExperienceBlockContainer>> EXPERIENCE_BLOCK_CONTAINER;
+    public static final RegistryObject<ContainerType<ExperienceBlockContainer>> EXPERIENCE_BLOCK_CONTAINER;// = Registration.CONTAINERS.register("experience_block_container",
+                //() -> IForgeContainerType.create(ExperienceBlockContainer::createContainerClientSide));
+
 
     static{
 

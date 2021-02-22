@@ -39,6 +39,7 @@ public class Registration {
         ITEMS.register(modEventBus);
         RECIPES.register(modEventBus);
         TILES.register(modEventBus);
+        CONTAINERS.register(modEventBus);
 
         // Registry objects are registered
         ModItems.register();
