@@ -12,10 +12,9 @@ public class ExperienceBlockContents implements IInventory {
 
     private ItemStackHandler expBlockComponentContents;
 
-
-
     //region Constructors
 
+    // Two constructors to coincide with the two methods needed for Client/Server side
     private ExperienceBlockContents(int size){
         this.expBlockComponentContents = new ItemStackHandler(size);
     }
@@ -31,6 +30,10 @@ public class ExperienceBlockContents implements IInventory {
 
     //endregion
 
+    //region Gui Stuff
+
+    // Two methods needed for Client and Server side separately, TileEntity for the server
+    // and Container for the Client
     public static ExperienceBlockContents createForTileEntity(int size,
                                                               Predicate<PlayerEntity> canPlayerAccessInventoryLam,
                                                               Notify markDirtyNotificationLam){
@@ -40,7 +43,9 @@ public class ExperienceBlockContents implements IInventory {
     public static ExperienceBlockContents createForClientSideContainer(int size){
         return new ExperienceBlockContents(size);
     }
-    
+
+    //endregion
+
     //region Write/Read NBT
 
     public CompoundNBT serializeNBT(){
@@ -136,18 +141,23 @@ public class ExperienceBlockContents implements IInventory {
     //region Predicates
 
     //region Linking Methods
+
+    // Server Side Only: Set function that the conatiner should call if the player wants to access the block
     public void setCanPlayerAccessInventoryLam(Predicate<PlayerEntity> canPlayerAccessInventoryLam){
         this.canPlayerAccessInventoryLam = canPlayerAccessInventoryLam;
     }
 
+    // Function to tell the parent TileEntity that something has changed and to update, else do nothing
     public void setMarkDirtyNotificationLam(Notify markDirtyNotificationLam){
         this.markDirtyNotificationLam = markDirtyNotificationLam;
     }
 
+    // Function to tell the parent Tile that a player has opened the container, else do nothing
     public void setOpenInventoryNotificationLam(Notify openInventoryNotificationLam){
         this.openInventoryNotificationLam = openInventoryNotificationLam;
     }
 
+    // Function to tell the parent Tile that a player has closed the container, else do nothing
     public void setCloseInventoryNotificationLam(Notify closeInventoryNotificationLam){
         this.closeInventoryNotificationLam = closeInventoryNotificationLam;
     }
