@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.gui.BaseContainer;
-import com.rhysgrabany.experienced.gui.SingleMinusButton;
+import com.rhysgrabany.experienced.gui.widgets.buttons.*;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -54,7 +54,7 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
 
     // Double Minus
     final static int DOUBLE_MINUS_BUTTON_XPOS = 129;
-    final static int DOUBLE_MINUS_BUTTON_YPOS = 41;
+    final static int DOUBLE_MINUS_BUTTON_YPOS = 40;
 
     // Button Spacings
     final static int SINGLE_SPACING_X = 11;
@@ -117,15 +117,15 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
         // Drawing the main gui element
         this.blit(matrixStack, edgeSpacingX, edgeSpacingY, 0, 0, this.xSize, this.ySize);
 
-        // Drawing the button for single minus
-        // (x,y) this can be the (0,0) of the gui element, then the offsets to get the texture, then the width and height
-//        this.blit(matrixStack, edgeSpacingX + SINGLE_MINUS_BUTTON_XPOS,  edgeSpacingY + SINGLE_MINUS_BUTTON_YPOS,
-//                SINGLE_MINUS_BUTTON_XPOS, SINGLE_MINUS_BUTTON_YPOS,
-//                SINGLE_SPACING_X, SINGLE_SPACING_Y);
-
-
+        //Buttons adding to the gui
         this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
+        this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
+                new TranslationTextComponent(""), (press)->{}));
+//        this.addButton(new SinglePlusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
+//                new TranslationTextComponent(""), (press)->{}));
+//        this.addButton(new DoublePlusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
+//                new TranslationTextComponent(""), (press)->{}));
 
 
         // Drawing the ExpBar

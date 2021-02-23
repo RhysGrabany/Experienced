@@ -1,4 +1,4 @@
-package com.rhysgrabany.experienced.gui;
+package com.rhysgrabany.experienced.gui.widgets.buttons;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -46,7 +46,6 @@ public class SingleMinusButton extends Button {
         this.blit(matrixStack, x, y,
                 SINGLE_MINUS_BUTTON_BASE_U, SINGLE_MINUS_BUTTON_BASE_V,
                 width, height);
-
 
 
         if (isHovered()){
