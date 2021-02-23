@@ -22,16 +22,17 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
 
     //region Arrow Coords
     // B/G
-    final static int ARROW_BAR_XPOS = 199;
-    final static int ARROW_BAR_YPOS = 4;
+    final static int ARROW_BAR_XPOS = 48;
+    final static int ARROW_BAR_YPOS = 34;
 
     // F/G
-    final static int ARROW_BAR_TEX_XPOS = 203;
-    final static int ARROW_BAR_TEX_YPOS = 14;
+    final static int ARROW_BAR_TEX_U = 203;
+    final static int ARROW_BAR_TEX_V = 28;
 
-    // Width and Height
+    // Width and Height B/G
     final static int ARROW_BAR_SPACING_X = 8;
     final static int ARROW_BAR_SPACING_Y = 13;
+
     //endregion
 
     //region Exp Bar Coords
@@ -47,7 +48,6 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     final static int EXP_BAR_SPACING_X = 21;
     final static int EXP_BAR_SPACING_Y = 72;
     //endregion
-
 
     //region Button Coords on GUI
     // Single Plus
@@ -134,8 +134,9 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
         this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - 17,
                 EXP_BAR_TEX_U, EXP_BAR_TEX_V - 17, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
 
-
-
+        // Drawing the Arrow
+        this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS,
+                ARROW_BAR_TEX_U, ARROW_BAR_TEX_V, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y);
 
     }
 
