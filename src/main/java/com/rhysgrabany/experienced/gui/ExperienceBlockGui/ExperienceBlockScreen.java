@@ -18,28 +18,38 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Constants.MOD_ID,
             "textures/gui/experience_block_gui.png");
 
-    // Coords for the graphical elements of the gui
-    // Arrow Coords
+    //region Coords for the graphical elements of the gui
+
+    //region Arrow Coords
     // B/G
     final static int ARROW_BAR_XPOS = 199;
     final static int ARROW_BAR_YPOS = 4;
 
+    // F/G
+    final static int ARROW_BAR_TEX_XPOS = 203;
+    final static int ARROW_BAR_TEX_YPOS = 14;
 
-    // Exp Bar Coords
+    // Width and Height
+    final static int ARROW_BAR_SPACING_X = 8;
+    final static int ARROW_BAR_SPACING_Y = 13;
+    //endregion
+
+    //region Exp Bar Coords
     // B/G
     final static int EXP_BAR_XPOS = 8;
     final static int EXP_BAR_YPOS = 78;
-
-    // Width and Height
-    final static int EXP_BAR_SPACING_X = 21;
-    final static int EXP_BAR_SPACING_Y = 72;
 
     // F/G
     final static int EXP_BAR_TEX_U = 177;
     final static int EXP_BAR_TEX_V = 75;
 
+    // Width and Height
+    final static int EXP_BAR_SPACING_X = 21;
+    final static int EXP_BAR_SPACING_Y = 72;
+    //endregion
 
-    // Buttons
+
+    //region Button Coords on GUI
     // Single Plus
     final static int SINGLE_PLUS_BUTTON_XPOS = 115;
     final static int SINGLE_PLUS_BUTTON_YPOS = 28;
@@ -55,15 +65,18 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     // Double Minus
     final static int DOUBLE_MINUS_BUTTON_XPOS = 129;
     final static int DOUBLE_MINUS_BUTTON_YPOS = 40;
+    //endregion
 
-    // Button Spacings
+    //region Button Spacings
+    // Single Spacings
     final static int SINGLE_SPACING_X = 11;
     final static int SINGLE_SPACING_Y = 11;
 
+    //Double Spacings
     final static int DOUBLE_SPACING_X = 17;
     final static int DOUBLE_SPACING_Y = 9;
-
-
+    //endregion
+    //endregion
 
     public ExperienceBlockScreen(BaseContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -71,15 +84,6 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
         xSize = 176;
         ySize = 166;
     }
-
-//    @Override
-//    protected void init() {
-//
-//        super.init();
-//
-//        //this.buttons.clear();
-//
-//    }
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -103,8 +107,6 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
 
     }
 
-
-
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
@@ -124,8 +126,8 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
                 new TranslationTextComponent(""), (press)->{}));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
-//        this.addButton(new DoublePlusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-//                new TranslationTextComponent(""), (press)->{}));
+        this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
+                new TranslationTextComponent(""), (press)->{}));
 
 
         // Drawing the ExpBar
