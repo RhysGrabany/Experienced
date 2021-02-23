@@ -6,7 +6,6 @@ import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.gui.SingleMinusButton;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -36,14 +35,14 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     final static int EXP_BAR_SPACING_Y = 72;
 
     // F/G
-    final static int EXP_BAR_TEX_XPOS = 177;
-    final static int EXP_BAR_TEX_YPOS = 75;
+    final static int EXP_BAR_TEX_U = 177;
+    final static int EXP_BAR_TEX_V = 75;
 
 
     // Buttons
     // Single Plus
-    final static int SINGLE_PLUS_BUTTON_XPOS = 116;
-    final int SINGLE_PLUS_BUTTON_YPOS = 28;
+    final static int SINGLE_PLUS_BUTTON_XPOS = 115;
+    final static int SINGLE_PLUS_BUTTON_YPOS = 28;
 
     // Double Plus
     final static int DOUBLE_PLUS_BUTTON_XPOS = 129;
@@ -73,22 +72,14 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
         ySize = 166;
     }
 
-    @Override
-    protected void init() {
-
-        super.init();
-
-        //this.buttons.clear();
-
-
+//    @Override
+//    protected void init() {
 //
-//        int x = guiLeft - SINGLE_MINUS_BUTTON_XPOS;
-//        int y = guiTop - SINGLE_MINUS_BUTTON_YPOS;
+//        super.init();
 //
-//        this.addButton(new Button(x, y,
-//                SINGLE_SPACING_X, SINGLE_SPACING_Y, new StringTextComponent(""), (press) -> {}).);
-
-    }
+//        //this.buttons.clear();
+//
+//    }
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -128,18 +119,18 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
 
         // Drawing the button for single minus
         // (x,y) this can be the (0,0) of the gui element, then the offsets to get the texture, then the width and height
-        this.blit(matrixStack, edgeSpacingX + SINGLE_MINUS_BUTTON_XPOS,  edgeSpacingY + SINGLE_MINUS_BUTTON_YPOS,
-                SINGLE_MINUS_BUTTON_XPOS, SINGLE_MINUS_BUTTON_YPOS,
-                SINGLE_SPACING_X, SINGLE_SPACING_Y);
+//        this.blit(matrixStack, edgeSpacingX + SINGLE_MINUS_BUTTON_XPOS,  edgeSpacingY + SINGLE_MINUS_BUTTON_YPOS,
+//                SINGLE_MINUS_BUTTON_XPOS, SINGLE_MINUS_BUTTON_YPOS,
+//                SINGLE_SPACING_X, SINGLE_SPACING_Y);
 
 
-        this.addButton(new SingleMinusButton(edgeSpacingX + SINGLE_MINUS_BUTTON_XPOS,  edgeSpacingY + SINGLE_MINUS_BUTTON_YPOS,
-                SINGLE_SPACING_X, SINGLE_SPACING_Y, new TranslationTextComponent(""), (press)->{})).clearFGColor();
+        this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
+                new TranslationTextComponent(""), (press)->{}));
 
 
         // Drawing the ExpBar
-        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - 71,
-                EXP_BAR_TEX_XPOS, EXP_BAR_TEX_YPOS - 71, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
+        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - 17,
+                EXP_BAR_TEX_U, EXP_BAR_TEX_V - 17, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
 
 
 

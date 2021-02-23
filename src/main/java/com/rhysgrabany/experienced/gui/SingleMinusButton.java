@@ -14,55 +14,51 @@ import org.lwjgl.opengl.GL11;
 
 public class SingleMinusButton extends Button {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID,
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Constants.MOD_ID,
             "textures/gui/experience_block_gui.png");
 
-    public SingleMinusButton(int x, int y, int width, int height, ITextComponent title, IPressable pressedAction) {
-        super(x, y, width, height, title, pressedAction);
+
+    public SingleMinusButton(int x, int y, ITextComponent title, IPressable pressedAction) {
+        super(x, y, 11, 11, title, pressedAction);
+
     }
 
     @Override
     public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 
-        int xSize = 176;
-        int ySize = 166;
+        //Coords to base button
+        final int SINGLE_MINUS_BUTTON_BASE_U = 216;
+        final int SINGLE_MINUS_BUTTON_BASE_V = 68;
 
-        final int SINGLE_MINUS_BUTTON_XPOS = 115;
-        final int SINGLE_MINUS_BUTTON_YPOS = 40;
+        // Coords to the texture of hovered button texture
+        final int SINGLE_MINUS_BUTTON_HOV_U = 216;
+        final int SINGLE_MINUS_BUTTON_HOV_V = 17;
+
+        // Coords to the texture of the selected button texture
+        final int SINGLE_MINUS_BUTTON_SEL_U = 216;
+        final int SINGLE_MINUS_BUTTON_SEL_V = 42;
+
 
         Minecraft minecraft = Minecraft.getInstance();
-
-        isHovered = inBounds(x, y, width, height, mouseX, mouseY);
-
-        minecraft.getTextureManager().bindTexture(TEXTURE);
-        RenderSystem.enableDepthTest();
+        minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         RenderSystem.color4f(1.0f, 1.0f,1.0f,1.0f);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        int textureX = (this.width - xSize)/2 + SINGLE_MINUS_BUTTON_XPOS;
-        int textureY = (this.height - ySize)/2 + SINGLE_MINUS_BUTTON_YPOS;
-
-        int width = 11;
-        int height = 11;
-
-        this.blit(matrixStack, textureX, textureY, SINGLE_MINUS_BUTTON_XPOS, SINGLE_MINUS_BUTTON_YPOS, width, height);
+        this.blit(matrixStack, x, y,
+                SINGLE_MINUS_BUTTON_BASE_U, SINGLE_MINUS_BUTTON_BASE_V,
+                width, height);
 
 
-        if(isHovered){
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 0.5f);
-            this.blit(matrixStack, );
+
+        if (isHovered()){
+            this.blit(matrixStack, x, y,
+                    SINGLE_MINUS_BUTTON_HOV_U, SINGLE_MINUS_BUTTON_HOV_V,
+                    width, height);
         }
-
-        this.renderBg(matrixStack, minecraft, mouseX, mouseY);
 
     }
 
-    private static boolean inBounds(int x, int y, int w, int h, double ox, double oy){
-        return ox >= x && ox <= x + w && oy >= y && oy <= y + h;
+    private static boolean inBounds(int x, int y, int xSize, int ySize, double mouseX, double mouseY) {
+        return ((mouseX >= x && mouseX <= x + xSize) && (mouseY >= y && mouseY <= y + ySize));
     }
 
 
