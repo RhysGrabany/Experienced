@@ -122,8 +122,8 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
                 new TranslationTextComponent(""), (press)->{}));
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
-//        this.addButton(new SinglePlusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-//                new TranslationTextComponent(""), (press)->{}));
+        this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
+                new TranslationTextComponent(""), (press)->{}));
 //        this.addButton(new DoublePlusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
 //                new TranslationTextComponent(""), (press)->{}));
 
