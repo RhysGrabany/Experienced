@@ -1,6 +1,7 @@
 package com.rhysgrabany.experienced.gui.ExperienceBlockGui;
 
 import com.rhysgrabany.experienced.ModContainers;
+import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
 import net.minecraft.client.gui.widget.button.Button;
@@ -12,6 +13,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -56,6 +58,11 @@ public class ExperienceBlockContainer extends BaseContainer {
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
 
+    private ExperienceBlockStateData experienceBlockStateData;
+
+    private int MAX_EXP;
+
+
 
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, ExperienceBlockContents inputZoneContents,
                                     ExperienceBlockContents outputZoneContents, ExperienceBlockContents expBarZoneContents,
@@ -70,6 +77,10 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.inputContents = inputZoneContents;
         this.outputContents = outputZoneContents;
         this.expBarContents = expBarZoneContents;
+
+        this.experienceBlockStateData = experienceBlockStateData;
+
+        this.MAX_EXP = ExperienceBlock.getMaxExpFromTier(ExperienceBlock.BLOCK_TIER);
 
         this.world = playerIn.player.world;
 
@@ -157,16 +168,130 @@ public class ExperienceBlockContainer extends BaseContainer {
         return new ExperienceBlockContainer(windowId, playerInventory, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
     }
 
+    public double fractionOfExpAmount(){
+        if(experienceBlockStateData.expAmountInContainer == 0) return 0;
+        double fraction = experienceBlockStateData.expAmountInContainer / (double) MAX_EXP;
+        return MathHelper.clamp(fraction, 0.0, 1.0);
+    }
+
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return inputContents.isUsableByPlayer(playerIn) && outputContents.isUsableByPlayer(playerIn);
     }
 
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        Slot sourceSlot = inventorySlots.get(index);
+
+
+        if(sourceSlot == null || !sourceSlot.getHasStack()) return ItemStack.EMPTY;
+
+        ItemStack sourceItemStack = sourceSlot.getStack();
+        ItemStack sourceStackBeforeMerge = sourceItemStack.copy();
+        boolean successfulTransfer = false;
+
+        SlotZone sourceZone = SlotZone.getZoneFromIndex(index);
+
+        switch (sourceZone){
+            case OUTPUT_ZONE:
+                successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, true);
+                if(!successfulTransfer){
+                    successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, true);
+                } else {
+                    sourceSlot.onSlotChange(sourceItemStack, sourceStackBeforeMerge);
+                }
+                break;
+            case INPUT_ZONE:
+                successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
+                if(!successfulTransfer){
+                    successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, false);
+                }
+                break;
+            case PLAYER_HOTBAR:
+            case PLAYER_MAIN_INVENTORY:
+                if(!ExperienceBlockTile.getDrainResultForItem(world, sourceItemStack).isEmpty()){
+                    successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
+                }
+                if(!successfulTransfer){
+                    if(sourceZone == SlotZone.PLAYER_HOTBAR){
+                        successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
+                    } else {
+                        successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, false);
+                    }
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unexpected sourceZone: " + sourceZone);
+        }
+
+        if(!successfulTransfer) return ItemStack.EMPTY;
+
+        if(sourceItemStack.isEmpty()){
+            sourceSlot.putStack(ItemStack.EMPTY);
+        } else {
+            sourceSlot.onSlotChanged();
+        }
+
+        if(sourceItemStack.getCount() == sourceStackBeforeMerge.getCount()){
+            return ItemStack.EMPTY;
+        }
+
+        sourceSlot.onTake(playerIn, sourceItemStack);
+        return sourceStackBeforeMerge;
+
+    }
+
+    private boolean mergeInto(SlotZone dest, ItemStack sourceItemStack, boolean fillFromEnd){
+        return mergeItemStack(sourceItemStack, dest.firstIndex, dest.lastIndexPlus1, fillFromEnd);
+    }
+
+    public ExperienceBlockStateData getExperienceBlockData(){
+        return experienceBlockStateData;
+    }
+
+
+
+    private enum SlotZone{
+        INPUT_ZONE(INPUT_SLOT_INDEX, INPUT_SLOTS),
+        OUTPUT_ZONE(OUTPUT_SLOT_INDEX, OUTPUT_SLOTS),
+        EXP_ZONE(EXP_BAR_SLOT_INDEX, EXP_BAR_SLOT),
+        PLAYER_MAIN_INVENTORY(PLAYER_INVENTORY_FIRST_SLOT_INDEX, PLAYER_INVENTORY_SLOT_COUNT),
+        PLAYER_HOTBAR(HOTBAR_FIRST_SLOT_INDEX, HOTBAR_SLOT_COUNT);
+
+        public final int firstIndex;
+        public final int slotCount;
+        public final int lastIndexPlus1;
+
+
+        SlotZone(int firstIndex, int numberOfSlots){
+            this.firstIndex = firstIndex;
+            this.slotCount = numberOfSlots;
+            this.lastIndexPlus1 = firstIndex + numberOfSlots;
+        }
+
+        public static SlotZone getZoneFromIndex(int slotIndex){
+            for(SlotZone slotZone : SlotZone.values()){
+                if(slotIndex >= slotZone.firstIndex && slotIndex < slotZone.lastIndexPlus1) return slotZone;
+            }
+            throw new IndexOutOfBoundsException("Unexpected slotIndex");
+        }
+
+    }
+
+
+
     public class SlotInput extends Slot {
 
         public SlotInput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return ExperienceBlockTile.isItemValidForInputSlot(stack);
         }
     }
 
@@ -174,6 +299,11 @@ public class ExperienceBlockContainer extends BaseContainer {
 
         public SlotOutput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return ExperienceBlockTile.isItemValidForOutputSlot(stack);
         }
     }
 

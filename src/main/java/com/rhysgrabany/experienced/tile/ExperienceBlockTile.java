@@ -1,10 +1,12 @@
 package com.rhysgrabany.experienced.tile;
 
+import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
+import com.rhysgrabany.experienced.util.ExperienceHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -47,7 +49,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     private ItemStack currentlyDrainingItemLastTick = ItemStack.EMPTY;
 
-    private final int MAX_EXP;
+    public final int MAX_EXP;
 
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
@@ -279,11 +281,16 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     }
 
-    private ItemStack getDrainResultForItem(World world, ItemStack item){
+    public static ItemStack getDrainResultForItem(World world, ItemStack item){
 
-        item.getOrCreateTag().putInt("exp", 0);
+        ItemStack itemCopy = item.copy();
+        itemCopy.getOrCreateTag().putInt("exp", 0);
 
-        return item;
+        return itemCopy;
+
+//        item.getOrCreateTag().putInt("exp", 0);
+//
+//        return item;
     }
 
 //    private boolean takeExperience(ItemStackHandler itemHandler){
@@ -360,34 +367,13 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
+    public static boolean isItemValidForInputSlot(ItemStack item){
+        return true;
+    }
 
-//    private int insertExp(int container, @Nonnull int amount, @Nonnull ActionResultType action){
-//
-//    }
-
-//    public static ItemStack getDrainResultForItem(World world, ItemStack stack){
-//
-//        Optional<ExperienceDrainRecipe> matchingRecipe = getMatchingRecipeForInput(world, stack);
-//        if(!matchingRecipe.isPresent()) return ItemStack.EMPTY;
-//
-//        return matchingRecipe.get().getRecipeOutput().copy();
-//
-//
-//    }
-//
-//    public static Optional<ExperienceDrainRecipe> getMatchingRecipeForInput(World world, ItemStack stack){
-//        RecipeManager recipeManager = world.getRecipeManager();
-//        Inventory singleItemInventory = new Inventory(stack);
-//
-//
-//        Optional<ExperienceDrainRecipe> matchingRecipe = recipeManager.getRecipe(IRecipeType.DRAIN, singleItemInventory, world);
-//        return matchingRecipe;
-//
-//
-//
-//
-//    }
-
+    public static boolean isItemValidForOutputSlot(ItemStack item){
+        return true;
+    }
 
 
 

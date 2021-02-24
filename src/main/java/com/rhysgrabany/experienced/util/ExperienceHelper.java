@@ -32,4 +32,13 @@ public class ExperienceHelper {
     }
 
 
+    public static int takeExpToPrevLevel(int level){
+        level -= 1;
+
+        return recieveExpToNextLevel(level);
+
+
+    }
+
+
 }

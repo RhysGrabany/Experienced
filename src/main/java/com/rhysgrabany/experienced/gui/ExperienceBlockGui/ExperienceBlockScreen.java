@@ -5,7 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.gui.widgets.buttons.*;
+import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
+import com.rhysgrabany.experienced.util.ExperienceHelper;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -89,6 +92,8 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         this.containerExpBlock = containerExpBlock;
 
+
+
     }
 
     @Override
@@ -131,13 +136,14 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), (press)->{}));
+                new TranslationTextComponent(""), button-> singlePlusOnButtonPress(playerInventory.player)));
         this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
 
 
         int expOffset = 0;
         int arrowOffset = 13;
+
 
         // Drawing the ExpBar
         this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - expOffset,
@@ -146,6 +152,35 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
         // Drawing the Arrow
         this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS,
                 ARROW_BAR_TEX_U, ARROW_BAR_TEX_V, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y - arrowOffset);
+
+    }
+
+    public void singlePlusOnButtonPress(PlayerEntity playerIn){
+
+        int expLevel = playerIn.experienceLevel;
+        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
+
+        int amount = ExperienceHelper.takeExpToPrevLevel(expLevel);
+
+        int currAmount = experienceBlockStateData.get(4);
+
+        playerIn.giveExperiencePoints(-amount);
+
+        currAmount += amount;
+
+        experienceBlockStateData.set(4, currAmount);
+
+    }
+
+    public void doublePlusOnButtonPress(){
+
+    }
+
+    public void singleMinusOnButtonPress(){
+
+    }
+
+    public void doubleMinusOnButtonPress(){
 
     }
 
