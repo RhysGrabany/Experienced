@@ -78,11 +78,17 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     //endregion
     //endregion
 
-    public ExperienceBlockScreen(BaseContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-        super(screenContainer, inv, titleIn);
+
+    private ExperienceBlockContainer containerExpBlock;
+
+    public ExperienceBlockScreen(ExperienceBlockContainer containerExpBlock, PlayerInventory inv, ITextComponent titleIn) {
+        super(containerExpBlock, inv, titleIn);
 
         xSize = 176;
         ySize = 166;
+
+        this.containerExpBlock = containerExpBlock;
+
     }
 
     @Override

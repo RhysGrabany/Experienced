@@ -128,14 +128,6 @@ public class ExperienceBlockContainer extends BaseContainer {
         final int EXP_SLOT_XPOS = 8;
         final int EXP_SLOT_YPOS = 7;
 
-        //for(int i = 0; i < EXP_BAR_SLOT; i++) {
-//            addSlot(new SlotExp(expBarZoneContents, i, EXP_SLOT_XPOS + EXP_SLOT_SPACING_X * i, EXP_SLOT_YPOS));
-//        }
-
-
-
-
-
 
     }
 
@@ -176,11 +168,6 @@ public class ExperienceBlockContainer extends BaseContainer {
         public SlotInput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
         }
-
-//        @Override
-//        public boolean isItemValid(ItemStack stack) {
-//            return ExperienceBlockTile
-//        }
     }
 
     public class SlotOutput extends Slot {
