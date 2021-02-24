@@ -7,18 +7,25 @@ import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateDa
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class ExperienceBlockTile extends BaseTile implements INamedContainerProvider, ITickableTileEntity {
 
@@ -84,6 +91,12 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Override
     public void tick() {
 
+        // do nothing on client
+        if(world.isRemote) return;
+
+        ItemStack currentlyDrainedItem = getCurrentDrainedItem();
+
+
     }
 
     public boolean willItemStackFit(ExperienceBlockContents experienceBlockContents, int slotIndex, ItemStack itemStackOrigin){
@@ -108,6 +121,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
 
+        experienceBlockStateData.putIntoNBT(compound);
+
         compound.put(INPUT_SLOT_NBT, inputContents.serializeNBT());
         compound.put(OUTPUT_SLOT_NBT, outputContents.serializeNBT());
         compound.put(EXP_BAR_NBT, expBarContents.serializeNBT());
@@ -119,6 +134,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
+
+        experienceBlockStateData.readFromNBT(nbt);
 
         CompoundNBT invNBT = nbt.getCompound(INPUT_SLOT_NBT);
         inputContents.deserializeNBT(invNBT);
@@ -167,11 +184,66 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         read(state, tag);
     }
 
+    public void dropContents(World world, BlockPos pos){
+        InventoryHelper.dropInventoryItems(world, pos, inputContents);
+        InventoryHelper.dropInventoryItems(world, pos, outputContents);
+    }
 
 
 
 
+    // Checks if there is an item in the input area being drained
+    public boolean isExpBeingDrained(){
+        if(experienceBlockStateData.expDrainTimeRemaining > 0) return true;
+        return false;
+    }
 
+    private ItemStack getCurrentDrainedItem(){
+        return drainFirstSuitableInputItem(false);
+    }
+
+    private void drainFirstSuitableInputItem(){
+        drainFirstSuitableInputItem(true);
+    }
+
+    private ItemStack drainFirstSuitableInputItem(boolean performDrain){
+
+        Integer firstSuitableInputSlot = null;
+        Integer firstSuitableOutputSlot = null;
+        ItemStack result = ItemStack.EMPTY;
+
+        ItemStack itemToDrain = inputContents.getStackInSlot(0);
+
+        if(!itemToDrain.isEmpty()){
+            result = getDrainResultForItem(this.world, itemToDrain);
+        }
+
+
+
+    }
+
+    public static ItemStack getDrainResultForItem(World world, ItemStack stack){
+
+        Optional<ExperienceDrainRecipe> matchingRecipe = getMatchingRecipeForInput(world, stack);
+        if(!matchingRecipe.isPresent()) return ItemStack.EMPTY;
+
+        return matchingRecipe.get().getRecipeOutput().copy();
+
+
+    }
+
+    public static Optional<ExperienceDrainRecipe> getMatchingRecipeForInput(World world, ItemStack stack){
+        RecipeManager recipeManager = world.getRecipeManager();
+        Inventory singleItemInventory = new Inventory(stack);
+
+
+        Optional<ExperienceDrainRecipe> matchingRecipe = recipeManager.getRecipe(IRecipeType.DRAIN, singleItemInventory, world);
+        return matchingRecipe;
+
+
+
+
+    }
 
 
 

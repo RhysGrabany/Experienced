@@ -11,6 +11,8 @@ public class ExperienceBlockStateData implements IIntArray {
     public int expDrainTimeInitialValue;
     public int expDrainTimeRemaining;
 
+    public int expAmountInContainer;
+
 
     public void putIntoNBT(CompoundNBT nbt) {
 
@@ -18,6 +20,7 @@ public class ExperienceBlockStateData implements IIntArray {
         nbt.putInt("ExpDrainToComplete", expDrainToComplete);
         nbt.putInt("ExpDrainTimeInitialValue", expDrainTimeInitialValue);
         nbt.putInt("ExpDrainTimeRemaining", expDrainTimeRemaining);
+        nbt.putInt("ExpAmountInContainer", expAmountInContainer);
 
     }
 
@@ -27,6 +30,7 @@ public class ExperienceBlockStateData implements IIntArray {
         expDrainToComplete = nbt.getInt("ExpDrainToComplete");
         expDrainTimeInitialValue = nbt.getInt("ExpDrainTimeInitialValue");
         expDrainTimeRemaining = nbt.getInt("ExpDrainTimeRemaining");
+        expAmountInContainer = nbt.getInt("ExpAmountInContainer");
     }
 
     // Indexing
@@ -35,6 +39,8 @@ public class ExperienceBlockStateData implements IIntArray {
     private final int DRAIN_TO_COMPLETION_INDEX = 1;
     private final int DRAINTIME_INITIAL_VALUE_INDEX = 2;
     private final int DRAINTIME_REMAINING_INDEX = 3;
+    private final int EXP_AMOUNT_IN_CONTAINER = 4;
+    private final int END_OF_DATA_INDEX = 5;
 
 
     @Override
@@ -48,6 +54,8 @@ public class ExperienceBlockStateData implements IIntArray {
                 return expDrainToComplete;
             case DRAINTIME_INITIAL_VALUE_INDEX:
                 return expDrainTimeInitialValue;
+            case EXP_AMOUNT_IN_CONTAINER:
+                return expAmountInContainer;
             default:
                 return expDrainTimeRemaining;
         }
@@ -68,6 +76,10 @@ public class ExperienceBlockStateData implements IIntArray {
                 break;
             case DRAINTIME_INITIAL_VALUE_INDEX:
                 expDrainTimeInitialValue = value;
+                break;
+            case EXP_AMOUNT_IN_CONTAINER:
+                expAmountInContainer = value;
+                break;
             default:
                 expDrainTimeRemaining = value;
                 break;
@@ -77,9 +89,8 @@ public class ExperienceBlockStateData implements IIntArray {
 
     @Override
     public int size() {
-        return 0;
+        return END_OF_DATA_INDEX;
     }
-
 
     private void validateIndex(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size()) {
