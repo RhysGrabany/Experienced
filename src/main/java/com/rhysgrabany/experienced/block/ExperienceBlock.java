@@ -25,7 +25,7 @@ public class ExperienceBlock extends Block {
     public static Tier BLOCK_TIER;
 
     // Max Exp a block can hold
-    private final int MAX_EXP;
+    public static int MAX_EXP;
 
     public enum Tier {
         SMALL("small"),
@@ -104,6 +104,23 @@ public class ExperienceBlock extends Block {
 
     }
 
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+
+
+        if(state.getBlock() != newState.getBlock()){
+            TileEntity tile = worldIn.getTileEntity(pos);
+
+            if(tile instanceof ExperienceBlockTile){
+                ExperienceBlockTile tileEntity = (ExperienceBlockTile) tile;
+                tileEntity.dropContents(worldIn, pos);
+            }
+
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
+
+        }
+
+    }
 
     //region Helper Methods for Block
 

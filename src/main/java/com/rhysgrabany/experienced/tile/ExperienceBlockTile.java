@@ -1,6 +1,7 @@
 package com.rhysgrabany.experienced.tile;
 
 import com.rhysgrabany.experienced.ModTiles;
+import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
@@ -11,6 +12,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
@@ -19,11 +21,15 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -38,6 +44,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private ExperienceBlockContents inputContents;
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
+
+    private ItemStack currentlyDrainingItemLastTick = ItemStack.EMPTY;
+
+    private final int MAX_EXP;
 
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
@@ -57,6 +67,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         expBarContents = ExperienceBlockContents.createForTileEntity(EXP_BAR_SLOT,
                 this::canPlayerAccessInventory,
                 this::markDirty);
+
+        this.MAX_EXP = ExperienceBlock.MAX_EXP;
+
 
     }
 
@@ -94,7 +107,31 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         // do nothing on client
         if(world.isRemote) return;
 
-        ItemStack currentlyDrainedItem = getCurrentDrainedItem();
+        ItemStack currentlyDrainingItem = getCurrentDrainedItem();
+
+        if(!ItemStack.areItemsEqual(currentlyDrainingItem, currentlyDrainingItemLastTick)){
+            experienceBlockStateData.expDrainElapsed = 0;
+        }
+
+        currentlyDrainingItemLastTick = currentlyDrainingItem.copy();
+
+        if(!currentlyDrainingItem.isEmpty()){
+            boolean isSomethingDraining = drainExp();
+
+
+            if(isSomethingDraining){
+                experienceBlockStateData.expDrainElapsed += 1;
+            }
+
+            if(experienceBlockStateData.expDrainElapsed < 0) experienceBlockStateData.expDrainElapsed = 0;
+
+            int drainTimeForItem = getItemDrainTime(this.world, currentlyDrainingItem);
+            experienceBlockStateData.expDrainToComplete = drainTimeForItem;
+
+
+        }
+
+        markDirty();
 
 
     }
@@ -189,9 +226,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         InventoryHelper.dropInventoryItems(world, pos, outputContents);
     }
 
-
-
-
     // Checks if there is an item in the input area being drained
     public boolean isExpBeingDrained(){
         if(experienceBlockStateData.expDrainTimeRemaining > 0) return true;
@@ -216,34 +250,145 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         if(!itemToDrain.isEmpty()){
             result = getDrainResultForItem(this.world, itemToDrain);
+
+            if(!result.isEmpty()){
+                if(willItemStackFit(outputContents, 0, result)){
+                    firstSuitableInputSlot = 0;
+                    firstSuitableOutputSlot = 0;
+                }
+            }
+
         }
 
+        if(firstSuitableInputSlot == null){
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack returnValue = inputContents.getStackInSlot(firstSuitableInputSlot).copy();
+
+        if(!performDrain){
+            return returnValue;
+        }
+
+        inputContents.decrStackSize(firstSuitableInputSlot, 1);
+        outputContents.incrStackSize(firstSuitableOutputSlot, result);
+
+        markDirty();
+        return returnValue;
 
 
     }
 
-    public static ItemStack getDrainResultForItem(World world, ItemStack stack){
+    private ItemStack getDrainResultForItem(World world, ItemStack item){
 
-        Optional<ExperienceDrainRecipe> matchingRecipe = getMatchingRecipeForInput(world, stack);
-        if(!matchingRecipe.isPresent()) return ItemStack.EMPTY;
+        item.getOrCreateTag().putInt("exp", 0);
 
-        return matchingRecipe.get().getRecipeOutput().copy();
+        return item;
+    }
+
+//    private boolean takeExperience(ItemStackHandler itemHandler){
+//        if(itemHandler == null){
+//            return false;
+//        }
+//
+//        int expToTake = itemHandler.getStackInSlot(0).getOrCreateTag().getInt("exp");
+//
+//        if(expToTake > 0){
+//
+//
+//        }
+//
+//    }
+
+    private boolean drainExp(){
+        boolean expDrain = false;
+        boolean inventoryChanged = false;
+
+        if(experienceBlockStateData.expDrainTimeRemaining > 0){
+            --experienceBlockStateData.expDrainTimeRemaining;
+            expDrain = true;
+        }
+
+        if(experienceBlockStateData.expDrainTimeRemaining == 0){
+            ItemStack expDrainItemStack = inputContents.getStackInSlot(0);
+            if(!expDrainItemStack.isEmpty() && getItemDrainTime(this.world, expDrainItemStack) > 0){
+                int drainTimeForItem = getItemDrainTime(this.world, expDrainItemStack);
+
+                experienceBlockStateData.expDrainTimeRemaining = drainTimeForItem;
+                experienceBlockStateData.expDrainTimeInitialValue = drainTimeForItem;
+
+                inventoryChanged = true;
+
+
+//                if(expDrainItemStack.isEmpty()){
+//
+//                }
+
+            }
+        }
+
+        if(inventoryChanged) markDirty();
+
+        return expDrain;
+    }
+
+    public static int getItemDrainTime(World world, ItemStack stack){
+
+        return getDrainTime(stack);
 
 
     }
 
-    public static Optional<ExperienceDrainRecipe> getMatchingRecipeForInput(World world, ItemStack stack){
-        RecipeManager recipeManager = world.getRecipeManager();
-        Inventory singleItemInventory = new Inventory(stack);
-
-
-        Optional<ExperienceDrainRecipe> matchingRecipe = recipeManager.getRecipe(IRecipeType.DRAIN, singleItemInventory, world);
-        return matchingRecipe;
-
-
-
+    private static int getDrainTime(ItemStack item){
+        int amount = item.getOrCreateTag().getInt("exp");
+        return (amount / getDrainTimeMultiplier());
 
     }
+
+    private static int getDrainTimeMultiplier(){
+        switch (ExperienceBlock.BLOCK_TIER){
+            case SMALL:
+                return 8;
+            case MEDIUM:
+                return 12;
+            case LARGE:
+                return 16;
+            case CREATIVE:
+                return 24;
+        }
+        return 0;
+    }
+
+
+
+//    private int insertExp(int container, @Nonnull int amount, @Nonnull ActionResultType action){
+//
+//    }
+
+//    public static ItemStack getDrainResultForItem(World world, ItemStack stack){
+//
+//        Optional<ExperienceDrainRecipe> matchingRecipe = getMatchingRecipeForInput(world, stack);
+//        if(!matchingRecipe.isPresent()) return ItemStack.EMPTY;
+//
+//        return matchingRecipe.get().getRecipeOutput().copy();
+//
+//
+//    }
+//
+//    public static Optional<ExperienceDrainRecipe> getMatchingRecipeForInput(World world, ItemStack stack){
+//        RecipeManager recipeManager = world.getRecipeManager();
+//        Inventory singleItemInventory = new Inventory(stack);
+//
+//
+//        Optional<ExperienceDrainRecipe> matchingRecipe = recipeManager.getRecipe(IRecipeType.DRAIN, singleItemInventory, world);
+//        return matchingRecipe;
+//
+//
+//
+//
+//    }
+
+
 
 
 

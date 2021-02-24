@@ -24,7 +24,7 @@ public class ModRecipesProvider extends RecipeProvider {
         registerBlockRecipes(consumer);
     }
 
-    // Register the recipes for the Items in the Mod
+    // Register the recipe for the Items in the Mod
     private void registerItemRecipes(Consumer<IFinishedRecipe> consumer){
 
         // Recipe for the Experience Book Item
@@ -49,7 +49,7 @@ public class ModRecipesProvider extends RecipeProvider {
     }
 
 
-    // Register the recipes for the Blocks in the Mod
+    // Register the recipe for the Blocks in the Mod
     private void registerBlockRecipes(Consumer<IFinishedRecipe> consumer){
 
         // Recipe for Small Experience Block

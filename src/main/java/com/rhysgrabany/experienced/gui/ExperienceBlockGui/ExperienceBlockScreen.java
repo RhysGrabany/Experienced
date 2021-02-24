@@ -13,7 +13,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 
 
-public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
+public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContainer> {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Constants.MOD_ID,
             "textures/gui/experience_block_gui.png");
@@ -41,12 +41,12 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
     final static int EXP_BAR_YPOS = 78;
 
     // F/G
-    final static int EXP_BAR_TEX_U = 177;
-    final static int EXP_BAR_TEX_V = 75;
+    final static int EXP_BAR_TEX_U = 176;
+    final static int EXP_BAR_TEX_V = 76;
 
     // Width and Height
-    final static int EXP_BAR_SPACING_X = 21;
-    final static int EXP_BAR_SPACING_Y = 72;
+    final static int EXP_BAR_SPACING_X = 23;
+    final static int EXP_BAR_SPACING_Y = 74;
     //endregion
 
     //region Button Coords on GUI
@@ -136,13 +136,16 @@ public class ExperienceBlockScreen extends ContainerScreen<BaseContainer> {
                 new TranslationTextComponent(""), (press)->{}));
 
 
+        int expOffset = 0;
+        int arrowOffset = 13;
+
         // Drawing the ExpBar
-        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - 17,
-                EXP_BAR_TEX_U, EXP_BAR_TEX_V - 17, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
+        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - expOffset,
+                EXP_BAR_TEX_U, EXP_BAR_TEX_V - expOffset, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
 
         // Drawing the Arrow
         this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS,
-                ARROW_BAR_TEX_U, ARROW_BAR_TEX_V, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y);
+                ARROW_BAR_TEX_U, ARROW_BAR_TEX_V, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y - arrowOffset);
 
     }
 

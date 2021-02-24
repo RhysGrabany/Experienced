@@ -7,7 +7,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 import java.util.function.Supplier;
 
-// ModRecipes allow all the recipes in the mod to be registered
+// ModRecipes allow all the recipe in the mod to be registered
 public class ModRecipes {
 
     private ModRecipes(){}

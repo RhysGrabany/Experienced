@@ -1,24 +1,25 @@
-package com.rhysgrabany.experienced.recipes;
+package com.rhysgrabany.experienced.recipe;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public abstract class ExperienceDrainRecipe extends ExperiencedRecipe {
 
 
+    private final ItemStack input;
     private final ItemStack output;
 
     public ExperienceDrainRecipe(ResourceLocation id, ItemStack input, ItemStack output){
         super(id);
+
+        this.input = input;
+        this.output = output.copy();
     }
-
-
-
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
@@ -37,7 +38,7 @@ public abstract class ExperienceDrainRecipe extends ExperiencedRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return output.copy();
     }
 
     @Override
@@ -53,5 +54,14 @@ public abstract class ExperienceDrainRecipe extends ExperiencedRecipe {
     @Override
     public IRecipeType<?> getType() {
         return null;
+    }
+
+    @Override
+    public void write(PacketBuffer buff) {
+
+        buff.writeItemStack(input);
+        buff.writeItemStack(output);
+
+
     }
 }

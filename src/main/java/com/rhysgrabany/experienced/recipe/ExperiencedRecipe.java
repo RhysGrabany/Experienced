@@ -1,4 +1,4 @@
-package com.rhysgrabany.experienced.recipes;
+package com.rhysgrabany.experienced.recipe;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

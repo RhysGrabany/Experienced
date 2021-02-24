@@ -39,7 +39,7 @@ public class ExperienceBookItem extends Item {
     // This is used for the progress bar for how much exp is in the Book
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        return 1 - (currentStoredExp / MAX_EXP); // TODO:1 = drained, 0 = full; lmao what try and find a way to do this right
+        return 1D - ((double) currentStoredExp / (double) MAX_EXP); // TODO: Kinda works now but not really
     }
 
 

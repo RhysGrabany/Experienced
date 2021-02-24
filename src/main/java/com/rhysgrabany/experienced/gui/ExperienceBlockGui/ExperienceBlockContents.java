@@ -88,6 +88,11 @@ public class ExperienceBlockContents implements IInventory {
         return expBlockComponentContents.extractItem(index, count, false);
     }
 
+    public ItemStack incrStackSize(int index, ItemStack itemToInsert){
+        ItemStack leftoverItemStack = expBlockComponentContents.insertItem(index, itemToInsert, false);
+        return leftoverItemStack;
+    }
+
     @Override
     public ItemStack removeStackFromSlot(int index) {
         int maxItemStackSize = expBlockComponentContents.getSlotLimit(index);
