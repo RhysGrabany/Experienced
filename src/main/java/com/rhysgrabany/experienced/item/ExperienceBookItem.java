@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import com.rhysgrabany.experienced.util.ExperienceHelper;
+import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ public class ExperienceBookItem extends Item {
     // What happens when you right click while using the item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+
 
         ItemStack stack = playerIn.getHeldItem(Hand.MAIN_HAND).getStack();
 

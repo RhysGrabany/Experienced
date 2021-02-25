@@ -138,6 +138,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     }
 
+    public static boolean doesItemHaveExpTag(ItemStack item){
+        return item.getOrCreateTag().contains("exp");
+    }
+
     public boolean willItemStackFit(ExperienceBlockContents experienceBlockContents, int slotIndex, ItemStack itemStackOrigin){
         ItemStack itemStackDest = experienceBlockContents.getStackInSlot(slotIndex);
 
@@ -246,15 +250,15 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         Integer firstSuitableInputSlot = null;
         Integer firstSuitableOutputSlot = null;
-        ItemStack result = ItemStack.EMPTY;
+        boolean result = false;
 
         ItemStack itemToDrain = inputContents.getStackInSlot(0);
 
         if(!itemToDrain.isEmpty()){
-            result = getDrainResultForItem(this.world, itemToDrain);
+            result = doesItemHaveExpTag(itemToDrain);
 
-            if(!result.isEmpty()){
-                if(willItemStackFit(outputContents, 0, result)){
+            if(result){
+                if(willItemStackFit(outputContents, 0, itemToDrain)){
                     firstSuitableInputSlot = 0;
                     firstSuitableOutputSlot = 0;
                 }
@@ -273,7 +277,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         }
 
         inputContents.decrStackSize(firstSuitableInputSlot, 1);
-        outputContents.incrStackSize(firstSuitableOutputSlot, result);
+        outputContents.incrStackSize(firstSuitableOutputSlot, itemToDrain);
 
         markDirty();
         return returnValue;
@@ -281,6 +285,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     }
 
+    // TODO: This doesn't work the way I think it does
     public static ItemStack getDrainResultForItem(World world, ItemStack item){
 
         ItemStack itemCopy = item.copy();

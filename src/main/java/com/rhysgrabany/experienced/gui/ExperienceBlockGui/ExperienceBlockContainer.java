@@ -37,7 +37,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     public static final int OUTPUT_SLOTS = ExperienceBlockTile.OUTPUT_SLOTS;
     public static final int EXP_BAR_SLOT = ExperienceBlockTile.EXP_BAR_SLOT;
     // Experience Block Inventory Indexes
-    private static final int INPUT_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + INPUT_SLOTS;
+    private static final int INPUT_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int OUTPUT_SLOT_INDEX = INPUT_SLOT_INDEX + OUTPUT_SLOTS;
     private static final int EXP_BAR_SLOT_INDEX = OUTPUT_SLOT_INDEX + EXP_BAR_SLOT;
 
@@ -210,8 +210,20 @@ public class ExperienceBlockContainer extends BaseContainer {
                 }
                 break;
             case PLAYER_HOTBAR:
+                if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
+                    successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
+                }
+                if(!successfulTransfer){
+                    if(sourceZone == SlotZone.PLAYER_HOTBAR){
+                        successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
+                    } else {
+                        successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, false);
+                    }
+                }
+                break;
             case PLAYER_MAIN_INVENTORY:
-                if(!ExperienceBlockTile.getDrainResultForItem(world, sourceItemStack).isEmpty()){
+                // TODO: Shift clicking moves the item but twice for some reason, so it stays in player main inv
+                if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
                     successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
                 }
                 if(!successfulTransfer){
@@ -248,6 +260,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         return mergeItemStack(sourceItemStack, dest.firstIndex, dest.lastIndexPlus1, fillFromEnd);
     }
 
+    // TODO: I acc don't like this because it is too accessable to other classes, maybe narrow it down
     public ExperienceBlockStateData getExperienceBlockData(){
         return experienceBlockStateData;
     }

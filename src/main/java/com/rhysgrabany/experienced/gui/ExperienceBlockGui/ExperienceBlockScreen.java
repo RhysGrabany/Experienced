@@ -157,6 +157,8 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     public void singlePlusOnButtonPress(PlayerEntity playerIn){
 
+        //TODO: Weird interaction cause it is only half implemented right now, need to check if the player is at 0 and then continue
+
         int expLevel = playerIn.experienceLevel;
         ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
 
@@ -189,10 +191,12 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
     }
 
     public void singleMinusOnButtonPress(){
+        //TODO: Implement this but as the same as SinglePlus
 
     }
 
     public void doubleMinusOnButtonPress(){
+        //TODO: Implement this but as the same as DoublePlus
 
     }
 
