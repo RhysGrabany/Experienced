@@ -138,7 +138,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), button-> singlePlusOnButtonPress(playerInventory.player)));
         this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), (press)->{}));
+                new TranslationTextComponent(""), button->doublePlusOnButtonPress(playerInventory.player)));
 
 
         int expOffset = 0;
@@ -172,7 +172,19 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     }
 
-    public void doublePlusOnButtonPress(){
+    public void doublePlusOnButtonPress(PlayerEntity playerIn){
+
+        int expTotal = playerIn.experienceTotal;
+        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
+
+        int currAmount = experienceBlockStateData.get(4);
+
+        playerIn.giveExperiencePoints(-expTotal);
+
+        currAmount += expTotal;
+
+        experienceBlockStateData.set(4, currAmount);
+
 
     }
 
