@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModContainers {
 
-    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
+    private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
 
     public static final RegistryObject<ContainerType<ExperienceBlockContainer>> EXPERIENCE_BLOCK_CONTAINER;// = Registration.CONTAINERS.register("experience_block_container",
                 //() -> IForgeContainerType.create(ExperienceBlockContainer::createContainerClientSide));
@@ -22,7 +22,7 @@ public class ModContainers {
 
     static{
 
-        EXPERIENCE_BLOCK_CONTAINER = Registration.CONTAINERS.register("experience_block_container",
+        EXPERIENCE_BLOCK_CONTAINER = CONTAINERS.register("experience_block_container",
                 () -> IForgeContainerType.create(ExperienceBlockContainer::createContainerClientSide));
 
     }

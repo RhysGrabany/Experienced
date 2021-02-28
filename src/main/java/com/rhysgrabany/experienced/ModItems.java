@@ -21,14 +21,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModItems {
 
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
     public static final RegistryObject<Item> EXPERIENCE_BOOK;
     public static final RegistryObject<Item> EXPERIENCE_BLOCK_CASING;
 
     static{
-        EXPERIENCE_BOOK = Registration.ITEMS.register("experience_book", ExperienceBookItem::new);
-        EXPERIENCE_BLOCK_CASING = Registration.ITEMS.register("experience_block_casing", ExperienceBlockCasingItem::new);
+        EXPERIENCE_BOOK = ITEMS.register("experience_book", ExperienceBookItem::new);
+        EXPERIENCE_BLOCK_CASING = ITEMS.register("experience_block_casing", ExperienceBlockCasingItem::new);
 
         // All the blocks need their item equivalent otherwise loot tables wont work
         // A for each loop is great when used with Tier
@@ -44,7 +44,7 @@ public class ModItems {
 
     // Method used to register the BlockItem of each block, without this then there'd be no block drops
     private static <T extends Block> RegistryObject<BlockItem> registerBlockItemFor(RegistryObject<T> block){
-        return ITEMS.register(block.getId().getPath(), ()-> new BaseBlockItem(block.get(), new Item.Properties().group(ItemGroup.MISC)));
+        return ITEMS.register(block.getId().getPath(), ()-> new BaseBlockItem(block.get(), new Item.Properties().group(ItemGroup.MISC))); //TODO: Change from misc to something else
     }
 
     private ModItems(){}

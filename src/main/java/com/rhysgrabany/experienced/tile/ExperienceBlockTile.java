@@ -29,6 +29,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -49,14 +50,14 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     private ItemStack currentlyDrainingItemLastTick = ItemStack.EMPTY;
 
-    public final int MAX_EXP;
+//    public final int MAX_EXP;
 
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
 
     // Constructor that creates the tile and the input/output contents
-    public ExperienceBlockTile() {
-        super(ModTiles.EXPERIENCE_BLOCK_TILE);
+    public ExperienceBlockTile(ExperienceBlock.Tier tier) {
+        super(getTier(tier));
 
         inputContents = ExperienceBlockContents.createForTileEntity(INPUT_SLOTS,
                 this::canPlayerAccessInventory,
@@ -70,10 +71,25 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
                 this::canPlayerAccessInventory,
                 this::markDirty);
 
-        this.MAX_EXP = ExperienceBlock.MAX_EXP;
-
 
     }
+
+
+    public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
+        switch (tier){
+            case SMALL:
+                return ModTiles.EXPERIENCE_BLOCK_SMALL.get();
+            case MEDIUM:
+                return ModTiles.EXPERIENCE_BLOCK_MEDIUM.get();
+            case LARGE:
+                return ModTiles.EXPERIENCE_BLOCK_LARGE.get();
+            case CREATIVE:
+                return ModTiles.EXPERIENCE_BLOCK_CREATIVE.get();
+            default:
+                throw new IllegalArgumentException("Unkown tier: " + tier);
+        }
+    }
+
 
     @Override
     public ITextComponent getDisplayName() {

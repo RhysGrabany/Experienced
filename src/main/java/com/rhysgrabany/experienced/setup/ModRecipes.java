@@ -19,9 +19,9 @@ public class ModRecipes {
         return register(Constants.MOD_ID, serializer);
     }
 
-    private static RegistryObject<IRecipeSerializer<?>> register(ResourceLocation id, Supplier<IRecipeSerializer<?>> serializer){
-        return Registration.RECIPES.register(id.getPath(), serializer);
-    }
+//    private static RegistryObject<IRecipeSerializer<?>> register(ResourceLocation id, Supplier<IRecipeSerializer<?>> serializer){
+//        return Registration.RECIPES.register(id.getPath(), serializer);
+//    }
 
 
 }

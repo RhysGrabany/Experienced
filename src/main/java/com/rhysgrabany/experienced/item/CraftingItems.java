@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 
-//TODO: I dont know what this does again
+//TODO: I dont know what this does again, this is what happens when you follow a tutorial and don't question stuff
 public enum CraftingItems implements IItemProvider {
 
     EXPERIENCE_BOOK,
