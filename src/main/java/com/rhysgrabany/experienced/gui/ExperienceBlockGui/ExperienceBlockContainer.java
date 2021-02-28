@@ -80,7 +80,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
         this.experienceBlockStateData = experienceBlockStateData;
 
-        this.MAX_EXP = ExperienceBlock.getMaxExpFromTier(ExperienceBlock.BLOCK_TIER);
+//        this.MAX_EXP = ExperienceBlock.getMaxExpFromTier(ExperienceBlock.BLOCK_TIER);
 
         this.world = playerIn.player.world;
 

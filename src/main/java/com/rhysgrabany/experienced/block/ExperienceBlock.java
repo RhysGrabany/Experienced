@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 public class ExperienceBlock extends Block {
 
     // The tiers of the experience block, this makes it easy to register the blocks and all that sort of stuff
-    public static Tier BLOCK_TIER;
+    public Tier BLOCK_TIER;
 
     public enum Tier {
         SMALL("small"),

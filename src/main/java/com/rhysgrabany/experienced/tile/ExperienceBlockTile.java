@@ -143,8 +143,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
             if(experienceBlockStateData.expDrainElapsed < 0) experienceBlockStateData.expDrainElapsed = 0;
 
-            int drainTimeForItem = getItemDrainTime(this.world, currentlyDrainingItem);
-            experienceBlockStateData.expDrainToComplete = drainTimeForItem;
+//            int drainTimeForItem = getItemDrainTime(this.world, currentlyDrainingItem);
+//            experienceBlockStateData.expDrainToComplete = drainTimeForItem;
 
 
         }
@@ -339,20 +339,20 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         if(experienceBlockStateData.expDrainTimeRemaining == 0){
             ItemStack expDrainItemStack = inputContents.getStackInSlot(0);
-            if(!expDrainItemStack.isEmpty() && getItemDrainTime(this.world, expDrainItemStack) > 0){
-                int drainTimeForItem = getItemDrainTime(this.world, expDrainItemStack);
-
-                experienceBlockStateData.expDrainTimeRemaining = drainTimeForItem;
-                experienceBlockStateData.expDrainTimeInitialValue = drainTimeForItem;
-
-                inventoryChanged = true;
-
-
-//                if(expDrainItemStack.isEmpty()){
+//            if(!expDrainItemStack.isEmpty() && getItemDrainTime(this.world, expDrainItemStack) > 0){
+//                int drainTimeForItem = getItemDrainTime(this.world, expDrainItemStack);
 //
-//                }
-
-            }
+//                experienceBlockStateData.expDrainTimeRemaining = drainTimeForItem;
+//                experienceBlockStateData.expDrainTimeInitialValue = drainTimeForItem;
+//
+//                inventoryChanged = true;
+//
+//
+////                if(expDrainItemStack.isEmpty()){
+////
+////                }
+//
+//            }
         }
 
         if(inventoryChanged) markDirty();
@@ -360,32 +360,32 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return expDrain;
     }
 
-    public static int getItemDrainTime(World world, ItemStack stack){
+//    public static int getItemDrainTime(World world, ItemStack stack){
+//
+//        return getDrainTime(stack);
+//
+//
+//    }
 
-        return getDrainTime(stack);
+//    private static int getDrainTime(ItemStack item){
+//        int amount = item.getOrCreateTag().getInt("exp");
+//        return (amount / getDrainTimeMultiplier());
+//
+//    }
 
-
-    }
-
-    private static int getDrainTime(ItemStack item){
-        int amount = item.getOrCreateTag().getInt("exp");
-        return (amount / getDrainTimeMultiplier());
-
-    }
-
-    private static int getDrainTimeMultiplier(){
-        switch (ExperienceBlock.BLOCK_TIER){
-            case SMALL:
-                return 8;
-            case MEDIUM:
-                return 12;
-            case LARGE:
-                return 16;
-            case CREATIVE:
-                return 24;
-        }
-        return 0;
-    }
+//    private static int getDrainTimeMultiplier(){
+//        switch (ExperienceBlock.BLOCK_TIER){
+//            case SMALL:
+//                return 8;
+//            case MEDIUM:
+//                return 12;
+//            case LARGE:
+//                return 16;
+//            case CREATIVE:
+//                return 24;
+//        }
+//        return 0;
+//    }
 
 
     public static boolean isItemValidForInputSlot(ItemStack item){
