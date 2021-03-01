@@ -2,6 +2,7 @@ package com.rhysgrabany.experienced.gui.ExperienceBlockGui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.gui.widgets.buttons.*;
@@ -132,7 +133,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         //Buttons adding to the gui
         this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), (press)->{}));
+                new TranslationTextComponent(""), button->singleMinusOnButtonPress()));
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), (press)->{}));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
@@ -192,6 +193,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     public void singleMinusOnButtonPress(){
         //TODO: Implement this but as the same as SinglePlus
+        ExperienceBlock.Tier test = containerExpBlock.tier;
 
     }
 

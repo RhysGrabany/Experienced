@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class ExperienceBlock extends Block {
 
@@ -89,7 +91,12 @@ public class ExperienceBlock extends Block {
         if(nmContainer != null){
 
             TileEntity tile = worldIn.getTileEntity(pos);
-            NetworkHooks.openGui((ServerPlayerEntity) player, nmContainer, (packetBuffer -> {}));
+            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider)tile, new Consumer<PacketBuffer>() {
+                @Override
+                public void accept(PacketBuffer packetBuffer) {
+                    packetBuffer.writeBlockPos(pos);
+                }
+            });
 
         }
 

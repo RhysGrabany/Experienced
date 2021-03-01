@@ -50,6 +50,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     private ItemStack currentlyDrainingItemLastTick = ItemStack.EMPTY;
 
+    public ExperienceBlock.Tier tier;
+    public ExperienceBlockTile tile;
+
 //    public final int MAX_EXP;
 
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
@@ -70,6 +73,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         expBarContents = ExperienceBlockContents.createForTileEntity(EXP_BAR_SLOT,
                 this::canPlayerAccessInventory,
                 this::markDirty);
+
+        this.tier = tier;
+        this.tile = (ExperienceBlockTile) getTileEntity();
+
 
 
     }
@@ -100,7 +107,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
         return ExperienceBlockContainer.createContainerServerSide(p_createMenu_1_,
-                p_createMenu_2_, inputContents, outputContents, expBarContents, experienceBlockStateData);
+                p_createMenu_2_, tile, inputContents, outputContents, expBarContents, experienceBlockStateData);
     }
 
     // Basically just checks to see if the player is within range, true if they are
