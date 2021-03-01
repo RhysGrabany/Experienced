@@ -46,12 +46,6 @@ public class ExperienceBlockContainer extends BaseContainer {
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
 
-    // Pos of Tile Label
-
-    public static final int TILE_INV_YPOS = 20;
-    public static final int PLAYER_INV_YPOS = 51;
-
-
     private World world;
 
     private ExperienceBlockContents inputContents;
@@ -60,10 +54,9 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private ExperienceBlockStateData experienceBlockStateData;
 
-    private int MAX_EXP;
+    public final int MAX_EXP = 600;
 
-    private ExperienceBlockTile tile;
-    public static final ContainerType<ExperienceBlockContainer> TYPE = null;
+    public ExperienceBlockTile tile;
     private PlayerInventory playerIn;
 
     public ExperienceBlock.Tier tier;
@@ -73,9 +66,39 @@ public class ExperienceBlockContainer extends BaseContainer {
         super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
     }
 
-    public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, ExperienceBlockTile tile) {
-        super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
+//    public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, ExperienceBlockTile tile) {
+//        super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
+//
+//        ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
+//        ExperienceBlockContents outputZoneContents = ExperienceBlockContents.createForClientSideContainer(OUTPUT_SLOTS);
+//        ExperienceBlockContents expBarZoneContents = ExperienceBlockContents.createForClientSideContainer(EXP_BAR_SLOT);
+//        ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
+//
+//
+//        new ExperienceBlockContainer(windowId, playerIn, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
+//
+//    }
+
+    public static ExperienceBlockContainer createContainerServerSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile,
+                                                                     ExperienceBlockContents inputZoneContents,
+                                                                     ExperienceBlockContents outputZoneContents,
+                                                                     ExperienceBlockContents expBarZoneContents,
+                                                                     ExperienceBlockStateData experienceBlockStateData) {
+
+        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
     }
+
+    public static ExperienceBlockContainer createContainerClientSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile) {
+
+        ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
+        ExperienceBlockContents outputZoneContents = ExperienceBlockContents.createForClientSideContainer(OUTPUT_SLOTS);
+        ExperienceBlockContents expBarZoneContents = ExperienceBlockContents.createForClientSideContainer(EXP_BAR_SLOT);
+        ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
+
+
+        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
+    }
+
 
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, @Nullable ExperienceBlockTile tile, ExperienceBlockContents inputZoneContents,
                                     ExperienceBlockContents outputZoneContents, ExperienceBlockContents expBarZoneContents,
@@ -96,10 +119,10 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.tier = tile.tier;
 
         this.world = playerIn.player.world;
+        this.tile = tile;
 
         trackIntArray(experienceBlockStateData);
 
-        this.tile = tile;
 
         // The amount of pixels from the first pixel of one slot to the next slot
         final int SLOT_SPACING_X = 18;
@@ -158,25 +181,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     }
 
 
-    public static ExperienceBlockContainer createContainerServerSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile,
-                                                                     ExperienceBlockContents inputZoneContents,
-                                                                     ExperienceBlockContents outputZoneContents,
-                                                                     ExperienceBlockContents expBarZoneContents,
-                                                                     ExperienceBlockStateData experienceBlockStateData) {
 
-        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
-    }
-
-    public static ExperienceBlockContainer createContainerClientSide(int windowId, PlayerInventory playerInventory) {
-
-        ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
-        ExperienceBlockContents outputZoneContents = ExperienceBlockContents.createForClientSideContainer(OUTPUT_SLOTS);
-        ExperienceBlockContents expBarZoneContents = ExperienceBlockContents.createForClientSideContainer(EXP_BAR_SLOT);
-        ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
-
-
-        return new ExperienceBlockContainer(windowId, playerInventory, null, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
-    }
 
     public double fractionOfExpAmount(){
         if(experienceBlockStateData.expAmountInContainer == 0) return 0;

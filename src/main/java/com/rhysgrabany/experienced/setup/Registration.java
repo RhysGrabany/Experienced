@@ -20,26 +20,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 // This is the class that deals with the registration of different parts of the mod
 // Blocks, Items, Recipes, Tiles, etc etc
 public class Registration {
-//
-//    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
-//    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
-//    public static final DeferredRegister<IRecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MOD_ID);
-//    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
-//    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
-
-
-
 
     public static void register(){
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        // The deferred registries
-//        BLOCKS.register(modEventBus);
-//        ITEMS.register(modEventBus);
-//        RECIPES.register(modEventBus);
-//        TILES.register(modEventBus);
-//        CONTAINERS.register(modEventBus);
 
         // Registry objects are registered
         ModItems.register();
@@ -49,9 +31,6 @@ public class Registration {
         ModContainers.register();
 
 
-
-
     }
-
 
 }

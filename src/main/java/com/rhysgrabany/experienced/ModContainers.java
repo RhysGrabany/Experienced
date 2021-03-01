@@ -42,7 +42,7 @@ public class ModContainers {
                             TileEntity te = inv.player.world.getTileEntity(tePos);
 
                             if (te != null && te instanceof ExperienceBlockTile) {
-                                return new ExperienceBlockContainer(windowId, inv, ((ExperienceBlockTile) te));
+                                return ExperienceBlockContainer.createContainerClientSide(windowId, inv, (ExperienceBlockTile)te);
                             }
                         }
                         return new ExperienceBlockContainer(windowId, inv);

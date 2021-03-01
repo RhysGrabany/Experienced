@@ -177,16 +177,16 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     public void doublePlusOnButtonPress(PlayerEntity playerIn){
 
-        int expTotal = playerIn.experienceTotal;
-        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
-
-        int currAmount = experienceBlockStateData.get(4);
-
-        playerIn.giveExperiencePoints(-expTotal);
-
-        currAmount += expTotal;
-
-        experienceBlockStateData.set(4, currAmount);
+//        int expTotal = playerIn.experienceTotal;
+//        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
+//
+//        int currAmount = experienceBlockStateData.get(4);
+//
+//        playerIn.giveExperiencePoints(-expTotal);
+//
+//        currAmount += expTotal;
+//
+//        experienceBlockStateData.set(4, currAmount);
 
 
     }
