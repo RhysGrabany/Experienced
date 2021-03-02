@@ -157,6 +157,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
     }
 
     // Plus Buttons ADD experience to the block
+    // ADDING a single level to the block at a time
     public void singlePlusOnButtonPress(PlayerEntity playerIn){
 
         int expLevel = playerIn.experienceLevel;
@@ -191,32 +192,69 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     }
 
+    // ADDING all of the levels to the block
     public void doublePlusOnButtonPress(PlayerEntity playerIn){
 
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
 
-        // Base case
-        if(expLevel == 0 && expTotal == 0){
+        int expBlockAmount = containerExpBlock.getExpBlockAmount();
+        int maxExp = containerExpBlock.getMaxExpAmount();
+
+        // Check if we have reached our cap
+        if(expBlockAmount == maxExp){
             return;
         }
 
-        int expToTake = expTotal;
+        // Check if player is level 0 and has less than 7 exp
+        int expToTake;
+        if(expLevel == 0){
+            if(expTotal < 7){
+                expToTake = expTotal;
+            } else{
+                return;
+            }
+        } else{
+            expToTake = expTotal;
+        }
+
+        if(expToTake + expBlockAmount > maxExp){
+            expToTake = maxExp - expBlockAmount;
+        }
 
         playerIn.giveExperiencePoints(-expToTake);
-
         containerExpBlock.addExpAmount(expToTake);
-
     }
 
     // Minus Buttons TAKE AWAY experience from the block
-    public void singleMinusOnButtonPress(){
+    // TAKE AWAY a single level from the block
+    public void singleMinusOnButtonPress(PlayerEntity playerIn){
         //TODO: Implement this but as the same as SinglePlus
-        ExperienceBlock.Tier test = containerExpBlock.tier;
+
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = containerExpBlock.getExpBlockAmount();
+        int maxExp = containerExpBlock.getMaxExpAmount();
+
+        if(expBlockAmount == 0){
+            return;
+        }
+
+        int expToTake;
+
+        int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
+
+
+
+
+
+
 
     }
 
-    public void doubleMinusOnButtonPress(){
+    // TAKING AWAY all of the levels in the block
+    public void doubleMinusOnButtonPress(PlayerEntity playerIn){
         //TODO: Implement this but as the same as DoublePlus
 
     }
