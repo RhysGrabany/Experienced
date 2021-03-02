@@ -133,13 +133,13 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         //Buttons adding to the gui
         this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button->singleMinusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> singleMinusOnButtonPress(playerInventory.player)));
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button->doubleMinusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> doubleMinusOnButtonPress(playerInventory.player)));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button-> singlePlusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> singlePlusOnButtonPress(playerInventory.player)));
         this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button->doublePlusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> doublePlusOnButtonPress(playerInventory.player)));
 
 
         int expOffset = 0;
@@ -189,7 +189,6 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(-expToTake);
         containerExpBlock.addExpAmount(expToTake);
-
     }
 
     // ADDING all of the levels to the block
@@ -254,13 +253,29 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(expToTake);
         containerExpBlock.takeExpAmount(expToTake);
-
     }
 
     // TAKING AWAY all of the levels in the block
     public void doubleMinusOnButtonPress(PlayerEntity playerIn){
-        //TODO: Implement this but as the same as DoublePlus
 
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = containerExpBlock.getExpBlockAmount();
+        int maxExp = containerExpBlock.getMaxExpAmount();
+
+        if(expBlockAmount == 0){
+            return;
+        }
+
+        int expToTake = expBlockAmount;
+
+        // Clean up the dregs stored in the block
+        if(expToTake > expBlockAmount) {
+            expToTake = expBlockAmount;
+        }
+
+        playerIn.giveExperiencePoints(expToTake);
+        containerExpBlock.takeExpAmount(expToTake);
     }
-
 }
