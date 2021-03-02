@@ -126,20 +126,7 @@ public class ExperienceBlock extends Block {
 
     // Method used to initialize the max amount of exp a certain block can hold
     // For now; Small = 30, Medium = 60, Large = 100, Creative = MAX_VALUE, and default is 0 cause that might not happen
-    public static int getMaxExpFromTier(Tier tier){
-        switch(tier){
-            case SMALL:
-                return 1395;
-            case MEDIUM:
-                return 8670;
-            case LARGE:
-                return 30970;
-            case CREATIVE:
-                return Integer.MAX_VALUE;
-            default:
-                return 0;
-        }
-    }
+
 
     //endregion
 

@@ -54,7 +54,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private ExperienceBlockStateData experienceBlockStateData;
 
-    public final int MAX_EXP = 600;
+    public int MAX_EXP;
 
     public ExperienceBlockTile tile;
     private PlayerInventory playerIn;
@@ -65,19 +65,6 @@ public class ExperienceBlockContainer extends BaseContainer {
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn){
         super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
     }
-
-//    public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, ExperienceBlockTile tile) {
-//        super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
-//
-//        ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
-//        ExperienceBlockContents outputZoneContents = ExperienceBlockContents.createForClientSideContainer(OUTPUT_SLOTS);
-//        ExperienceBlockContents expBarZoneContents = ExperienceBlockContents.createForClientSideContainer(EXP_BAR_SLOT);
-//        ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
-//
-//
-//        new ExperienceBlockContainer(windowId, playerIn, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
-//
-//    }
 
     public static ExperienceBlockContainer createContainerServerSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile,
                                                                      ExperienceBlockContents inputZoneContents,
@@ -117,6 +104,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.experienceBlockStateData = experienceBlockStateData;
 
         this.tier = tile.tier;
+        this.MAX_EXP = getMaxExpFromTier(tier);
 
         this.world = playerIn.player.world;
         this.tile = tile;
@@ -171,11 +159,11 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
         // Exp Slot
-        final int EXP_SLOT_SPACING_X = 21;
-        final int EXP_SLOT_SPACING_Y = 72;
-
-        final int EXP_SLOT_XPOS = 8;
-        final int EXP_SLOT_YPOS = 7;
+//        final int EXP_SLOT_SPACING_X = 21;
+//        final int EXP_SLOT_SPACING_Y = 72;
+//
+//        final int EXP_SLOT_XPOS = 8;
+//        final int EXP_SLOT_YPOS = 7;
 
 
     }
@@ -237,7 +225,6 @@ public class ExperienceBlockContainer extends BaseContainer {
                 }
                 break;
             case PLAYER_MAIN_INVENTORY:
-                // TODO: Shift clicking moves the item but twice for some reason, so it stays in player main inv
                 if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
                     successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
                 }
@@ -279,6 +266,33 @@ public class ExperienceBlockContainer extends BaseContainer {
     public ExperienceBlockStateData getExperienceBlockData(){
         return experienceBlockStateData;
     }
+
+
+    public int getExpBlockAmount(){
+        return experienceBlockStateData.get(4);
+    }
+
+    public void setExpBlockAmount(int value){
+        experienceBlockStateData.set(4, value);
+    }
+
+    public void addExpAmount(int value){
+        int expAmountTotal = experienceBlockStateData.get(4);
+        expAmountTotal += value;
+        experienceBlockStateData.set(4, expAmountTotal);
+    }
+
+    public void takeExpAmount(int value){
+        addExpAmount(-value);
+    }
+
+    public int getMaxExpAmount(){
+        return getMaxExpFromTier(tier);
+    }
+
+
+
+
 
 
 
@@ -341,6 +355,24 @@ public class ExperienceBlockContainer extends BaseContainer {
             super(inventoryIn, index, xPosition, yPosition);
         }
     }
+
+
+    public static int getMaxExpFromTier(ExperienceBlock.Tier tier){
+        switch(tier){
+            case SMALL:
+                return 1395;
+            case MEDIUM:
+                return 8670;
+            case LARGE:
+                return 30970;
+            case CREATIVE:
+                return Integer.MAX_VALUE;
+            default:
+                return 0;
+        }
+    }
+
+
 
 
 }

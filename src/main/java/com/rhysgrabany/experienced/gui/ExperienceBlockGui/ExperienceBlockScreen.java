@@ -156,41 +156,60 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     }
 
+    // Plus Buttons ADD experience to the block
     public void singlePlusOnButtonPress(PlayerEntity playerIn){
 
-        //TODO: Weird interaction cause it is only half implemented right now, need to check if the player is at 0 and then continue
-
         int expLevel = playerIn.experienceLevel;
-        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
+        int expTotal = playerIn.experienceTotal;
 
-        int amount = ExperienceHelper.takeExpToPrevLevel(expLevel);
+        int expBlockAmount = containerExpBlock.getExpBlockAmount();
 
-        int currAmount = experienceBlockStateData.get(4);
+        // Check if we have reached our cap
+        if(expBlockAmount == containerExpBlock.getMaxExpAmount()){
+            return;
+        }
 
-        playerIn.giveExperiencePoints(-amount);
 
-        currAmount += amount;
+        // The amount of exp to take away from the player
+        int expToTake;
 
-        experienceBlockStateData.set(4, currAmount);
+        // Check if the player is level 0, if they are then check if they have 6 or less exp to take the dregs,
+        // else just take the exp normally
+        if(expLevel == 0){
+            if(expTotal < 7){
+                expToTake = expTotal;
+            }
+            else{
+                return;
+            }
+        } else{
+            expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
+        }
+
+        playerIn.giveExperiencePoints(-expToTake);
+        containerExpBlock.addExpAmount(expToTake);
 
     }
 
     public void doublePlusOnButtonPress(PlayerEntity playerIn){
 
-//        int expTotal = playerIn.experienceTotal;
-//        ExperienceBlockStateData experienceBlockStateData = containerExpBlock.getExperienceBlockData();
-//
-//        int currAmount = experienceBlockStateData.get(4);
-//
-//        playerIn.giveExperiencePoints(-expTotal);
-//
-//        currAmount += expTotal;
-//
-//        experienceBlockStateData.set(4, currAmount);
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
 
+        // Base case
+        if(expLevel == 0 && expTotal == 0){
+            return;
+        }
+
+        int expToTake = expTotal;
+
+        playerIn.giveExperiencePoints(-expToTake);
+
+        containerExpBlock.addExpAmount(expToTake);
 
     }
 
+    // Minus Buttons TAKE AWAY experience from the block
     public void singleMinusOnButtonPress(){
         //TODO: Implement this but as the same as SinglePlus
         ExperienceBlock.Tier test = containerExpBlock.tier;

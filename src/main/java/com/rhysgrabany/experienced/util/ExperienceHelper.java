@@ -32,12 +32,9 @@ public class ExperienceHelper {
     }
 
 
+    // Method used to get the experience needed to go back a level, easy to understand
     public static int takeExpToPrevLevel(int level){
-        level -= 1;
-
-        return recieveExpToNextLevel(level);
-
-
+        return recieveExpToNextLevel(level-1);
     }
 
 
