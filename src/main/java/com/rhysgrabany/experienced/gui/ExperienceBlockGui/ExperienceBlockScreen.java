@@ -133,9 +133,9 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         //Buttons adding to the gui
         this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button->singleMinusOnButtonPress()));
+                new TranslationTextComponent(""), button->singleMinusOnButtonPress(playerInventory.player)));
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), (press)->{}));
+                new TranslationTextComponent(""), button->doubleMinusOnButtonPress(playerInventory.player)));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
                 new TranslationTextComponent(""), button-> singlePlusOnButtonPress(playerInventory.player)));
         this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
@@ -218,6 +218,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
             expToTake = expTotal;
         }
 
+        // Clean up the dregs in the player exp bar
         if(expToTake + expBlockAmount > maxExp){
             expToTake = maxExp - expBlockAmount;
         }
@@ -229,7 +230,6 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
     // Minus Buttons TAKE AWAY experience from the block
     // TAKE AWAY a single level from the block
     public void singleMinusOnButtonPress(PlayerEntity playerIn){
-        //TODO: Implement this but as the same as SinglePlus
 
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
@@ -245,11 +245,15 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
 
+        // Clean up the dregs stored in the block
+        if(amountNeededToNextLevel > expBlockAmount){
+            expToTake = expBlockAmount;
+        } else {
+            expToTake = amountNeededToNextLevel;
+        }
 
-
-
-
-
+        playerIn.giveExperiencePoints(expToTake);
+        containerExpBlock.takeExpAmount(expToTake);
 
     }
 
