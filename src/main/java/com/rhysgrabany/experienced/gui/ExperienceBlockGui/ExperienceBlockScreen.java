@@ -41,8 +41,8 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
     //region Exp Bar Coords
     // B/G
-    final static int EXP_BAR_XPOS = 8;
-    final static int EXP_BAR_YPOS = 78;
+    final static int EXP_BAR_XPOS = 7;
+    final static int EXP_BAR_YPOS = 79;
 
     // F/G
     final static int EXP_BAR_TEX_U = 176;
@@ -93,8 +93,6 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         this.containerExpBlock = containerExpBlock;
 
-
-
     }
 
     @Override
@@ -142,21 +140,25 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
                 new TranslationTextComponent(""), button -> doublePlusOnButtonPress(playerInventory.player)));
 
 
-        int expOffset = 0;
         int arrowOffset = 13;
 
 
+        //Exp drawing
+        double expProgress = containerExpBlock.fractionOfExpAmount();
+        int yOffSetExp = (int)(EXP_BAR_SPACING_Y / expProgress);
+
+
         // Drawing the ExpBar
-        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - expOffset,
-                EXP_BAR_TEX_U, EXP_BAR_TEX_V - expOffset, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
+        this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - yOffSetExp,
+                EXP_BAR_TEX_U, EXP_BAR_TEX_V - yOffSetExp, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
 
         // Drawing the Arrow
-        this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS,
-                ARROW_BAR_TEX_U, ARROW_BAR_TEX_V, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y - arrowOffset);
+        this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS + arrowOffset,
+                ARROW_BAR_TEX_U, ARROW_BAR_TEX_V + arrowOffset, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y - arrowOffset);
 
     }
 
-    // Plus Buttons ADD experience to the block
+    // Plus Buttons ADD experience to the blockM
     // ADDING a single level to the block at a time
     public void singlePlusOnButtonPress(PlayerEntity playerIn){
 
@@ -189,6 +191,8 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(-expToTake);
         containerExpBlock.addExpAmount(expToTake);
+        containerExpBlock.markDirty();
+
     }
 
     // ADDING all of the levels to the block
@@ -224,6 +228,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(-expToTake);
         containerExpBlock.addExpAmount(expToTake);
+        containerExpBlock.markDirty();
     }
 
     // Minus Buttons TAKE AWAY experience from the block
@@ -241,7 +246,6 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
         }
 
         int expToTake;
-
         int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
 
         // Clean up the dregs stored in the block
@@ -253,6 +257,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(expToTake);
         containerExpBlock.takeExpAmount(expToTake);
+        containerExpBlock.markDirty();
     }
 
     // TAKING AWAY all of the levels in the block
@@ -277,5 +282,6 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         playerIn.giveExperiencePoints(expToTake);
         containerExpBlock.takeExpAmount(expToTake);
+        containerExpBlock.markDirty();
     }
 }

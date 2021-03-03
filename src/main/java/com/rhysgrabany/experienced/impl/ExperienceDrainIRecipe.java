@@ -1,14 +1,14 @@
 package com.rhysgrabany.experienced.impl;
 
-import com.rhysgrabany.experienced.recipe.ExperienceDrainRecipe;
+import com.rhysgrabany.experienced.recipe.ExperienceBlockRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class ExperienceDrainIRecipe extends ExperienceDrainRecipe {
+public class ExperienceDrainIRecipe extends ExperienceBlockRecipe {
 
     //TODO: Will I really need this? Find out next time on DBZ
-    public ExperienceDrainIRecipe(ResourceLocation id, ItemStack input, ItemStack output) {
-        super(id, input, output);
+    public ExperienceDrainIRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken) {
+        super(id, input, output, timeTaken);
     }
 
 

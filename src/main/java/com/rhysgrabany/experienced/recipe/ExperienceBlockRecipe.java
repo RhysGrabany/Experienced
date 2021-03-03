@@ -8,17 +8,20 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public abstract class ExperienceDrainRecipe extends ExperiencedRecipe {
+public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
 
 
     private final ItemStack input;
     private final ItemStack output;
+    private final int timeTaken;
 
-    public ExperienceDrainRecipe(ResourceLocation id, ItemStack input, ItemStack output){
+    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken){
         super(id);
 
         this.input = input;
         this.output = output.copy();
+        this.timeTaken = timeTaken;
+
     }
 
     @Override

@@ -57,7 +57,6 @@ public class ExperienceBlockContainer extends BaseContainer {
     public int MAX_EXP;
 
     public ExperienceBlockTile tile;
-    private PlayerInventory playerIn;
 
     public ExperienceBlock.Tier tier;
 
@@ -173,7 +172,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     public double fractionOfExpAmount(){
         if(experienceBlockStateData.expAmountInContainer == 0) return 0;
-        double fraction = experienceBlockStateData.expAmountInContainer / (double) MAX_EXP;
+        double fraction = MAX_EXP / (double) experienceBlockStateData.expAmountInContainer;
         return MathHelper.clamp(fraction, 0.0, 1.0);
     }
 
@@ -199,13 +198,6 @@ public class ExperienceBlockContainer extends BaseContainer {
 
         switch (sourceZone){
             case OUTPUT_ZONE:
-                successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, true);
-                if(!successfulTransfer){
-                    successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, true);
-                } else {
-                    sourceSlot.onSlotChange(sourceItemStack, sourceStackBeforeMerge);
-                }
-                break;
             case INPUT_ZONE:
                 successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
                 if(!successfulTransfer){
@@ -213,17 +205,6 @@ public class ExperienceBlockContainer extends BaseContainer {
                 }
                 break;
             case PLAYER_HOTBAR:
-                if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
-                    successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
-                }
-                if(!successfulTransfer){
-                    if(sourceZone == SlotZone.PLAYER_HOTBAR){
-                        successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
-                    } else {
-                        successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, false);
-                    }
-                }
-                break;
             case PLAYER_MAIN_INVENTORY:
                 if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
                     successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
@@ -236,7 +217,6 @@ public class ExperienceBlockContainer extends BaseContainer {
                     }
                 }
                 break;
-
             default:
                 throw new IllegalArgumentException("Unexpected sourceZone: " + sourceZone);
         }
@@ -262,38 +242,36 @@ public class ExperienceBlockContainer extends BaseContainer {
         return mergeItemStack(sourceItemStack, dest.firstIndex, dest.lastIndexPlus1, fillFromEnd);
     }
 
-    // TODO: I acc don't like this because it is too accessable to other classes, maybe narrow it down
-    public ExperienceBlockStateData getExperienceBlockData(){
-        return experienceBlockStateData;
-    }
-
-
     public int getExpBlockAmount(){
-        return experienceBlockStateData.get(4);
-    }
-
-    public void setExpBlockAmount(int value){
-        experienceBlockStateData.set(4, value);
+        return experienceBlockStateData.expAmountInContainer;
     }
 
     public void addExpAmount(int value){
-        int expAmountTotal = experienceBlockStateData.get(4);
-        expAmountTotal += value;
-        experienceBlockStateData.set(4, expAmountTotal);
+        experienceBlockStateData.expAmountInContainer += value;
     }
 
     public void takeExpAmount(int value){
-        addExpAmount(-value);
+        experienceBlockStateData.expAmountInContainer -= value;
     }
 
     public int getMaxExpAmount(){
         return getMaxExpFromTier(tier);
     }
 
-
-
-
-
+    public static int getMaxExpFromTier(ExperienceBlock.Tier tier){
+        switch(tier){
+            case SMALL:
+                return 1395;
+            case MEDIUM:
+                return 8670;
+            case LARGE:
+                return 30970;
+            case CREATIVE:
+                return Integer.MAX_VALUE;
+            default:
+                throw new IllegalArgumentException("Tier is not recognized: " + tier);
+        }
+    }
 
 
     private enum SlotZone{
@@ -321,6 +299,10 @@ public class ExperienceBlockContainer extends BaseContainer {
             throw new IndexOutOfBoundsException("Unexpected slotIndex");
         }
 
+    }
+
+    public void markDirty(){
+        tile.markDirty();
     }
 
 
@@ -357,20 +339,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     }
 
 
-    public static int getMaxExpFromTier(ExperienceBlock.Tier tier){
-        switch(tier){
-            case SMALL:
-                return 1395;
-            case MEDIUM:
-                return 8670;
-            case LARGE:
-                return 30970;
-            case CREATIVE:
-                return Integer.MAX_VALUE;
-            default:
-                return 0;
-        }
-    }
+
 
 
 

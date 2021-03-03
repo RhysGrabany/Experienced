@@ -10,7 +10,7 @@ public class ExperiencedRecipeType<RECIPE_TYPE extends ExperiencedRecipe> implem
 
     private static final List<ExperiencedRecipeType<? extends ExperiencedRecipe>> types = new ArrayList<>();
 
-//    public static final ExperiencedRecipeType<ExperienceDrainRecipe> EXPERIENCE_DRAIN = create("exp_drain");
+//    public static final ExperiencedRecipeType<ExperienceBlockRecipe> EXPERIENCE_DRAIN = create("exp_drain");
 
 
 
