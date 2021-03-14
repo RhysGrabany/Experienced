@@ -4,6 +4,7 @@ import com.rhysgrabany.experienced.ModContainers;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
+import com.rhysgrabany.experienced.util.ExperienceHelper;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -242,17 +243,6 @@ public class ExperienceBlockContainer extends BaseContainer {
         return mergeItemStack(sourceItemStack, dest.firstIndex, dest.lastIndexPlus1, fillFromEnd);
     }
 
-    public int getExpBlockAmount(){
-        return experienceBlockStateData.expAmountInContainer;
-    }
-
-    public void addExpAmount(int value){
-        experienceBlockStateData.expAmountInContainer += value;
-    }
-
-    public void takeExpAmount(int value){
-        experienceBlockStateData.expAmountInContainer -= value;
-    }
 
     public int getMaxExpAmount(){
         return getMaxExpFromTier(tier);
@@ -301,10 +291,131 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     }
 
-    public void markDirty(){
-        tile.markDirty();
+    //region Buttons for ExperienceBlockScreen
+
+    // Plus Buttons ADD experience to the blockM
+    // ADDING a single level to the block at a time
+    public void singlePlusOnButtonPress(PlayerEntity playerIn){
+
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = tile.getExpBlockAmount();
+
+        // Check if we have reached our cap
+        if(expBlockAmount == getMaxExpAmount()){
+            return;
+        }
+
+
+        // The amount of exp to take away from the player
+        int expToTake;
+
+        // Check if the player is level 0, if they are then check if they have 6 or less exp to take the dregs,
+        // else just take the exp normally
+        if(expLevel == 0){
+            if(expTotal < 7){
+                expToTake = expTotal;
+            }
+            else{
+                return;
+            }
+        } else{
+            expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
+        }
+
+        playerIn.giveExperiencePoints(-expToTake);
+        tile.addExpAmount(expToTake);
     }
 
+    // ADDING all of the levels to the block
+    public void doublePlusOnButtonPress(PlayerEntity playerIn){
+
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = tile.getExpBlockAmount();
+        int maxExp = getMaxExpAmount();
+
+        // Check if we have reached our cap
+        if(expBlockAmount == maxExp){
+            return;
+        }
+
+        // Check if player is level 0 and has less than 7 exp
+        int expToTake;
+        if(expLevel == 0){
+            if(expTotal < 7){
+                expToTake = expTotal;
+            } else{
+                return;
+            }
+        } else{
+            expToTake = expTotal;
+        }
+
+        // Clean up the dregs in the player exp bar
+        if(expToTake + expBlockAmount > maxExp){
+            expToTake = maxExp - expBlockAmount;
+        }
+
+        playerIn.giveExperiencePoints(-expToTake);
+        tile.addExpAmount(expToTake);
+    }
+
+    // Minus Buttons TAKE AWAY experience from the block
+    // TAKE AWAY a single level from the block
+    public void singleMinusOnButtonPress(PlayerEntity playerIn){
+
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = tile.getExpBlockAmount();
+        int maxExp = getMaxExpAmount();
+
+        if(expBlockAmount == 0){
+            return;
+        }
+
+        int expToTake;
+        int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
+
+        // Clean up the dregs stored in the block
+        if(amountNeededToNextLevel > expBlockAmount){
+            expToTake = expBlockAmount;
+        } else {
+            expToTake = amountNeededToNextLevel;
+        }
+
+        playerIn.giveExperiencePoints(expToTake);
+        tile.takeExpAmount(expToTake);
+    }
+
+    // TAKING AWAY all of the levels in the block
+    public void doubleMinusOnButtonPress(PlayerEntity playerIn){
+
+        int expLevel = playerIn.experienceLevel;
+        int expTotal = playerIn.experienceTotal;
+
+        int expBlockAmount = tile.getExpBlockAmount();
+        int maxExp = getMaxExpAmount();
+
+        if(expBlockAmount == 0){
+            return;
+        }
+
+        int expToTake = expBlockAmount;
+
+        // Clean up the dregs stored in the block
+        if(expToTake > expBlockAmount) {
+            expToTake = expBlockAmount;
+        }
+
+        playerIn.giveExperiencePoints(expToTake);
+        tile.takeExpAmount(expToTake);
+    }
+
+    //endregion
 
 
     public class SlotInput extends Slot {

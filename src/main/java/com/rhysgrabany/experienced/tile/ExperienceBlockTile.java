@@ -144,15 +144,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
             boolean isSomethingDraining = drainExp();
 
 
-            if(isSomethingDraining){
-                experienceBlockStateData.expDrainElapsed += 1;
-            }
-
-            if(experienceBlockStateData.expDrainElapsed < 0) experienceBlockStateData.expDrainElapsed = 0;
-
-//            int drainTimeForItem = getItemDrainTime(this.world, currentlyDrainingItem);
-//            experienceBlockStateData.expDrainToComplete = drainTimeForItem;
-
+            if(isSomethingDraining){ experienceBlockStateData.expDrainElapsed += 1; }
+            if(experienceBlockStateData.expDrainElapsed < 0){ experienceBlockStateData.expDrainElapsed = 0; }
 
         }
 
@@ -308,32 +301,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     }
 
-    // TODO: This doesn't work the way I think it does
-    public static ItemStack getDrainResultForItem(World world, ItemStack item){
-
-        ItemStack itemCopy = item.copy();
-        itemCopy.getOrCreateTag().putInt("exp", 0);
-
-        return itemCopy;
-
-//        item.getOrCreateTag().putInt("exp", 0);
-//
-//        return item;
-    }
-
-//    private boolean takeExperience(ItemStackHandler itemHandler){
-//        if(itemHandler == null){
-//            return false;
-//        }
-//
-//        int expToTake = itemHandler.getStackInSlot(0).getOrCreateTag().getInt("exp");
-//
-//        if(expToTake > 0){
-//
-//
-//        }
-//
-//    }
 
     private boolean drainExp(){
         boolean expDrain = false;
@@ -346,20 +313,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         if(experienceBlockStateData.expDrainTimeRemaining == 0){
             ItemStack expDrainItemStack = inputContents.getStackInSlot(0);
-//            if(!expDrainItemStack.isEmpty() && getItemDrainTime(this.world, expDrainItemStack) > 0){
-//                int drainTimeForItem = getItemDrainTime(this.world, expDrainItemStack);
-//
-//                experienceBlockStateData.expDrainTimeRemaining = drainTimeForItem;
-//                experienceBlockStateData.expDrainTimeInitialValue = drainTimeForItem;
-//
-//                inventoryChanged = true;
-//
-//
-////                if(expDrainItemStack.isEmpty()){
-////
-////                }
-//
-//            }
+
         }
 
         if(inventoryChanged) markDirty();
@@ -367,18 +321,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return expDrain;
     }
 
-//    public static int getItemDrainTime(World world, ItemStack stack){
-//
-//        return getDrainTime(stack);
-//
-//
-//    }
-
-//    private static int getDrainTime(ItemStack item){
-//        int amount = item.getOrCreateTag().getInt("exp");
-//        return (amount / getDrainTimeMultiplier());
-//
-//    }
 
 //    private static int getDrainTimeMultiplier(){
 //        switch (ExperienceBlock.BLOCK_TIER){
@@ -404,6 +346,20 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
+
+    public int getExpBlockAmount(){
+        return experienceBlockStateData.expAmountInContainer;
+    }
+
+    public void addExpAmount(int value){
+        experienceBlockStateData.expAmountInContainer += value;
+        markDirty();
+    }
+
+    public void takeExpAmount(int value){
+        experienceBlockStateData.expAmountInContainer -= value;
+        markDirty();
+    }
 
 
 
