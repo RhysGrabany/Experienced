@@ -321,7 +321,11 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
         }
 
-        if ()
+        // Check if the amount coming in can fit well under the cap, if not
+        // then lower the amount and continue
+        if(expToTake + expBlockAmount > expMaxAmount){
+            expToTake = expMaxAmount - expBlockAmount;
+        }
 
         playerIn.giveExperiencePoints(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
