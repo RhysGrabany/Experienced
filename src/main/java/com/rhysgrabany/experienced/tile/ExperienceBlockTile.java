@@ -58,7 +58,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
 
-    // Constructor that creates the tile and the input/output contents
+    // Constructor that creates the experienceBlockTile and the input/output contents
     public ExperienceBlockTile(ExperienceBlock.Tier tier) {
         super(getTier(tier));
 
@@ -93,7 +93,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
             case CREATIVE:
                 return ModTiles.EXPERIENCE_BLOCK_CREATIVE.get();
             default:
-                throw new IllegalArgumentException("Unkown tier: " + tier);
+                throw new IllegalArgumentException("Unknown tier: " + tier);
         }
     }
 
@@ -321,22 +321,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return expDrain;
     }
 
-
-//    private static int getDrainTimeMultiplier(){
-//        switch (ExperienceBlock.BLOCK_TIER){
-//            case SMALL:
-//                return 8;
-//            case MEDIUM:
-//                return 12;
-//            case LARGE:
-//                return 16;
-//            case CREATIVE:
-//                return 24;
-//        }
-//        return 0;
-//    }
-
-
     public static boolean isItemValidForInputSlot(ItemStack item){
         return true;
     }
@@ -351,11 +335,15 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return experienceBlockStateData.expAmountInContainer;
     }
 
+    // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
+
+    // Add Exp to the Block
     public void addExpAmount(int value){
         experienceBlockStateData.expAmountInContainer += value;
         markDirty();
     }
 
+    // Take Exp from the Block
     public void takeExpAmount(int value){
         experienceBlockStateData.expAmountInContainer -= value;
         markDirty();

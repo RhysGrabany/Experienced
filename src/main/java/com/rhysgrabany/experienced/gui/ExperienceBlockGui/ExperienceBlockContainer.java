@@ -5,15 +5,11 @@ import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
 import com.rhysgrabany.experienced.util.ExperienceHelper;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -55,9 +51,9 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private ExperienceBlockStateData experienceBlockStateData;
 
-    public int MAX_EXP;
+    private int MAX_EXP;
 
-    public ExperienceBlockTile tile;
+    private ExperienceBlockTile experienceBlockTile;
 
     public ExperienceBlock.Tier tier;
 
@@ -107,7 +103,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.MAX_EXP = getMaxExpFromTier(tier);
 
         this.world = playerIn.player.world;
-        this.tile = tile;
+        this.experienceBlockTile = tile;
 
         trackIntArray(experienceBlockStateData);
 
@@ -172,8 +168,9 @@ public class ExperienceBlockContainer extends BaseContainer {
 
 
     public double fractionOfExpAmount(){
-        if(experienceBlockStateData.expAmountInContainer == 0) return 0;
-        double fraction = MAX_EXP / (double) experienceBlockStateData.expAmountInContainer;
+        int expAmount = experienceBlockTile.getExpBlockAmount();
+        if(expAmount == 0) return 0;
+        double fraction = (double) expAmount / MAX_EXP;
         return MathHelper.clamp(fraction, 0.0, 1.0);
     }
 
@@ -300,13 +297,13 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
 
-        int expBlockAmount = tile.getExpBlockAmount();
+        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
+        int expMaxAmount = getMaxExpAmount();
 
         // Check if we have reached our cap
-        if(expBlockAmount == getMaxExpAmount()){
+        if(expBlockAmount == expMaxAmount){
             return;
         }
-
 
         // The amount of exp to take away from the player
         int expToTake;
@@ -324,8 +321,10 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
         }
 
+        if ()
+
         playerIn.giveExperiencePoints(-expToTake);
-        tile.addExpAmount(expToTake);
+        experienceBlockTile.addExpAmount(expToTake);
     }
 
     // ADDING all of the levels to the block
@@ -334,7 +333,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
 
-        int expBlockAmount = tile.getExpBlockAmount();
+        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = getMaxExpAmount();
 
         // Check if we have reached our cap
@@ -360,7 +359,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
         playerIn.giveExperiencePoints(-expToTake);
-        tile.addExpAmount(expToTake);
+        experienceBlockTile.addExpAmount(expToTake);
     }
 
     // Minus Buttons TAKE AWAY experience from the block
@@ -370,7 +369,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
 
-        int expBlockAmount = tile.getExpBlockAmount();
+        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = getMaxExpAmount();
 
         if(expBlockAmount == 0){
@@ -388,7 +387,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
         playerIn.giveExperiencePoints(expToTake);
-        tile.takeExpAmount(expToTake);
+        experienceBlockTile.takeExpAmount(expToTake);
     }
 
     // TAKING AWAY all of the levels in the block
@@ -397,7 +396,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expLevel = playerIn.experienceLevel;
         int expTotal = playerIn.experienceTotal;
 
-        int expBlockAmount = tile.getExpBlockAmount();
+        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = getMaxExpAmount();
 
         if(expBlockAmount == 0){
@@ -412,7 +411,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
         playerIn.giveExperiencePoints(expToTake);
-        tile.takeExpAmount(expToTake);
+        experienceBlockTile.takeExpAmount(expToTake);
     }
 
     //endregion

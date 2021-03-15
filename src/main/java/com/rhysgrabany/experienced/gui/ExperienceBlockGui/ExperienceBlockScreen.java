@@ -145,7 +145,7 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         //Exp drawing
         double expProgress = containerExpBlock.fractionOfExpAmount();
-        int yOffSetExp = (int)(EXP_BAR_SPACING_Y / expProgress);
+        int yOffSetExp = (int)(EXP_BAR_SPACING_Y * expProgress);
 
 
         // Drawing the ExpBar
