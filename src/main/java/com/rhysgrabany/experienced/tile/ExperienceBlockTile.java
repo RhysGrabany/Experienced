@@ -85,13 +85,13 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
         switch (tier){
             case SMALL:
-                return ModTiles.EXPERIENCE_BLOCK_SMALL.get();
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.SMALL).get();
             case MEDIUM:
-                return ModTiles.EXPERIENCE_BLOCK_MEDIUM.get();
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.MEDIUM).get();
             case LARGE:
-                return ModTiles.EXPERIENCE_BLOCK_LARGE.get();
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.LARGE).get();
             case CREATIVE:
-                return ModTiles.EXPERIENCE_BLOCK_CREATIVE.get();
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.CREATIVE).get();
             default:
                 throw new IllegalArgumentException("Unknown tier: " + tier);
         }

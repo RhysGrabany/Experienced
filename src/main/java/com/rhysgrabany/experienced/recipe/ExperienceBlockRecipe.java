@@ -14,13 +14,15 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
     private final ItemStack input;
     private final ItemStack output;
     private final int timeTaken;
+    private final int expAmount;
 
-    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken){
+    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken, int expAmount){
         super(id);
 
         this.input = input;
         this.output = output.copy();
         this.timeTaken = timeTaken;
+        this.expAmount = expAmount;
 
     }
 
