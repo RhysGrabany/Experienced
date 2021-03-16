@@ -7,7 +7,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
 
 import java.util.function.Consumer;
 

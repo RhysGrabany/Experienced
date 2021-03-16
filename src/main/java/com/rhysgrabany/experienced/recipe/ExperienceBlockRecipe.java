@@ -8,7 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
+public class ExperienceBlockRecipe extends ExperiencedRecipe {
 
 
     private final ItemStack input;

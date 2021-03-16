@@ -1,14 +1,34 @@
 package com.rhysgrabany.experienced.setup;
 
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.recipe.ExperienceBlockRecipe;
+import com.rhysgrabany.experienced.recipe.serializer.ExperienceBlockSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Supplier;
 
 // ModRecipes allow all the recipe in the mod to be registered
 public class ModRecipes {
+
+
+
+    private static final DeferredRegister<IRecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MOD_ID);
+
+    public static final RegistryObject<IRecipeSerializer<ExperienceBlockRecipe>> EXPERIENCE_BLOCK_RECIPE;
+
+    static{
+        EXPERIENCE_BLOCK_RECIPE = RECIPES.register("experience_block_recipe", new ExperienceBlockSerializer<ExperienceBlockRecipe>(ExperienceBlockRecipe::new));
+    }
+
+
+
+
+
 
     private ModRecipes(){}
 
