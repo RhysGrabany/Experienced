@@ -1,7 +1,7 @@
 package com.rhysgrabany.experienced.recipe.serializer;
 
 import com.google.gson.JsonObject;
-import com.rhysgrabany.experienced.recipe.ExperienceBlockRecipe;
+import com.rhysgrabany.experienced.recipe.recipes.ExperienceBlockRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-import javax.annotation.Resource;
 
 public class ExperienceBlockSerializer <R extends ExperienceBlockRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>>
         implements IRecipeSerializer<R> {

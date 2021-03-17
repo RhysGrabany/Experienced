@@ -1,5 +1,6 @@
-package com.rhysgrabany.experienced.recipe;
+package com.rhysgrabany.experienced.recipe.recipes;
 
+import com.rhysgrabany.experienced.recipe.recipes.ExperiencedRecipe;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -8,20 +9,18 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class ExperienceBlockRecipe extends ExperiencedRecipe {
+public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
 
 
     private final ItemStack input;
     private final ItemStack output;
-    private final int timeTaken;
     private final int expAmount;
 
-    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken, int expAmount){
+    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int expAmount){
         super(id);
 
         this.input = input;
         this.output = output.copy();
-        this.timeTaken = timeTaken;
         this.expAmount = expAmount;
 
     }
