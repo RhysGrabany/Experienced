@@ -41,11 +41,6 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
-        return output.copy();
-    }
-
-    @Override
     public ResourceLocation getId() {
         return null;
     }
@@ -65,7 +60,20 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
 
         buff.writeItemStack(input);
         buff.writeItemStack(output);
+        buff.writeInt(expAmount);
 
+    }
 
+    public ItemStack getInput() {
+        return input;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return output.copy();
+    }
+
+    public int getExpAmount() {
+        return expAmount;
     }
 }
