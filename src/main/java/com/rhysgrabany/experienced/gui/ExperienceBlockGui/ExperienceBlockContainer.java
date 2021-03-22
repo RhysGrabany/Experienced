@@ -212,6 +212,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         switch (sourceZone){
             case OUTPUT_ZONE:
             case INPUT_ZONE:
+            case INPUT_BOOK_ZONE:
                 successfulTransfer = mergeInto(SlotZone.PLAYER_MAIN_INVENTORY, sourceItemStack, false);
                 if(!successfulTransfer){
                     successfulTransfer = mergeInto(SlotZone.PLAYER_HOTBAR, sourceItemStack, false);
@@ -220,7 +221,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             case PLAYER_HOTBAR:
             case PLAYER_MAIN_INVENTORY:
                 if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
-                    successfulTransfer = mergeInto(SlotZone.INPUT_ZONE, sourceItemStack, false);
+                    successfulTransfer = mergeInto(SlotZone.INPUT_BOOK_ZONE, sourceItemStack, false);
                 }
                 if(!successfulTransfer){
                     if(sourceZone == SlotZone.PLAYER_HOTBAR){
