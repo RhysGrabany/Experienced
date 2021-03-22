@@ -40,11 +40,13 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
 
     public static final int INPUT_SLOTS = 1;
+    public static final int INPUT_BOOK_SLOTS = 1;
     public static final int OUTPUT_SLOTS = 1;
     public static final int EXP_BAR_SLOT = 1;
     public static final int TOTAL_SLOTS = INPUT_SLOTS + OUTPUT_SLOTS;
 
     private ExperienceBlockContents inputContents;
+    private ExperienceBlockContents inputBookContents;
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
 
@@ -63,6 +65,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         super(getTier(tier));
 
         inputContents = ExperienceBlockContents.createForTileEntity(INPUT_SLOTS,
+                this::canPlayerAccessInventory,
+                this::markDirty);
+
+        inputBookContents = ExperienceBlockContents.createForTileEntity(INPUT_BOOK_SLOTS,
                 this::canPlayerAccessInventory,
                 this::markDirty);
 
@@ -173,6 +179,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
     private final String INPUT_SLOT_NBT = "inputSlot";
+    private final String INPUT_BOOK_SLOT_NBT = "inputBookSlot";
     private final String OUTPUT_SLOT_NBT = "outputSlot";
     private final String EXP_BAR_NBT = "expBar";
 
@@ -183,6 +190,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         experienceBlockStateData.putIntoNBT(compound);
 
         compound.put(INPUT_SLOT_NBT, inputContents.serializeNBT());
+        compound.put(INPUT_BOOK_SLOT_NBT, inputBookContents.serializeNBT());
         compound.put(OUTPUT_SLOT_NBT, outputContents.serializeNBT());
         compound.put(EXP_BAR_NBT, expBarContents.serializeNBT());
 
@@ -199,6 +207,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         CompoundNBT invNBT = nbt.getCompound(INPUT_SLOT_NBT);
         inputContents.deserializeNBT(invNBT);
 
+        invNBT = nbt.getCompound(INPUT_BOOK_SLOT_NBT);
+        inputBookContents.deserializeNBT(invNBT);
+
         invNBT = nbt.getCompound(OUTPUT_SLOT_NBT);
         outputContents.deserializeNBT(invNBT);
 
@@ -206,6 +217,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         expBarContents.deserializeNBT(invNBT);
 
         if(inputContents.getSizeInventory() != INPUT_SLOTS
+                || inputBookContents.getSizeInventory() != INPUT_BOOK_SLOTS
                 || outputContents.getSizeInventory() != OUTPUT_SLOTS
                 || expBarContents.getSizeInventory() != EXP_BAR_SLOT){
             throw new IllegalArgumentException("Corrupted NBT: Number of inventory slots did not match expected");
@@ -245,6 +257,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     public void dropContents(World world, BlockPos pos){
         InventoryHelper.dropInventoryItems(world, pos, inputContents);
+        InventoryHelper.dropInventoryItems(world, pos, inputBookContents);
         InventoryHelper.dropInventoryItems(world, pos, outputContents);
     }
 

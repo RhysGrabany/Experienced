@@ -31,11 +31,13 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     // Experience Block Inventory slot counts
     public static final int INPUT_SLOTS = ExperienceBlockTile.INPUT_SLOTS;
+    public static final int INPUT_BOOK_SLOTS = ExperienceBlockTile.INPUT_BOOK_SLOTS;
     public static final int OUTPUT_SLOTS = ExperienceBlockTile.OUTPUT_SLOTS;
     public static final int EXP_BAR_SLOT = ExperienceBlockTile.EXP_BAR_SLOT;
     // Experience Block Inventory Indexes
     private static final int INPUT_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + PLAYER_INVENTORY_SLOT_COUNT;
-    private static final int OUTPUT_SLOT_INDEX = INPUT_SLOT_INDEX + OUTPUT_SLOTS;
+    private static final int INPUT_BOOK_SLOT_INDEX = INPUT_SLOT_INDEX + INPUT_BOOK_SLOTS;
+    private static final int OUTPUT_SLOT_INDEX = INPUT_BOOK_SLOT_INDEX + OUTPUT_SLOTS;
     private static final int EXP_BAR_SLOT_INDEX = OUTPUT_SLOT_INDEX + EXP_BAR_SLOT;
 
 
@@ -46,6 +48,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     private World world;
 
     private ExperienceBlockContents inputContents;
+    private ExperienceBlockContents inputBookContents;
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
 
@@ -64,28 +67,30 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     public static ExperienceBlockContainer createContainerServerSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile,
                                                                      ExperienceBlockContents inputZoneContents,
+                                                                     ExperienceBlockContents inputBookZoneContents,
                                                                      ExperienceBlockContents outputZoneContents,
                                                                      ExperienceBlockContents expBarZoneContents,
                                                                      ExperienceBlockStateData experienceBlockStateData) {
 
-        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
+        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, inputBookZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
     }
 
     public static ExperienceBlockContainer createContainerClientSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile) {
 
         ExperienceBlockContents inputZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_SLOTS);
+        ExperienceBlockContents inputBookZoneContents = ExperienceBlockContents.createForClientSideContainer(INPUT_BOOK_SLOTS);
         ExperienceBlockContents outputZoneContents = ExperienceBlockContents.createForClientSideContainer(OUTPUT_SLOTS);
         ExperienceBlockContents expBarZoneContents = ExperienceBlockContents.createForClientSideContainer(EXP_BAR_SLOT);
         ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
 
-        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
+        return new ExperienceBlockContainer(windowId, playerInventory, tile, inputZoneContents, inputBookZoneContents, outputZoneContents, expBarZoneContents, experienceBlockStateData);
     }
 
 
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn, @Nullable ExperienceBlockTile tile, ExperienceBlockContents inputZoneContents,
-                                    ExperienceBlockContents outputZoneContents, ExperienceBlockContents expBarZoneContents,
-                                    ExperienceBlockStateData experienceBlockStateData) {
+                                    ExperienceBlockContents inputBookZoneContents, ExperienceBlockContents outputZoneContents,
+                                    ExperienceBlockContents expBarZoneContents, ExperienceBlockStateData experienceBlockStateData) {
 
         super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
 
@@ -94,6 +99,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
         this.inputContents = inputZoneContents;
+        this.inputBookContents = inputBookZoneContents;
         this.outputContents = outputZoneContents;
         this.expBarContents = expBarZoneContents;
 
@@ -143,6 +149,15 @@ public class ExperienceBlockContainer extends BaseContainer {
         // This looks stupid just for one slot but it gives the chance to upgrade in the future if I really want to
         for (int i = 0; i < INPUT_SLOTS; i++) {
             addSlot(new SlotInput(inputZoneContents, i, INPUT_SLOT_XPOS + SLOT_SPACING_X * i, INPUT_SLOT_YPOS));
+        }
+
+        // Input Slot
+        final int INPUT_BOOK_SLOT_XPOS = 77;
+        final int INPUT_BOOK_SLOT_YPOS = 32;
+
+        // This looks stupid just for one slot but it gives the chance to upgrade in the future if I really want to
+        for (int i = 0; i < INPUT_SLOTS; i++) {
+            addSlot(new SlotInputBook(inputBookZoneContents, i, INPUT_BOOK_SLOT_XPOS + SLOT_SPACING_X * i, INPUT_BOOK_SLOT_YPOS));
         }
 
 
@@ -263,6 +278,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private enum SlotZone{
         INPUT_ZONE(INPUT_SLOT_INDEX, INPUT_SLOTS),
+        INPUT_BOOK_ZONE(INPUT_BOOK_SLOT_INDEX, INPUT_BOOK_SLOTS),
         OUTPUT_ZONE(OUTPUT_SLOT_INDEX, OUTPUT_SLOTS),
         EXP_ZONE(EXP_BAR_SLOT_INDEX, EXP_BAR_SLOT),
         PLAYER_MAIN_INVENTORY(PLAYER_INVENTORY_FIRST_SLOT_INDEX, PLAYER_INVENTORY_SLOT_COUNT),
@@ -424,6 +440,18 @@ public class ExperienceBlockContainer extends BaseContainer {
     public class SlotInput extends Slot {
 
         public SlotInput(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+            super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return ExperienceBlockTile.isItemValidForInputSlot(stack);
+        }
+    }
+
+    public class SlotInputBook extends Slot {
+
+        public SlotInputBook(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
         }
 
