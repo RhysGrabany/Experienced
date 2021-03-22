@@ -1,11 +1,13 @@
 package com.rhysgrabany.experienced;
 
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.recipe.ExperiencedRecipeType;
 import com.rhysgrabany.experienced.setup.ClientSetup;
 import com.rhysgrabany.experienced.setup.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -40,6 +42,10 @@ public class Experienced
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
+
+//    private void registerRecipeType(RegistryEvent.Register<IRecipeSerializer<?>> e){
+//        ExperiencedRecipeType.re
+//    }
 
 
     public static ModelResourceLocation getId(String path){

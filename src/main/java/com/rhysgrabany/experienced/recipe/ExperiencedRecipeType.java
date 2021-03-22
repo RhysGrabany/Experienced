@@ -15,6 +15,8 @@ import java.util.*;
 
 public class ExperiencedRecipeType<RT extends ExperiencedRecipe> implements IRecipeType<RT> {
 
+
+
     private static final List<ExperiencedRecipeType<? extends ExperiencedRecipe>> types = new ArrayList<>();
 
     public static final ExperiencedRecipeType<ExperienceBlockRecipe> EXPERIENCE_BLOCK = create("exp_block");

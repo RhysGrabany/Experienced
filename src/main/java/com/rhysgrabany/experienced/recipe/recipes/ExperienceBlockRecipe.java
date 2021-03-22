@@ -1,5 +1,6 @@
 package com.rhysgrabany.experienced.recipe.recipes;
 
+import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
 import com.rhysgrabany.experienced.recipe.recipes.ExperiencedRecipe;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -12,11 +13,11 @@ import net.minecraft.world.World;
 public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
 
 
-    private final ItemStack input;
+    private final ItemIngredient input;
     private final ItemStack output;
     private final int expAmount;
 
-    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int expAmount){
+    public ExperienceBlockRecipe(ResourceLocation id, ItemIngredient input, ItemStack output, int expAmount){
         super(id);
 
         this.input = input;
@@ -58,13 +59,13 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
     @Override
     public void write(PacketBuffer buff) {
 
-        buff.writeItemStack(input);
+        input.write(buff);
         buff.writeItemStack(output);
         buff.writeInt(expAmount);
 
     }
 
-    public ItemStack getInput() {
+    public ItemIngredient getInput() {
         return input;
     }
 

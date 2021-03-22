@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 public class ExperienceBlockIRecipe extends ExperienceBlockRecipe {
 
     //TODO: Will I really need this? Find out next time on DBZ
-    public ExperienceBlockIRecipe(ResourceLocation id, ItemStack input, ItemStack output, int expAmount) {
+    public ExperienceBlockIRecipe(ResourceLocation id, ItemIngredient input, ItemStack output, int expAmount) {
         super(id, input, output, expAmount);
     }
 
