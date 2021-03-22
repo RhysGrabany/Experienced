@@ -1,5 +1,9 @@
 package com.rhysgrabany.experienced.recipe.builder;
 
+import com.google.gson.JsonObject;
+import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.recipe.recipes.ExperienceBlockRecipe;
+import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -9,7 +13,7 @@ public class ExperienceBlockRecipeBuilder extends ExperiencedRecipeBuilder<Exper
     private final ItemStack output;
     private final int expAmount;
 
-    protected ExperiencedBlockRecipeBuilder(ItemStack input, ItemStack output, int expAmount){
+    protected ExperienceBlockRecipeBuilder(ItemStack input, ItemStack output, int expAmount){
         super(expSerializer("experience_block"));
         this.input = input;
         this.output = output;
@@ -28,4 +32,27 @@ public class ExperienceBlockRecipeBuilder extends ExperiencedRecipeBuilder<Exper
     protected RecipeResult getResult(ResourceLocation id) {
         return null;
     }
+
+
+
+
+    public class ExperienceBlockRecipeResult extends RecipeResult{
+        protected ExperienceBlockRecipeResult(ResourceLocation id){
+            super(id);
+        }
+
+        @Override
+        public void serialize(JsonObject json) {
+            json.add(Constants.Json.INPUT, input.serializeNBT());
+        }
+    }
+
+    CookingRecipeBuilder
+
+
+
+
+
+
+
 }
