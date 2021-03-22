@@ -12,6 +12,7 @@ import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -26,6 +27,12 @@ public class ModRecipesProvider extends RecipeProvider {
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         registerItemRecipes(consumer);
         registerBlockRecipes(consumer);
+
+        ExperienceBlockRecipeBuilder.experienced(ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem())),
+                ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem())), 10)
+                .addCriterion("has_item", hasItem())
+                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + "_exp"));
+
     }
 
     // Register the recipe for the Items in the Mod
@@ -67,10 +74,7 @@ public class ModRecipesProvider extends RecipeProvider {
                 .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BLOCK_CASING.get()))
                 .build(consumer);
 
-        ExperienceBlockRecipeBuilder.experienced(ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem()), 1),
-                ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem()), 1), 10)
-                .addCriterion("has_item", hasItem())
-                .build(consumer, Experienced.getId(ModItems.EXPERIENCE_BOOK.get().getName() + "_exp"));
+
 
 //        CookingRecipeBuilder.smeltingRecipe();
 

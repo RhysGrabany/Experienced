@@ -16,6 +16,7 @@ import net.minecraftforge.common.crafting.NBTIngredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public abstract class ItemIngredient implements InputIngredient<ItemStack> {
 
@@ -45,10 +46,8 @@ public abstract class ItemIngredient implements InputIngredient<ItemStack> {
     }
 
     public static ItemIngredient from(@Nonnull Ingredient ingredient, int amount){
-        return new Item(ingredient, amount);
+        return new Single(ingredient, amount);
     }
-
-
 
     public static ItemIngredient read(PacketBuffer buff){
         return read(buff);
@@ -83,8 +82,72 @@ public abstract class ItemIngredient implements InputIngredient<ItemStack> {
         Ingredient ingredient = Ingredient.deserialize(jsonElement);
         return from(ingredient, amount);
 
-
     }
+
+    public static class Single extends ItemIngredient{
+
+        @Nonnull
+        private final Ingredient ingredient;
+        private final int amount;
+
+        public Single(@Nonnull Ingredient ingredient, int amount){
+            this.ingredient = Objects.requireNonNull(ingredient);
+            this.amount = amount;
+        }
+
+
+        @Override
+        public boolean test(ItemStack itemStack) {
+            return testType(itemStack) && itemStack.getCount() >= amount;
+        }
+
+        @Override
+        public boolean testType(@Nonnull ItemStack type) {
+            return ingredient.test(type);
+        }
+
+        @Override
+        public ItemStack getMatchingInstance(ItemStack type) {
+            if(test(type)){
+                ItemStack matching = type.copy();
+                matching.setCount(amount);
+                return matching;
+            }
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public long getNeededAmount(ItemStack type) {
+            return testType(type) ? amount : 0;
+        }
+
+        @Override
+        public void write(PacketBuffer buff) {
+            buff.writeEnumValue(IngredientType.SINGLE);
+            ingredient.write(buff);
+            buff.writeVarInt(amount);
+        }
+
+        @Nonnull
+        @Override
+        public JsonElement serialize() {
+            JsonObject json = new JsonObject();
+
+            json.add("ingredient", ingredient.serialize());
+            return json;
+        }
+
+        public static Single read(PacketBuffer buff){
+            return new Single(Ingredient.read(buff), buff.readVarInt());
+        }
+    }
+
+    private enum IngredientType{
+        SINGLE;
+    }
+
+
+
 
 
 

@@ -13,5 +13,9 @@ public class Constants {
 
     }
 
+    public static class IngredientType{
+        public static final String SINGLE = "single";
+    }
+
 }
 
