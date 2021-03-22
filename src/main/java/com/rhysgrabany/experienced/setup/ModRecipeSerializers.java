@@ -5,6 +5,7 @@ import com.rhysgrabany.experienced.recipe.recipes.ExperienceBlockRecipe;
 import com.rhysgrabany.experienced.recipe.impl.ExperienceBlockIRecipe;
 import com.rhysgrabany.experienced.recipe.serializer.ExperienceBlockSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,9 +40,9 @@ public class ModRecipeSerializers {
         return register(Constants.MOD_ID, serializer);
     }
 
-//    private static RegistryObject<IRecipeSerializer<?>> register(ResourceLocation id, Supplier<IRecipeSerializer<?>> serializer){
-//        return Registration.RECIPES.register(id.getPath(), serializer);
-//    }
+    private static RegistryObject<IRecipeSerializer<?>> register(ResourceLocation id, Supplier<IRecipeSerializer<?>> serializer){
+        return RECIPES.register(id.getPath(), serializer);
+    }
 
 
 }
