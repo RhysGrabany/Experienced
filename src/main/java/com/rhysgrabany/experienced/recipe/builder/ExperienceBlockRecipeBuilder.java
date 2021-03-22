@@ -33,9 +33,9 @@ public class ExperienceBlockRecipeBuilder extends ExperiencedRecipeBuilder<Exper
     }
 
 
-//    public void build(Consumer<IFinishedRecipe> consumer) {
-//        build(consumer, );
-//    }
+    public void build(Consumer<IFinishedRecipe> consumer) {
+        build(consumer, output.);
+    }
 
     @Override
     protected RecipeResult getResult(ResourceLocation id) {

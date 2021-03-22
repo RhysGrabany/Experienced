@@ -17,7 +17,6 @@ public class Registration {
         ModRecipeSerializers.register();
         ModTiles.register();
         ModContainers.register();
-        ModRecipeSerializers.register();
 
 
     }

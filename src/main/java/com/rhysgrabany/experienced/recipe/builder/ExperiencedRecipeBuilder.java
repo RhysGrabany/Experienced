@@ -10,6 +10,7 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
+import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
@@ -63,6 +64,7 @@ public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilde
     protected void validate(ResourceLocation id){}
 
     public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id){
+
         validate(id);
 
         if(hasCriterion()){
