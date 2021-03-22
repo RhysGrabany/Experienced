@@ -113,7 +113,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Override
     public Container createMenu(int windowId, PlayerInventory playerIn, PlayerEntity playerEn) {
         return ExperienceBlockContainer.createContainerServerSide(windowId, playerIn, tile,
-                inputContents, outputContents, expBarContents, experienceBlockStateData);
+                inputContents, inputBookContents, outputContents, expBarContents, experienceBlockStateData);
     }
 
     // Basically just checks to see if the player is within range, true if they are
