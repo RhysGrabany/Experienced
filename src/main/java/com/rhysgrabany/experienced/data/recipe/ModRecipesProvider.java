@@ -1,13 +1,17 @@
 package com.rhysgrabany.experienced.data.recipe;
 
+import com.rhysgrabany.experienced.Experienced;
 import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
+import com.rhysgrabany.experienced.recipe.builder.ExperienceBlockRecipeBuilder;
 import com.rhysgrabany.experienced.recipe.builder.ExperiencedRecipeBuilder;
+import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Consumer;
 
@@ -62,6 +66,11 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("dcd")
                 .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BLOCK_CASING.get()))
                 .build(consumer);
+
+        ExperienceBlockRecipeBuilder.experienced(ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem()), 1),
+                ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem()), 1), 10)
+                .addCriterion("has_item", hasItem())
+                .build(consumer, Experienced.getId(ModItems.EXPERIENCE_BOOK.get().getName() + "_exp"));
 
 //        CookingRecipeBuilder.smeltingRecipe();
 

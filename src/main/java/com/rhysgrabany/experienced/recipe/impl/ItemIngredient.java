@@ -45,7 +45,7 @@ public abstract class ItemIngredient implements InputIngredient<ItemStack> {
     }
 
     public static ItemIngredient from(@Nonnull Ingredient ingredient, int amount){
-        return from(ingredient, 1);
+        return new Item(ingredient, amount);
     }
 
 
