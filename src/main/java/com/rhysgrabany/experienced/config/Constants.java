@@ -13,6 +13,10 @@ public class Constants {
 
     }
 
+    public static class RecipeType{
+        public static final String EXP_BLOCK = "_exp_block";
+    }
+
 
 }
 

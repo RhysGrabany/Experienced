@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "experienced:experience_book_exp"
+      "experienced:experience_book_exp_block"
     ]
   },
   "criteria": {
@@ -13,7 +13,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "experienced:experience_book_exp"
+        "recipe": "experienced:experience_book_exp_block"
       }
     }
   },

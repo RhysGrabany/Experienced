@@ -3,6 +3,7 @@ package com.rhysgrabany.experienced.data.recipe;
 import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
+import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.recipe.builder.ExperienceBlockRecipeBuilder;
 import net.minecraft.data.*;
 import net.minecraft.item.Items;
@@ -20,13 +21,10 @@ public class ModRecipesProvider extends RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+
         registerItemRecipes(consumer);
         registerBlockRecipes(consumer);
-
-        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
-                ModItems.EXPERIENCE_BOOK.get(), 10)
-                .addCriterion("has_item", hasItem())
-                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + "_exp"));
+        registerExpBlockRecipes(consumer);
 
     }
 
@@ -93,6 +91,17 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("dcd")
                 .addCriterion("has_item", hasItem(ModBlocks.EXPERIENCE_BLOCKS.get(ExperienceBlock.Tier.MEDIUM).get()))
                 .build(consumer);
+
+    }
+
+    // Recipes relating to the Exp Block
+    private void registerExpBlockRecipes(Consumer<IFinishedRecipe> consumer){
+
+        //This will get changed in the future
+//        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
+//                ModItems.EXPERIENCE_BOOK.get(), 10)
+//                .addCriterion("has_item", hasItem())
+//                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + Constants.RecipeType.EXP_BLOCK));
 
     }
 
