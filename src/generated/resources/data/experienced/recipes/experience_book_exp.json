@@ -1,0 +1,8 @@
+{
+  "type": "experienced:experience_block_recipe",
+  "input": {
+    "item": "experienced:experience_book"
+  },
+  "result": "experienced:experience_book",
+  "expamount": 10
+}

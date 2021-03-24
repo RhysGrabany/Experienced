@@ -3,11 +3,11 @@ package com.rhysgrabany.experienced.data.recipe;
 import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
-import net.minecraft.block.Blocks;
+import com.rhysgrabany.experienced.recipe.builder.ExperienceBlockRecipeBuilder;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -22,6 +22,12 @@ public class ModRecipesProvider extends RecipeProvider {
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         registerItemRecipes(consumer);
         registerBlockRecipes(consumer);
+
+        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
+                ModItems.EXPERIENCE_BOOK.get(), 10)
+                .addCriterion("has_item", hasItem())
+                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + "_exp"));
+
     }
 
     // Register the recipe for the Items in the Mod

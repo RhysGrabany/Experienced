@@ -1,9 +1,10 @@
-package com.rhysgrabany.experienced.recipe;
+package com.rhysgrabany.experienced.recipe.recipes;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -11,16 +12,16 @@ import net.minecraft.world.World;
 public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
 
 
-    private final ItemStack input;
+    private final Ingredient input;
     private final ItemStack output;
-    private final int timeTaken;
+    private final int expAmount;
 
-    public ExperienceBlockRecipe(ResourceLocation id, ItemStack input, ItemStack output, int timeTaken){
+    public ExperienceBlockRecipe(ResourceLocation id, Ingredient input, ItemStack output, int expAmount){
         super(id);
 
         this.input = input;
         this.output = output.copy();
-        this.timeTaken = timeTaken;
+        this.expAmount = expAmount;
 
     }
 
@@ -37,11 +38,6 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
     @Override
     public boolean canFit(int width, int height) {
         return false;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        return output.copy();
     }
 
     @Override
@@ -62,9 +58,22 @@ public abstract class ExperienceBlockRecipe extends ExperiencedRecipe {
     @Override
     public void write(PacketBuffer buff) {
 
-        buff.writeItemStack(input);
+        input.write(buff);
         buff.writeItemStack(output);
+        buff.writeInt(expAmount);
 
+    }
 
+    public Ingredient getInput() {
+        return input;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return output.copy();
+    }
+
+    public int getExpAmount() {
+        return expAmount;
     }
 }

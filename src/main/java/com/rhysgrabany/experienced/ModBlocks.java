@@ -29,6 +29,7 @@ public class ModBlocks {
             EXPERIENCE_BLOCKS.put(tier, BLOCKS.register("experience_block_" + tier.getName(),
                     () -> new ExperienceBlock(ExperienceBlock.Tier.valueOf(tier.name()))));
         }
+
     }
 
 
