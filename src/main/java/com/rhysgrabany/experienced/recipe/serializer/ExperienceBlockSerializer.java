@@ -3,8 +3,6 @@ package com.rhysgrabany.experienced.recipe.serializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.rhysgrabany.experienced.config.Constants;
-import com.rhysgrabany.experienced.recipe.impl.ExperienceBlockIRecipe;
-import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
 import com.rhysgrabany.experienced.recipe.recipes.ExperienceBlockRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -13,7 +11,6 @@ import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -33,7 +30,7 @@ public class ExperienceBlockSerializer <R extends ExperienceBlockRecipe> extends
 
         JsonElement jsonInput = JSONUtils.isJsonArray(json, Constants.Json.INPUT) ?
                 JSONUtils.getJsonArray(json, Constants.Json.INPUT) : JSONUtils.getJsonObject(json, Constants.Json.INPUT);
-        ItemIngredient input = ItemIngredient.deserialize(jsonInput);
+        Ingredient input = Ingredient.deserialize(jsonInput);
 
         ItemStack output = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, Constants.Json.OUTPUT));
 
@@ -47,7 +44,7 @@ public class ExperienceBlockSerializer <R extends ExperienceBlockRecipe> extends
     @Override
     public R read(ResourceLocation recipeId, PacketBuffer buffer) {
 
-        ItemIngredient input = ItemIngredient.read(buffer);
+        Ingredient input = Ingredient.read(buffer);
         ItemStack output = buffer.readItemStack();
         int exp = buffer.readInt();
 
@@ -65,7 +62,7 @@ public class ExperienceBlockSerializer <R extends ExperienceBlockRecipe> extends
     @FunctionalInterface
     public interface IFactory<R extends ExperienceBlockRecipe>{
 
-        R create(ResourceLocation id, ItemIngredient input, ItemStack output, int expAmount);
+        R create(ResourceLocation id, Ingredient input, ItemStack output, int expAmount);
 
     }
 

@@ -1,15 +1,10 @@
 package com.rhysgrabany.experienced.data.recipe;
 
-import com.rhysgrabany.experienced.Experienced;
 import com.rhysgrabany.experienced.ModBlocks;
 import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.recipe.builder.ExperienceBlockRecipeBuilder;
-import com.rhysgrabany.experienced.recipe.builder.ExperiencedRecipeBuilder;
-import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -73,11 +68,6 @@ public class ModRecipesProvider extends RecipeProvider {
                 .patternLine("dcd")
                 .addCriterion("has_item", hasItem(ModItems.EXPERIENCE_BLOCK_CASING.get()))
                 .build(consumer);
-
-
-
-//        CookingRecipeBuilder.smeltingRecipe();
-
 
         // Recipe for Medium Experience Block
         // TODO: Find a suitable replacement for Redstone Block, I don't want to use emerald block that will mean they will need 18 emeralds just for the next tier making this too expensive overall

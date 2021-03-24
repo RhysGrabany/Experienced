@@ -2,29 +2,20 @@ package com.rhysgrabany.experienced.recipe.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.kinds.Const;
 import com.rhysgrabany.experienced.config.Constants;
-import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
 import com.rhysgrabany.experienced.recipe.recipes.RecipeCriterion;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.core.jackson.JsonConstants;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilder<B>> {
 

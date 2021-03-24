@@ -7,12 +7,13 @@ import com.rhysgrabany.experienced.setup.ModRecipeSerializers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 public class ExperienceBlockIRecipe extends ExperienceBlockRecipe {
 
     //TODO: Will I really need this? Find out next time on DBZ
-    public ExperienceBlockIRecipe(ResourceLocation id, ItemIngredient input, ItemStack output, int expAmount) {
+    public ExperienceBlockIRecipe(ResourceLocation id, Ingredient input, ItemStack output, int expAmount) {
         super(id, input, output, expAmount);
     }
 
