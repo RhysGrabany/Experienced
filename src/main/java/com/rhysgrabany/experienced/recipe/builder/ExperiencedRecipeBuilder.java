@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.kinds.Const;
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.recipe.impl.ItemIngredient;
 import com.rhysgrabany.experienced.recipe.recipes.RecipeCriterion;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -12,6 +13,7 @@ import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -25,7 +27,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilder<B>> {
-
 
     protected static ResourceLocation expSerializer(String name){
         return new ResourceLocation(Constants.MOD_ID, name);
@@ -63,16 +64,16 @@ public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilde
 
     protected void validate(ResourceLocation id){}
 
-    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id){
-
-        validate(id);
-
-        if(hasCriterion()){
-            advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe",
-                    RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        }
-        consumer.accept(getResult(id));
-    }
+//    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id){
+//
+//        validate(id);
+//
+//        if(hasCriterion()){
+//            advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe",
+//                    RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
+//        }
+//        consumer.accept(getResult(id));
+//    }
 
     protected abstract class RecipeResult implements IFinishedRecipe{
 

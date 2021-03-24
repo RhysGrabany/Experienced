@@ -28,8 +28,8 @@ public class ModRecipesProvider extends RecipeProvider {
         registerItemRecipes(consumer);
         registerBlockRecipes(consumer);
 
-        ExperienceBlockRecipeBuilder.experienced(ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem())),
-                ItemIngredient.from(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get().asItem())), 10)
+        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
+                ModItems.EXPERIENCE_BOOK.get(), 10)
                 .addCriterion("has_item", hasItem())
                 .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + "_exp"));
 
