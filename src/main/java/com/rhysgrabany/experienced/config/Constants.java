@@ -7,15 +7,12 @@ public class Constants {
 
     public static class Json{
         public static final String INPUT = "input";
-        public static final String OUTPUT = "output";
-        public static final String EXP = "exp";
+        public static final String OUTPUT = "result";
+        public static final String EXP = "expamount";
         public static final String INGREDIENT = "ingredient";
 
     }
 
-    public static class IngredientType{
-        public static final String SINGLE = "single";
-    }
 
 }
 

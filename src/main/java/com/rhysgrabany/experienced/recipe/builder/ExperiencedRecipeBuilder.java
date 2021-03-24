@@ -51,20 +51,7 @@ public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilde
         return !advancementBuilder.getCriteria().isEmpty();
     }
 
-    protected abstract RecipeResult getResult(ResourceLocation id);
-
     protected void validate(ResourceLocation id){}
-
-//    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id){
-//
-//        validate(id);
-//
-//        if(hasCriterion()){
-//            advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe",
-//                    RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
-//        }
-//        consumer.accept(getResult(id));
-//    }
 
     protected abstract class RecipeResult implements IFinishedRecipe{
 

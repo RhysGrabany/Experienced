@@ -3,6 +3,6 @@
   "input": {
     "item": "experienced:experience_book"
   },
-  "output": "experienced:experience_book",
-  "exp": 10
+  "result": "experienced:experience_book",
+  "expamount": 10
 }
