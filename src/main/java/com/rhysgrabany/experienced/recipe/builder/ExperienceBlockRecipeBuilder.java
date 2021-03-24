@@ -32,7 +32,6 @@ public class ExperienceBlockRecipeBuilder extends ExperiencedRecipeBuilder<Exper
         this.input = input;
         this.output = output;
         this.expAmount = expAmount;
-
     }
 
     public static ExperienceBlockRecipeBuilder experienced(Ingredient input, Item output, int expAmount){
@@ -77,7 +76,6 @@ public class ExperienceBlockRecipeBuilder extends ExperiencedRecipeBuilder<Exper
             if (!this.group.isEmpty()) {
                 json.addProperty("group", this.group);
             }
-
 
             json.add(Constants.Json.INPUT, input.serialize());
             json.addProperty(Constants.Json.OUTPUT, Registry.ITEM.getKey(this.result).toString());

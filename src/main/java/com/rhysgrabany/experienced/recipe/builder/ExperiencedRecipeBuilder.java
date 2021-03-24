@@ -53,56 +53,5 @@ public abstract class ExperiencedRecipeBuilder<B extends ExperiencedRecipeBuilde
 
     protected void validate(ResourceLocation id){}
 
-    protected abstract class RecipeResult implements IFinishedRecipe{
-
-        private final ResourceLocation id;
-
-
-        public RecipeResult(ResourceLocation id){
-            this.id = id;
-        }
-
-        @Override
-        public JsonObject getRecipeJson() {
-
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("type", serializerName.toString());
-
-            if(!conditions.isEmpty()){
-                JsonArray conditionsArray = new JsonArray();
-                for(ICondition condition : conditions){
-                    conditionsArray.add(CraftingHelper.serialize(condition));
-                }
-                jsonObject.add("conditions", conditionsArray);
-            }
-            this.serialize(jsonObject);
-            return jsonObject;
-        }
-
-        @Override
-        public IRecipeSerializer<?> getSerializer() {
-            return ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
-        }
-
-        @Override
-        public ResourceLocation getID() {
-            return this.id;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject getAdvancementJson() {
-            return hasCriterion() ? advancementBuilder.serialize() : null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementID() {
-            return new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath());
-        }
-    }
-
-
-
 
 }
