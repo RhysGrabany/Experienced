@@ -1,40 +1,28 @@
 package com.rhysgrabany.experienced.tile;
 
-import com.rhysgrabany.experienced.ModItems;
 import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
-import com.rhysgrabany.experienced.util.ExperienceHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class ExperienceBlockTile extends BaseTile implements INamedContainerProvider, ITickableTileEntity {
 
@@ -50,7 +38,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private ExperienceBlockContents outputContents;
     private ExperienceBlockContents expBarContents;
 
-    private ItemStack currentlyDrainingItemLastTick = ItemStack.EMPTY;
+    private ItemStack currentlyInfusingItemLastTick = ItemStack.EMPTY;
+    private ItemStack currentlyExtractionItemLastTick = ItemStack.EMPTY;
 
     public ExperienceBlock.Tier tier;
     public ExperienceBlockTile tile;
@@ -123,8 +112,14 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
 
         ItemStack currentItemExpInfuse = getCurrentInfuseItemInput();
-        ItemStack currentBookItemInput = getCurrentBookItemInput();
+        ItemStack currentExtractionItemInput = getCurrentExpExtractItemInput();
 
+
+        if(!currentExtractionItemInput.isEmpty()){
+            extractExpItem();
+        }
+
+        currentlyExtractionItemLastTick = currentExtractionItemInput.copy();
 
         markDirty();
 
@@ -152,17 +147,17 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
-    private ItemStack getCurrentBookItemInput(){
-        return extractFirstSuitableBookItem(false);
+    private ItemStack getCurrentExpExtractItemInput(){
+        return extractExpItem(false);
     }
 
-    private void extractFirstSuitableBookItem(){
-        extractFirstSuitableBookItem(true);
+    private void extractExpItem(){
+        extractExpItem(true);
     }
 
-    private ItemStack extractFirstSuitableBookItem(boolean performExtract){
+    private ItemStack extractExpItem(boolean performExtract){
 
-        ItemStack extractItem = inputBookContents.getStackInSlot(0).copy();
+        ItemStack extractItem = inputBookContents.getStackInSlot(0);
 
         if(!performExtract){
             return extractItem;
@@ -170,6 +165,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         int extractRate = getExtractRate();
         performExtraction(extractItem, extractRate);
+
+        currentlyExtractionItemLastTick = extractItem;
 
         markDirty();
         return extractItem;
@@ -193,6 +190,13 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         // If the extract rate is higher than the amount of exp stored, then it'll go into the minus territory
         // If expAmount is less than the extractRate then the amount will be saved, otherwise just use the extractRate
         extractedExp = (expAmount < extractRate) ? expAmount : extractRate;
+
+
+        // If the amount of exp being extracted goes over the cap in the exp block then bring it down
+        if(expBlockAmount + extractedExp > expBlockMaxAmount){
+            extractedExp = expBlockMaxAmount - expBlockAmount;
+        }
+
 
         expAmount -= extractedExp;
 
@@ -320,13 +324,12 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
     // Add Exp to the Block
-
     public void addExpAmount(int value){
         experienceBlockStateData.expAmountInContainer += value;
         markDirty();
     }
-    // Take Exp from the Block
 
+    // Take Exp from the Block
     public void takeExpAmount(int value){
         experienceBlockStateData.expAmountInContainer -= value;
         markDirty();

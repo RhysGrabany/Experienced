@@ -54,8 +54,6 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private ExperienceBlockStateData experienceBlockStateData;
 
-    private int MAX_EXP;
-
     private ExperienceBlockTile experienceBlockTile;
 
     public ExperienceBlock.Tier tier;
@@ -106,7 +104,6 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.experienceBlockStateData = experienceBlockStateData;
 
         this.tier = tile.tier;
-        this.MAX_EXP = experienceBlockTile.getMaxExpFromTier(tier);
 
         this.world = playerIn.player.world;
         this.experienceBlockTile = tile;
@@ -185,7 +182,7 @@ public class ExperienceBlockContainer extends BaseContainer {
     public double fractionOfExpAmount(){
         int expAmount = experienceBlockTile.getExpBlockAmount();
         if(expAmount == 0) return 0;
-        double fraction = (double) expAmount / MAX_EXP;
+        double fraction = (double) expAmount / experienceBlockTile.getMaxExpFromTier(tier);;
         return MathHelper.clamp(fraction, 0.0, 1.0);
     }
 
