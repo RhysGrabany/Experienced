@@ -106,7 +106,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.experienceBlockStateData = experienceBlockStateData;
 
         this.tier = tile.tier;
-        this.MAX_EXP = getMaxExpFromTier(tier);
+        this.MAX_EXP = experienceBlockTile.getMaxExpFromTier(tier);
 
         this.world = playerIn.player.world;
         this.experienceBlockTile = tile;
@@ -257,24 +257,9 @@ public class ExperienceBlockContainer extends BaseContainer {
     }
 
 
-    public int getMaxExpAmount(){
-        return getMaxExpFromTier(tier);
-    }
 
-    public static int getMaxExpFromTier(ExperienceBlock.Tier tier){
-        switch(tier){
-            case SMALL:
-                return 1395;
-            case MEDIUM:
-                return 8670;
-            case LARGE:
-                return 30970;
-            case CREATIVE:
-                return Integer.MAX_VALUE;
-            default:
-                throw new IllegalArgumentException("Tier is not recognized: " + tier);
-        }
-    }
+
+
 
 
     private enum SlotZone{
@@ -315,7 +300,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTotal = playerIn.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int expMaxAmount = getMaxExpAmount();
+        int expMaxAmount = experienceBlockTile.getMaxExpFromTier(tier);
 
         // Check if we have reached our cap
         if(expBlockAmount == expMaxAmount){
@@ -355,7 +340,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTotal = playerIn.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = getMaxExpAmount();
+        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
 
         // Check if we have reached our cap
         if(expBlockAmount == maxExp){
@@ -391,7 +376,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTotal = playerIn.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = getMaxExpAmount();
+        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
 
         if(expBlockAmount == 0){
             return;
@@ -418,7 +403,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTotal = playerIn.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = getMaxExpAmount();
+        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
 
         if(expBlockAmount == 0){
             return;

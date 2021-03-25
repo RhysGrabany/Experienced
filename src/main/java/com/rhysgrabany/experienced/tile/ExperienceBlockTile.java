@@ -55,8 +55,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public ExperienceBlock.Tier tier;
     public ExperienceBlockTile tile;
 
-//    public final int MAX_EXP;
-
     private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
 
 
@@ -88,21 +86,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
-    public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
-        switch (tier){
-            case SMALL:
-                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.SMALL).get();
-            case MEDIUM:
-                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.MEDIUM).get();
-            case LARGE:
-                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.LARGE).get();
-            case CREATIVE:
-                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.CREATIVE).get();
-            default:
-                throw new IllegalArgumentException("Unknown tier: " + tier);
-        }
-    }
-
 
     @Override
     public ITextComponent getDisplayName() {
@@ -117,6 +100,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
     // Basically just checks to see if the player is within range, true if they are
+
     public boolean canPlayerAccessInventory(PlayerEntity playerIn){
         if(this.world.getTileEntity(this.pos) != this){
             return false;
@@ -131,29 +115,16 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
                 pos.getY() + Y_CENTRE_OFFSET,
                 pos.getZ() + Z_CENTRE_OFFSET) < MAXIMUM_DIST_SQ;
     }
-
     @Override
     public void tick() {
 
         // do nothing on client
         if(world.isRemote) return;
 
-        ItemStack currentlyDrainingItem = getCurrentDrainedItem();
 
-        if(!ItemStack.areItemsEqual(currentlyDrainingItem, currentlyDrainingItemLastTick)){
-            experienceBlockStateData.expDrainElapsed = 0;
-        }
+        ItemStack currentItemExpInfuse = getCurrentInfuseItemInput();
+        ItemStack currentBookItemInput = getCurrentBookItemInput();
 
-        currentlyDrainingItemLastTick = currentlyDrainingItem.copy();
-
-        if(!currentlyDrainingItem.isEmpty()){
-            boolean isSomethingDraining = drainExp();
-
-
-            if(isSomethingDraining){ experienceBlockStateData.expDrainElapsed += 1; }
-            if(experienceBlockStateData.expDrainElapsed < 0){ experienceBlockStateData.expDrainElapsed = 0; }
-
-        }
 
         markDirty();
 
@@ -163,6 +134,75 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public static boolean doesItemHaveExpTag(ItemStack item){
         return item.getOrCreateTag().contains("exp");
     }
+
+    private ItemStack getCurrentInfuseItemInput(){
+        return infuseFirstSuitableInputItem(false);
+    }
+
+    private void infuseFirstSuitableInputItem(){
+        infuseFirstSuitableInputItem(true);
+    }
+
+    private ItemStack infuseFirstSuitableInputItem(boolean performInfuse){
+
+        Integer inputSlot = null;
+        Integer outputSlot = null;
+
+        return ItemStack.EMPTY;
+    }
+
+
+    private ItemStack getCurrentBookItemInput(){
+        return extractFirstSuitableBookItem(false);
+    }
+
+    private void extractFirstSuitableBookItem(){
+        extractFirstSuitableBookItem(true);
+    }
+
+    private ItemStack extractFirstSuitableBookItem(boolean performExtract){
+
+        ItemStack extractItem = inputBookContents.getStackInSlot(0).copy();
+
+        if(!performExtract){
+            return extractItem;
+        }
+
+        int extractRate = getExtractRate();
+        performExtraction(extractItem, extractRate);
+
+        markDirty();
+        return extractItem;
+
+    }
+
+    private void performExtraction(ItemStack extractItem, int extractRate){
+
+        // Store the amount of exp currently in the book, and also the amount of exp that will be stored
+        int expAmount = extractItem.getOrCreateTag().getInt("exp");
+        int expBlockAmount = getExpBlockAmount();
+        int expBlockMaxAmount = getMaxExpAmount();
+
+        int extractedExp;
+
+        // Base case for the lower, and upper end
+        if(expAmount == 0 || expBlockAmount == expBlockMaxAmount){
+            return;
+        }
+
+        // If the extract rate is higher than the amount of exp stored, then it'll go into the minus territory
+        // If expAmount is less than the extractRate then the amount will be saved, otherwise just use the extractRate
+        extractedExp = (expAmount < extractRate) ? expAmount : extractRate;
+
+        expAmount -= extractedExp;
+
+        extractItem.getTag().putInt("exp", expAmount);
+        addExpAmount(extractedExp);
+
+
+
+    }
+
 
     public boolean willItemStackFit(ExperienceBlockContents experienceBlockContents, int slotIndex, ItemStack itemStackOrigin){
         ItemStack itemStackDest = experienceBlockContents.getStackInSlot(slotIndex);
@@ -179,10 +219,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
     private final String INPUT_SLOT_NBT = "inputSlot";
+
     private final String INPUT_BOOK_SLOT_NBT = "inputBookSlot";
     private final String OUTPUT_SLOT_NBT = "outputSlot";
     private final String EXP_BAR_NBT = "expBar";
-
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
@@ -261,78 +301,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         InventoryHelper.dropInventoryItems(world, pos, outputContents);
     }
 
-    // Checks if there is an item in the input area being drained
-    public boolean isExpBeingDrained(){
-        if(experienceBlockStateData.expDrainTimeRemaining > 0) return true;
-        return false;
-    }
 
-    private ItemStack getCurrentDrainedItem(){
-        return drainFirstSuitableInputItem(false);
-    }
-
-    private void drainFirstSuitableInputItem(){
-        drainFirstSuitableInputItem(true);
-    }
-
-    private ItemStack drainFirstSuitableInputItem(boolean performDrain){
-
-        Integer firstSuitableInputSlot = null;
-        Integer firstSuitableOutputSlot = null;
-        boolean result = false;
-
-        ItemStack itemToDrain = inputContents.getStackInSlot(0);
-
-        if(!itemToDrain.isEmpty()){
-            result = doesItemHaveExpTag(itemToDrain);
-
-            if(result){
-                if(willItemStackFit(outputContents, 0, itemToDrain)){
-                    firstSuitableInputSlot = 0;
-                    firstSuitableOutputSlot = 0;
-                }
-            }
-
-        }
-
-        if(firstSuitableInputSlot == null){
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack returnValue = inputContents.getStackInSlot(firstSuitableInputSlot).copy();
-
-        if(!performDrain){
-            return returnValue;
-        }
-
-        inputContents.decrStackSize(firstSuitableInputSlot, 1);
-        outputContents.incrStackSize(firstSuitableOutputSlot, itemToDrain);
-
-        markDirty();
-        return returnValue;
-
-
-    }
-
-
-    private boolean drainExp(){
-        boolean expDrain = false;
-        boolean inventoryChanged = false;
-
-        if(experienceBlockStateData.expDrainTimeRemaining > 0){
-            --experienceBlockStateData.expDrainTimeRemaining;
-            expDrain = true;
-        }
-
-        if(experienceBlockStateData.expDrainTimeRemaining == 0){
-            ItemStack expDrainItemStack = inputContents.getStackInSlot(0);
-
-        }
-
-        if(inventoryChanged) markDirty();
-
-        return expDrain;
-    }
 
     public static boolean isItemValidForInputSlot(ItemStack item){
         return true;
@@ -348,20 +317,71 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return experienceBlockStateData.expAmountInContainer;
     }
 
-    // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
 
+    // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
     // Add Exp to the Block
+
     public void addExpAmount(int value){
         experienceBlockStateData.expAmountInContainer += value;
         markDirty();
     }
-
     // Take Exp from the Block
+
     public void takeExpAmount(int value){
         experienceBlockStateData.expAmountInContainer -= value;
         markDirty();
     }
 
+
+
+    public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
+        switch (tier){
+            case SMALL:
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.SMALL).get();
+            case MEDIUM:
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.MEDIUM).get();
+            case LARGE:
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.LARGE).get();
+            case CREATIVE:
+                return ModTiles.EXPERIENCE_BLOCK_TILES.get(ExperienceBlock.Tier.CREATIVE).get();
+            default:
+                throw new IllegalArgumentException("Unknown tier: " + tier);
+        }
+    }
+
+    public int getMaxExpAmount(){
+        return getMaxExpFromTier(tier);
+    }
+
+    public int getMaxExpFromTier(ExperienceBlock.Tier tier){
+        switch(tier){
+            case SMALL:
+                return 1395;
+            case MEDIUM:
+                return 8670;
+            case LARGE:
+                return 30970;
+            case CREATIVE:
+                return Integer.MAX_VALUE;
+            default:
+                throw new IllegalArgumentException("Tier is not recognized: " + tier);
+        }
+    }
+
+    private int getExtractRate(){
+        switch (this.tier){
+            case SMALL:
+                return 10;
+            case MEDIUM:
+                return 15;
+            case LARGE:
+                return 20;
+            case CREATIVE:
+                return 100;
+            default:
+                throw new IllegalArgumentException("Unknown tier: " + tier);
+        }
+    }
 
 
 
