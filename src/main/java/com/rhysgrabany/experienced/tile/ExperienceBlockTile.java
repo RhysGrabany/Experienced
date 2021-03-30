@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +45,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public ExperienceBlock.Tier tier;
     public ExperienceBlockTile tile;
 
-    private final ExperienceBlockStateData experienceBlockStateData = new ExperienceBlockStateData();
+    private final ExperienceBlockStateData experienceBlockStateData;
 
 
     // Constructor that creates the experienceBlockTile and the input/output contents
@@ -70,7 +71,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         this.tier = tier;
         this.tile = (ExperienceBlockTile) getTileEntity();
 
-
+        this.experienceBlockStateData = new ExperienceBlockStateData();
 
     }
 
@@ -122,8 +123,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         currentlyExtractionItemLastTick = currentExtractionItemInput.copy();
 
         markDirty();
-
-
     }
 
     public static boolean doesItemHaveExpTag(ItemStack item){
@@ -203,7 +202,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         extractItem.getTag().putInt("exp", expAmount);
         addExpAmount(extractedExp);
 
-
+        BlockState state = world.getBlockState(this.pos);
+        world.notifyBlockUpdate(this.pos, state, state, 3);
 
     }
 
@@ -223,10 +223,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
     private final String INPUT_SLOT_NBT = "inputSlot";
-
     private final String INPUT_BOOK_SLOT_NBT = "inputBookSlot";
     private final String OUTPUT_SLOT_NBT = "outputSlot";
     private final String EXP_BAR_NBT = "expBar";
+
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
@@ -277,7 +277,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         final int METADATA = 42;
         return new SUpdateTileEntityPacket(this.pos, METADATA, updateTagTileEntityState);
 
-
     }
 
     @Override
@@ -326,12 +325,16 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     // Add Exp to the Block
     public void addExpAmount(int value){
         experienceBlockStateData.expAmountInContainer += value;
+//        BlockState state = world.getBlockState(this.pos);
+//        world.notifyBlockUpdate(this.pos, state, state, 3);
         markDirty();
     }
 
     // Take Exp from the Block
     public void takeExpAmount(int value){
         experienceBlockStateData.expAmountInContainer -= value;
+//        BlockState state = world.getBlockState(this.pos);
+//        world.notifyBlockUpdate(this.pos, state, state, 3);
         markDirty();
     }
 

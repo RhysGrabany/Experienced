@@ -98,10 +98,10 @@ public class ModRecipesProvider extends RecipeProvider {
     private void registerExpBlockRecipes(Consumer<IFinishedRecipe> consumer){
 
         //This will get changed in the future
-//        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
-//                ModItems.EXPERIENCE_BOOK.get(), 10)
-//                .addCriterion("has_item", hasItem())
-//                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + Constants.RecipeType.EXP_BLOCK));
+        ExperienceBlockRecipeBuilder.experienced(Ingredient.fromItems(ModItems.EXPERIENCE_BOOK.get()),
+                ModItems.EXPERIENCE_BOOK.get(), 10)
+                .addCriterion("has_item", hasItem())
+                .build(consumer, new ResourceLocation(ModItems.EXPERIENCE_BOOK.get().asItem().getRegistryName() + Constants.RecipeType.EXP_BLOCK));
 
     }
 

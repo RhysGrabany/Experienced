@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -284,6 +285,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             }
             throw new IndexOutOfBoundsException("Unexpected slotIndex");
         }
+
 
     }
 
