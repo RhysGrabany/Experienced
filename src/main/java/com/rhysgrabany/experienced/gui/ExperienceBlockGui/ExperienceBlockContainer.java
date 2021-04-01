@@ -55,6 +55,8 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     private ExperienceBlockStateData experienceBlockStateData;
 
+    private PlayerEntity player;
+
     private ExperienceBlockTile experienceBlockTile;
 
     public ExperienceBlock.Tier tier;
@@ -103,6 +105,8 @@ public class ExperienceBlockContainer extends BaseContainer {
         this.expBarContents = expBarZoneContents;
 
         this.experienceBlockStateData = experienceBlockStateData;
+
+        this.player = playerIn.player;
 
         this.tier = tile.tier;
 
@@ -293,10 +297,10 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     // Plus Buttons ADD experience to the blockM
     // ADDING a single level to the block at a time
-    public void singlePlusOnButtonPress(PlayerEntity playerIn){
+    public void singlePlusOnButtonPress(){
 
-        int expLevel = playerIn.experienceLevel;
-        int expTotal = playerIn.experienceTotal;
+        int expLevel = player.experienceLevel;
+        int expTotal = player.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int expMaxAmount = experienceBlockTile.getMaxExpFromTier(tier);
@@ -328,15 +332,15 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = expMaxAmount - expBlockAmount;
         }
 
-        playerIn.giveExperiencePoints(-expToTake);
+        player.giveExperiencePoints(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
     }
 
     // ADDING all of the levels to the block
-    public void doublePlusOnButtonPress(PlayerEntity playerIn){
+    public void doublePlusOnButtonPress(){
 
-        int expLevel = playerIn.experienceLevel;
-        int expTotal = playerIn.experienceTotal;
+        int expLevel = player.experienceLevel;
+        int expTotal = player.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
@@ -363,16 +367,17 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = maxExp - expBlockAmount;
         }
 
-        playerIn.giveExperiencePoints(-expToTake);
+        experienceBlockTile.givePlayerExpAmount(player, -expToTake);
+//        playerIn.giveExperiencePoints(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
     }
 
     // Minus Buttons TAKE AWAY experience from the block
     // TAKE AWAY a single level from the block
-    public void singleMinusOnButtonPress(PlayerEntity playerIn){
+    public void singleMinusOnButtonPress(){
 
-        int expLevel = playerIn.experienceLevel;
-        int expTotal = playerIn.experienceTotal;
+        int expLevel = player.experienceLevel;
+        int expTotal = player.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
@@ -391,15 +396,15 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = amountNeededToNextLevel;
         }
 
-        playerIn.giveExperiencePoints(expToTake);
+        player.giveExperiencePoints(expToTake);
         experienceBlockTile.takeExpAmount(expToTake);
     }
 
     // TAKING AWAY all of the levels in the block
-    public void doubleMinusOnButtonPress(PlayerEntity playerIn){
+    public void doubleMinusOnButtonPress(){
 
-        int expLevel = playerIn.experienceLevel;
-        int expTotal = playerIn.experienceTotal;
+        int expLevel = player.experienceLevel;
+        int expTotal = player.experienceTotal;
 
         int expBlockAmount = experienceBlockTile.getExpBlockAmount();
         int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
@@ -415,7 +420,10 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = expBlockAmount;
         }
 
-        playerIn.giveExperiencePoints(expToTake);
+
+        experienceBlockTile.givePlayerExpAmount(player, expToTake);
+
+//        playerIn.giveExperiencePoints(expToTake);
         experienceBlockTile.takeExpAmount(expToTake);
     }
 

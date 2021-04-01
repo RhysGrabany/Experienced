@@ -8,6 +8,7 @@ import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateDa
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -321,9 +322,24 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
+    public void givePlayerExpAmount(PlayerEntity playerIn, int value){
+
+
+        if(world.isRemote) return;
+
+        ServerPlayerEntity svrPlayerEntity = (ServerPlayerEntity) playerIn;
+        svrPlayerEntity.giveExperiencePoints(value);
+    }
+
     // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
     // Add Exp to the Block
     public void addExpAmount(int value){
+
+        // Things tried when fixing:
+        // markDirty by itself doesnt work
+        // just value addition works but doesn't save the exp to the player cause it is client side only
+
+
         experienceBlockStateData.expAmountInContainer += value;
 //        BlockState state = world.getBlockState(this.pos);
 //        world.notifyBlockUpdate(this.pos, state, state, 3);
