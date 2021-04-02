@@ -36,7 +36,9 @@ public class GiveExpToPlayerServer {
                 return;
             }
 
-            
+            player.giveExperiencePoints(msg.expAmount);
+
+
 
         });
         ctx.setPacketHandled(true);

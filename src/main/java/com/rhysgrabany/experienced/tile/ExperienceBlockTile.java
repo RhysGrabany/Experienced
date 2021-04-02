@@ -5,6 +5,8 @@ import com.rhysgrabany.experienced.block.ExperienceBlock;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
+import com.rhysgrabany.experienced.network.NetworkHandler;
+import com.rhysgrabany.experienced.network.messages.GiveExpToPlayerServer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -323,12 +325,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
 
     public void givePlayerExpAmount(PlayerEntity playerIn, int value){
-
-
-        if(world.isRemote) return;
-
-        ServerPlayerEntity svrPlayerEntity = (ServerPlayerEntity) playerIn;
-        svrPlayerEntity.giveExperiencePoints(value);
+        GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
+        NetworkHandler.channel.sendToServer(giveExp);
     }
 
     // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock

@@ -1,6 +1,7 @@
 package com.rhysgrabany.experienced;
 
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.network.NetworkHandler;
 import com.rhysgrabany.experienced.recipe.ExperiencedRecipeType;
 import com.rhysgrabany.experienced.setup.ClientSetup;
 import com.rhysgrabany.experienced.setup.Registration;
@@ -12,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
@@ -36,6 +38,7 @@ public class Experienced
     public Experienced() {
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
+        DeferredWorkQueue.runLater(NetworkHandler::init);
 
         Registration.register();
 
