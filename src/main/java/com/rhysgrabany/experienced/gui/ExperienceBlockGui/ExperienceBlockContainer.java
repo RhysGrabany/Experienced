@@ -296,7 +296,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     //region Buttons for ExperienceBlockScreen
 
-    // Plus Buttons ADD experience to the blockM
+    // Plus Buttons ADD experience to the block
     // ADDING a single level to the block at a time
     public void singlePlusOnButtonPress(){
 
@@ -333,7 +333,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = expMaxAmount - expBlockAmount;
         }
 
-        player.giveExperiencePoints(-expToTake);
+        experienceBlockTile.givePlayerExpAmount(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
     }
 
@@ -368,8 +368,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = maxExp - expBlockAmount;
         }
 
-        experienceBlockTile.givePlayerExpAmount(player, -expToTake);
-//        playerIn.giveExperiencePoints(-expToTake);
+        experienceBlockTile.givePlayerExpAmount(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
     }
 
@@ -397,7 +396,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = amountNeededToNextLevel;
         }
 
-        player.giveExperiencePoints(expToTake);
+        experienceBlockTile.givePlayerExpAmount(expToTake);
         experienceBlockTile.takeExpAmount(expToTake);
     }
 
@@ -422,9 +421,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
 
-        experienceBlockTile.givePlayerExpAmount(player, expToTake);
-
-//        playerIn.giveExperiencePoints(expToTake);
+        experienceBlockTile.givePlayerExpAmount(expToTake);
         experienceBlockTile.takeExpAmount(expToTake);
     }
 

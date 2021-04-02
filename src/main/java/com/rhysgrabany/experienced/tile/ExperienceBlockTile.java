@@ -324,7 +324,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
-    public void givePlayerExpAmount(PlayerEntity playerIn, int value){
+    public void givePlayerExpAmount(int value){
         GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
         NetworkHandler.channel.sendToServer(giveExp);
     }
@@ -336,19 +336,16 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         // Things tried when fixing:
         // markDirty by itself doesnt work
         // just value addition works but doesn't save the exp to the player cause it is client side only
+        // Network Handler fixes issue of giving the ServerPlayerEntity the exp, now to try and fix the issue with book input exp
 
 
         experienceBlockStateData.expAmountInContainer += value;
-//        BlockState state = world.getBlockState(this.pos);
-//        world.notifyBlockUpdate(this.pos, state, state, 3);
         markDirty();
     }
 
     // Take Exp from the Block
     public void takeExpAmount(int value){
         experienceBlockStateData.expAmountInContainer -= value;
-//        BlockState state = world.getBlockState(this.pos);
-//        world.notifyBlockUpdate(this.pos, state, state, 3);
         markDirty();
     }
 
