@@ -125,7 +125,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         currentlyExtractionItemLastTick = currentExtractionItemInput.copy();
 
-        markDirty();
+//        markDirty();
     }
 
     public static boolean doesItemHaveExpTag(ItemStack item){
@@ -205,8 +205,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         extractItem.getTag().putInt("exp", expAmount);
         addExpAmount(extractedExp);
 
-        BlockState state = world.getBlockState(this.pos);
-        world.notifyBlockUpdate(this.pos, state, state, 3);
+//        BlockState state = world.getBlockState(this.pos);
+//        world.notifyBlockUpdate(this.pos, state, state, 3);
+//        markDirty();
 
     }
 
