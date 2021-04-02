@@ -1,5 +1,7 @@
 package com.rhysgrabany.experienced.network.messages;
 
+import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -23,6 +25,21 @@ public class GiveExpToPlayerServer {
     }
 
     public static void handle(GiveExpToPlayerServer msg, Supplier<NetworkEvent.Context> ctxSupplier){
+
+        NetworkEvent.Context ctx = ctxSupplier.get();
+
+        ctx.enqueueWork(() -> {
+            ServerPlayerEntity player = ctx.getSender();
+
+            // Check if player exists, and also if the ExperienceBlockContainer is acc open to combat cheating
+            if(player == null || !(player.openContainer instanceof ExperienceBlockContainer)){
+                return;
+            }
+
+            
+
+        });
+        ctx.setPacketHandled(true);
 
     }
 
