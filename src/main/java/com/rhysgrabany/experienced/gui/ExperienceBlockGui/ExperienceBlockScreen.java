@@ -131,13 +131,13 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
         //Buttons adding to the gui
         this.addButton(new SingleMinusButton(guiLeft + SINGLE_MINUS_BUTTON_XPOS,  guiTop + SINGLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button -> containerExpBlock.singleMinusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> containerExpBlock.singleMinusOnButtonPress()));
         this.addButton(new DoubleMinusButton(guiLeft + DOUBLE_MINUS_BUTTON_XPOS,  guiTop + DOUBLE_MINUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button -> containerExpBlock.doubleMinusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> containerExpBlock.doubleMinusOnButtonPress()));
         this.addButton(new SinglePlusButton(guiLeft + SINGLE_PLUS_BUTTON_XPOS,  guiTop + SINGLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button -> containerExpBlock.singlePlusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> containerExpBlock.singlePlusOnButtonPress()));
         this.addButton(new DoublePlusButton(guiLeft + DOUBLE_PLUS_BUTTON_XPOS,  guiTop + DOUBLE_PLUS_BUTTON_YPOS,
-                new TranslationTextComponent(""), button -> containerExpBlock.doublePlusOnButtonPress(playerInventory.player)));
+                new TranslationTextComponent(""), button -> containerExpBlock.doublePlusOnButtonPress()));
 
 
         int arrowOffset = 13;

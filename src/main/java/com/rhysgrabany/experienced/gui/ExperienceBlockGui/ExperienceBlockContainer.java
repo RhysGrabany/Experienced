@@ -64,6 +64,7 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     public ExperienceBlockContainer(int windowId, PlayerInventory playerIn){
         super(ModContainers.EXPERIENCE_BLOCK_CONTAINER.get(), windowId);
+        this.player = playerIn.player;
     }
 
     public static ExperienceBlockContainer createContainerServerSide(int windowId, PlayerInventory playerInventory, ExperienceBlockTile tile,
