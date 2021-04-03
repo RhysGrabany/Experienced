@@ -325,6 +325,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
+    //region Exp Manipulation for Player and Block
     public void givePlayerExpAmount(int value){
         GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
         NetworkHandler.channel.sendToServer(giveExp);
@@ -349,9 +350,10 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         experienceBlockStateData.expAmountInContainer -= value;
         markDirty();
     }
+    //endregion
 
 
-
+    //region Getting General Information
     public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
         switch (tier){
             case SMALL:
@@ -389,17 +391,18 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private int getExtractRate(){
         switch (this.tier){
             case SMALL:
-                return 10;
+                return 1;
             case MEDIUM:
-                return 15;
+                return 2;
             case LARGE:
-                return 20;
+                return 3;
             case CREATIVE:
-                return 100;
+                return 10;
             default:
                 throw new IllegalArgumentException("Unknown tier: " + tier);
         }
     }
+    //endregion
 
 
 
