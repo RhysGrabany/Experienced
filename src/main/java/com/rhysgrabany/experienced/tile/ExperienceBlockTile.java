@@ -24,8 +24,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ExperienceBlockTile extends BaseTile implements INamedContainerProvider, ITickableTileEntity {
@@ -173,6 +176,12 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         markDirty();
         return extractItem;
 
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+        return null;
     }
 
     private void performExtraction(ItemStack extractItem, int extractRate){
