@@ -15,8 +15,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import com.rhysgrabany.experienced.util.ExperienceHelper;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 // This is the default ExperienceBook class
@@ -37,11 +39,19 @@ public class ExperienceBookItem extends Item {
         return true;
     }
 
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        return null;
+    }
+
     // This is used for the progress bar for how much exp is in the Book
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         return 1D - ((double) currentStoredExp / (double) MAX_EXP); // TODO: Kinda works now but not really
     }
+
+
 
 
 

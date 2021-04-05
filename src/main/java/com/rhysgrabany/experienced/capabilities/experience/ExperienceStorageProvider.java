@@ -1,6 +1,6 @@
 package com.rhysgrabany.experienced.capabilities.experience;
 
-public class ExperienceStorage implements IExperienceStorage {
+public class ExperienceStorageProvider implements IExperienceStorage {
 
 
     protected int experience;
@@ -9,19 +9,19 @@ public class ExperienceStorage implements IExperienceStorage {
     protected int maxExtract;
 
 
-    public ExperienceStorage(int capacity){
+    public ExperienceStorageProvider(int capacity){
         this(capacity, capacity, capacity, 0);
     }
 
-    public ExperienceStorage(int capacity, int maxTransfer){
+    public ExperienceStorageProvider(int capacity, int maxTransfer){
         this(capacity, maxTransfer, maxTransfer, 0);
     }
 
-    public ExperienceStorage(int capacity, int maxReceive, int maxExtract){
+    public ExperienceStorageProvider(int capacity, int maxReceive, int maxExtract){
         this(capacity, maxReceive, maxExtract, 0);
     }
 
-    public ExperienceStorage(int capacity, int maxReceive, int maxExtract, int experience){
+    public ExperienceStorageProvider(int capacity, int maxReceive, int maxExtract, int experience){
         this.capacity = capacity;
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
