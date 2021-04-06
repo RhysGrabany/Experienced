@@ -1,5 +1,6 @@
 package com.rhysgrabany.experienced;
 
+import com.rhysgrabany.experienced.capabilities.ModCapabilities;
 import com.rhysgrabany.experienced.config.Constants;
 import com.rhysgrabany.experienced.network.NetworkHandler;
 import com.rhysgrabany.experienced.recipe.ExperiencedRecipeType;
@@ -12,6 +13,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
@@ -36,9 +38,12 @@ public class Experienced
     private static final Logger LOGGER = LogManager.getLogger();
 
     public Experienced() {
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
         DeferredWorkQueue.runLater(NetworkHandler::init);
+        modEventBus.addListener(this::preInit);
 
         Registration.register();
 
@@ -50,6 +55,10 @@ public class Experienced
 //        ExperiencedRecipeType.re
 //    }
 
+
+    public void preInit(FMLCommonSetupEvent evt){
+        ModCapabilities.register();
+    }
 
     public static ModelResourceLocation getId(String path){
         if(path.contains(":")){

@@ -2,6 +2,10 @@ package com.rhysgrabany.experienced.tile;
 
 import com.rhysgrabany.experienced.ModTiles;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
+import com.rhysgrabany.experienced.capabilities.ModCapabilities;
+import com.rhysgrabany.experienced.capabilities.experience.ExperienceStorageHandler;
+import com.rhysgrabany.experienced.capabilities.experience.ExperienceStorageProvider;
+import com.rhysgrabany.experienced.capabilities.experience.IExperienceStorage;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContainer;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
@@ -52,6 +56,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public ExperienceBlockTile tile;
 
     private final ExperienceBlockStateData experienceBlockStateData;
+    LazyOptional<ExperienceStorageProvider> experienceStorage;
 
 
     // Constructor that creates the experienceBlockTile and the input/output contents
@@ -78,6 +83,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         this.tile = (ExperienceBlockTile) getTileEntity();
 
         this.experienceBlockStateData = new ExperienceBlockStateData();
+        experienceStorage = LazyOptional.of(() -> new ExperienceStorageProvider(1000));
 
     }
 
@@ -181,7 +187,16 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
-        return null;
+        if(cap == ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY){
+            return experienceStorage.cast();
+        }
+        return super.getCapability(cap);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        experienceStorage.invalidate();
     }
 
     private void performExtraction(ItemStack extractItem, int extractRate){

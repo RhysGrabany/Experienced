@@ -13,7 +13,6 @@ public class Registration {
     public static void register(){
 
         // Registry objects are registered
-        ModCapabilities.register();
         ModItems.register();
         ModBlocks.register();
         ModRecipeSerializers.register();

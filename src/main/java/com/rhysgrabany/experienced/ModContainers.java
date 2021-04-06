@@ -28,9 +28,7 @@ public class ModContainers {
 
     private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
 
-    public static final RegistryObject<ContainerType<ExperienceBlockContainer>> EXPERIENCE_BLOCK_CONTAINER;// = Registration.CONTAINERS.register("experience_block_container",
-    //() -> IForgeContainerType.create(ExperienceBlockContainer::createContainerClientSide));
-
+    public static final RegistryObject<ContainerType<ExperienceBlockContainer>> EXPERIENCE_BLOCK_CONTAINER;
 
     static {
         EXPERIENCE_BLOCK_CONTAINER = CONTAINERS.register("experience_block_container",
@@ -49,28 +47,6 @@ public class ModContainers {
                     }
                 }));
     }
-
-//
-//    @SubscribeEvent
-//    public static void registerContainer(RegistryEvent.Register<ContainerType<?>> e) {
-//        IForgeRegistry<ContainerType<?>> r = e.getRegistry();
-//
-//        r.register(new ContainerType<>(new IContainerFactory<ExperienceBlockContainer>() {
-//            @Override
-//            public ExperienceBlockContainer create(int windowId, PlayerInventory inv, PacketBuffer data) {
-//                if (data != null) {
-//                    BlockPos tePos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
-//                    TileEntity te = inv.player.world.getTileEntity(tePos);
-//
-//                    if (te != null && te instanceof ExperienceBlockTile) {
-//                        return new ExperienceBlockContainer(windowId, inv, ((ExperienceBlockTile) te));
-//                    }
-//                }
-//                return new ExperienceBlockContainer(windowId, inv);
-//            }
-//        }).setRegistryName(Constants.MOD_ID, "experience_block_container"));
-//    }
-
 
     public static void register() {
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
