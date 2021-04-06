@@ -307,14 +307,6 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expLevel = player.experienceLevel;
         int expTotal = player.experienceTotal;
 
-//        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-//        int expMaxAmount = experienceBlockTile.getMaxExpFromTier(tier);
-
-        // Check if we have reached our cap
-//        if(expBlockAmount == expMaxAmount){
-//            return;
-//        }
-
         // The amount of exp to take away from the player
         int expToTake;
 
@@ -333,49 +325,33 @@ public class ExperienceBlockContainer extends BaseContainer {
 
         blockCap.receiveExperience(expToTake, false);
 
-        // Check if the amount coming in can fit well under the cap, if not
-        // then lower the amount and continue
-//        if(expToTake + expBlockAmount > expMaxAmount){
-//            expToTake = expMaxAmount - expBlockAmount;
-//        }
-
         ExperienceHelper.givePlayerExpAmount(-expToTake);
-//        experienceBlockTile.addExpAmount(expToTake);
     }
 
     // ADDING all of the levels to the block
     public void doublePlusOnButtonPress(){
 
+        IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+
         int expLevel = player.experienceLevel;
         int expTotal = player.experienceTotal;
 
-        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
+//        // Check if player is level 0 and has less than 7 exp
+//        int expToTake;
+//        if(expLevel == 0){
+//            if(expTotal < 7){
+//                expToTake = expTotal;
+//            } else{
+//                return;
+//            }
+//        } else{
+//            expToTake = expTotal;
+//        }
+//
 
-        // Check if we have reached our cap
-        if(expBlockAmount == maxExp){
-            return;
-        }
-
-        // Check if player is level 0 and has less than 7 exp
-        int expToTake;
-        if(expLevel == 0){
-            if(expTotal < 7){
-                expToTake = expTotal;
-            } else{
-                return;
-            }
-        } else{
-            expToTake = expTotal;
-        }
-
-        // Clean up the dregs in the player exp bar
-        if(expToTake + expBlockAmount > maxExp){
-            expToTake = maxExp - expBlockAmount;
-        }
-
-        ExperienceHelper.givePlayerExpAmount(-expToTake);
-        experienceBlockTile.addExpAmount(expToTake);
+        blockCap.receiveExperience(expTotal, false);
+        ExperienceHelper.givePlayerExpAmount(-expTotal);
+//        experienceBlockTile.addExpAmount(expToTake);
     }
 
     // Minus Buttons TAKE AWAY experience from the block
@@ -385,52 +361,37 @@ public class ExperienceBlockContainer extends BaseContainer {
         IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
         int expLevel = player.experienceLevel;
-        int expTotal = player.experienceTotal;
-
-//        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-//        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
-
-//        if(expBlockAmount == 0){
-//            return;
-//        }
 
         int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
         int expToTake = blockCap.extractExperience(amountNeededToNextLevel, false);
 
-        // Clean up the dregs stored in the block
-//        if(amountNeededToNextLevel > expBlockAmount){
-//            expToTake = expBlockAmount;
-//        } else {
-//            expToTake = amountNeededToNextLevel;
-//        }
-
         ExperienceHelper.givePlayerExpAmount(expToTake);
-//        experienceBlockTile.takeExpAmount(expToTake);
     }
 
     // TAKING AWAY all of the levels in the block
     public void doubleMinusOnButtonPress(){
 
-        int expLevel = player.experienceLevel;
-        int expTotal = player.experienceTotal;
+        IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+        int expToTake = blockCap.extractExperience(blockCap.getExperienceStored(), false);
 
-        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
+//        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
 
-        if(expBlockAmount == 0){
-            return;
-        }
+//        if(expBlockAmount == 0){
+//            return;
+//        }
 
-        int expToTake = expBlockAmount;
+//        int expToTake = expBlockAmount;
+//
+//        // Clean up the dregs stored in the block
+//        if(expToTake > expBlockAmount) {
+//            expToTake = expBlockAmount;
+//        }
 
-        // Clean up the dregs stored in the block
-        if(expToTake > expBlockAmount) {
-            expToTake = expBlockAmount;
-        }
-
+//        blockCap.extractExperience(expToTake, false);
 
         ExperienceHelper.givePlayerExpAmount(expToTake);
-        experienceBlockTile.takeExpAmount(expToTake);
+
+//        experienceBlockTile.takeExpAmount(expToTake);
     }
 
     //endregion
