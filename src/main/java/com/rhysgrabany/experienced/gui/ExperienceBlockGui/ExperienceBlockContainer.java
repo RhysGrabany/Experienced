@@ -2,6 +2,8 @@ package com.rhysgrabany.experienced.gui.ExperienceBlockGui;
 
 import com.rhysgrabany.experienced.ModContainers;
 import com.rhysgrabany.experienced.block.ExperienceBlock;
+import com.rhysgrabany.experienced.capabilities.ModCapabilities;
+import com.rhysgrabany.experienced.capabilities.experience.IExperienceStorage;
 import com.rhysgrabany.experienced.gui.BaseContainer;
 import com.rhysgrabany.experienced.tile.ExperienceBlockTile;
 import com.rhysgrabany.experienced.util.ExperienceHelper;
@@ -300,16 +302,18 @@ public class ExperienceBlockContainer extends BaseContainer {
     // ADDING a single level to the block at a time
     public void singlePlusOnButtonPress(){
 
+        IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+
         int expLevel = player.experienceLevel;
         int expTotal = player.experienceTotal;
 
-        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int expMaxAmount = experienceBlockTile.getMaxExpFromTier(tier);
+//        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
+//        int expMaxAmount = experienceBlockTile.getMaxExpFromTier(tier);
 
         // Check if we have reached our cap
-        if(expBlockAmount == expMaxAmount){
-            return;
-        }
+//        if(expBlockAmount == expMaxAmount){
+//            return;
+//        }
 
         // The amount of exp to take away from the player
         int expToTake;
@@ -327,14 +331,16 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
         }
 
+        blockCap.receiveExperience(expToTake, false);
+
         // Check if the amount coming in can fit well under the cap, if not
         // then lower the amount and continue
-        if(expToTake + expBlockAmount > expMaxAmount){
-            expToTake = expMaxAmount - expBlockAmount;
-        }
+//        if(expToTake + expBlockAmount > expMaxAmount){
+//            expToTake = expMaxAmount - expBlockAmount;
+//        }
 
-        experienceBlockTile.givePlayerExpAmount(-expToTake);
-        experienceBlockTile.addExpAmount(expToTake);
+        ExperienceHelper.givePlayerExpAmount(-expToTake);
+//        experienceBlockTile.addExpAmount(expToTake);
     }
 
     // ADDING all of the levels to the block
@@ -368,7 +374,7 @@ public class ExperienceBlockContainer extends BaseContainer {
             expToTake = maxExp - expBlockAmount;
         }
 
-        experienceBlockTile.givePlayerExpAmount(-expToTake);
+        ExperienceHelper.givePlayerExpAmount(-expToTake);
         experienceBlockTile.addExpAmount(expToTake);
     }
 
@@ -376,28 +382,30 @@ public class ExperienceBlockContainer extends BaseContainer {
     // TAKE AWAY a single level from the block
     public void singleMinusOnButtonPress(){
 
+        IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+
         int expLevel = player.experienceLevel;
         int expTotal = player.experienceTotal;
 
-        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
-        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
+//        int expBlockAmount = experienceBlockTile.getExpBlockAmount();
+//        int maxExp = experienceBlockTile.getMaxExpFromTier(tier);
 
-        if(expBlockAmount == 0){
-            return;
-        }
+//        if(expBlockAmount == 0){
+//            return;
+//        }
 
-        int expToTake;
         int amountNeededToNextLevel = ExperienceHelper.recieveExpToNextLevel(expLevel);
+        int expToTake = blockCap.extractExperience(amountNeededToNextLevel, false);
 
         // Clean up the dregs stored in the block
-        if(amountNeededToNextLevel > expBlockAmount){
-            expToTake = expBlockAmount;
-        } else {
-            expToTake = amountNeededToNextLevel;
-        }
+//        if(amountNeededToNextLevel > expBlockAmount){
+//            expToTake = expBlockAmount;
+//        } else {
+//            expToTake = amountNeededToNextLevel;
+//        }
 
-        experienceBlockTile.givePlayerExpAmount(expToTake);
-        experienceBlockTile.takeExpAmount(expToTake);
+        ExperienceHelper.givePlayerExpAmount(expToTake);
+//        experienceBlockTile.takeExpAmount(expToTake);
     }
 
     // TAKING AWAY all of the levels in the block
@@ -421,7 +429,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
 
 
-        experienceBlockTile.givePlayerExpAmount(expToTake);
+        ExperienceHelper.givePlayerExpAmount(expToTake);
         experienceBlockTile.takeExpAmount(expToTake);
     }
 

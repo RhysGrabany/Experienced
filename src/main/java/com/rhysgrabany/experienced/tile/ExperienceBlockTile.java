@@ -201,7 +201,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private void performExtraction(ItemStack extractItem, int extractRate){
 
         IExperienceStorage blockCap = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
-        IExperienceStorage extractItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+//        IExperienceStorage extractItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
         // Store the amount of exp currently in the book, and also the amount of exp that will be stored
         int expAmount = extractItem.getOrCreateTag().getInt("exp");
@@ -228,7 +228,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
 
         expAmount -= extractedExp;
-//
+
         extractItem.getTag().putInt("exp", expAmount);
 //        addExpAmount(extractedExp);
 
@@ -352,11 +352,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
-    //region Exp Manipulation for Player and Block
-    public void givePlayerExpAmount(int value){
-        GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
-        NetworkHandler.channel.sendToServer(giveExp);
-    }
+
 
     // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
     // Add Exp to the Block

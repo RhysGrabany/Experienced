@@ -1,5 +1,7 @@
 package com.rhysgrabany.experienced.util;
 
+import com.rhysgrabany.experienced.network.NetworkHandler;
+import com.rhysgrabany.experienced.network.messages.GiveExpToPlayerServer;
 import net.minecraft.entity.player.PlayerEntity;
 
 
@@ -33,6 +35,12 @@ public class ExperienceHelper {
     // Method used to get the experience needed to go back a level, easy to understand
     public static int takeExpToPrevLevel(int level){
         return recieveExpToNextLevel(level-1);
+    }
+
+    //region Exp Manipulation for Player and Block
+    public static void givePlayerExpAmount(int value){
+        GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
+        NetworkHandler.channel.sendToServer(giveExp);
     }
 
 
