@@ -83,7 +83,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         this.tile = (ExperienceBlockTile) getTileEntity();
 
         this.experienceBlockStateData = new ExperienceBlockStateData();
-        experienceStorage = LazyOptional.of(() -> new ExperienceStorageProvider(1000));
+        experienceStorage = LazyOptional.of(() -> new ExperienceStorageProvider(getMaxExpFromTier(tier)));
 
     }
 
@@ -123,6 +123,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         // do nothing on client
         if(world.isRemote) return;
 
+        LazyOptional<IExperienceStorage> capability = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY);
+        capability.resolve().get().getExperienceStored();
+        capability.resolve().get().getMaxExperienceStored();
 
         ItemStack currentItemExpInfuse = getCurrentInfuseItemInput();
         ItemStack currentExtractionItemInput = getCurrentExpExtractItemInput();
