@@ -123,10 +123,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         // do nothing on client
         if(world.isRemote) return;
 
-        LazyOptional<IExperienceStorage> capability = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY);
-        capability.resolve().get().getExperienceStored();
-        capability.resolve().get().getMaxExperienceStored();
-
         ItemStack currentItemExpInfuse = getCurrentInfuseItemInput();
         ItemStack currentExtractionItemInput = getCurrentExpExtractItemInput();
 
@@ -204,37 +200,41 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     private void performExtraction(ItemStack extractItem, int extractRate){
 
+        IExperienceStorage blockCap = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+        IExperienceStorage extractItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+
         // Store the amount of exp currently in the book, and also the amount of exp that will be stored
         int expAmount = extractItem.getOrCreateTag().getInt("exp");
-        int expBlockAmount = getExpBlockAmount();
-        int expBlockMaxAmount = getMaxExpAmount();
 
-        int extractedExp;
+//        int expBlockAmount = getExpBlockAmount();
+//        int expBlockMaxAmount = getMaxExpAmount();
 
-        // Base case for the lower, and upper end
-        if(expAmount == 0 || expBlockAmount == expBlockMaxAmount){
-            return;
-        }
+        int extractedExp = blockCap.receiveExperience(expAmount, false);
+
+//        // Base case for the lower, and upper end
+//        if(expAmount == 0 || expBlockAmount == expBlockMaxAmount){
+//            return;
+//        }
 
         // If the extract rate is higher than the amount of exp stored, then it'll go into the minus territory
         // If expAmount is less than the extractRate then the amount will be saved, otherwise just use the extractRate
-        extractedExp = (expAmount < extractRate) ? expAmount : extractRate;
-
-
-        // If the amount of exp being extracted goes over the cap in the exp block then bring it down
-        if(expBlockAmount + extractedExp > expBlockMaxAmount){
-            extractedExp = expBlockMaxAmount - expBlockAmount;
-        }
+//        extractedExp = (expAmount < extractRate) ? expAmount : extractRate;
+//
+//
+//        // If the amount of exp being extracted goes over the cap in the exp block then bring it down
+//        if(expBlockAmount + extractedExp > expBlockMaxAmount){
+//            extractedExp = expBlockMaxAmount - expBlockAmount;
+//        }
 
 
         expAmount -= extractedExp;
-
+//
         extractItem.getTag().putInt("exp", expAmount);
-        addExpAmount(extractedExp);
+//        addExpAmount(extractedExp);
 
 //        BlockState state = world.getBlockState(this.pos);
 //        world.notifyBlockUpdate(this.pos, state, state, 3);
-//        markDirty();
+        markDirty();
 
     }
 
