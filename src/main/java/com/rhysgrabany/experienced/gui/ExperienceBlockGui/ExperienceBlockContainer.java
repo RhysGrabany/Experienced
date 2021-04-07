@@ -188,9 +188,11 @@ public class ExperienceBlockContainer extends BaseContainer {
 
 
     public double fractionOfExpAmount(){
-        int expAmount = experienceBlockTile.getExpBlockAmount();
+        IExperienceStorage cap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+        int expAmount = cap.getExperienceStored();
+        int expMaxAmount = cap.getMaxExperienceStored();
         if(expAmount == 0) return 0;
-        double fraction = (double) expAmount / experienceBlockTile.getMaxExpFromTier(tier);;
+        double fraction = (double) expAmount / expMaxAmount;
         return MathHelper.clamp(fraction, 0.0, 1.0);
     }
 
@@ -298,15 +300,18 @@ public class ExperienceBlockContainer extends BaseContainer {
 
     //region Buttons for ExperienceBlockScreen
 
+    //TODO: Can I move these into their own classes derived from the base buttons? Would cut down on some code
+
     // Plus Buttons ADD experience to the block
     // ADDING a single level to the block at a time
     public void singlePlusOnButtonPress(){
 
         IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
         int expLevel = player.experienceLevel;
+        int expTotal = player.experienceTotal;
 
-        // The amount of exp to take away from the player
-        int expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel);
+        // The amount of exp to take away from the player, test if they are at least 1 level,
+        int expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel, expTotal);
 
         blockCap.receiveExperience(expToTake, false);
         ExperienceHelper.givePlayerExpAmount(-expToTake);
@@ -386,6 +391,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         }
     }
 
+    //TODO: Prob can delete the ExpSlot since it isn't going to be used...
     public class SlotExp extends Slot {
 
         public SlotExp(IInventory inventoryIn, int index, int xPosition, int yPosition) {

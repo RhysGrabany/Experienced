@@ -33,11 +33,14 @@ public class ExperienceHelper {
     }
 
     // Method used to get the experience needed to go back a level, easy to understand
-    public static int takeExpToPrevLevel(int level){
+    public static int takeExpToPrevLevel(int level, int total){
+        if(total < 7){
+            return total;
+        }
         return recieveExpToNextLevel(level-1);
     }
 
-    //region Exp Manipulation for Player and Block
+    // Method that uses NetworkHandler to give the player an amount of exp
     public static void givePlayerExpAmount(int value){
         GiveExpToPlayerServer giveExp = new GiveExpToPlayerServer(value);
         NetworkHandler.channel.sendToServer(giveExp);

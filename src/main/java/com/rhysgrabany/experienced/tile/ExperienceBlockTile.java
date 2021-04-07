@@ -346,36 +346,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     }
 
 
-
-    public int getExpBlockAmount(){
-        return experienceBlockStateData.expAmountInContainer;
-    }
-
-
-
-
-    // Methods for the Exp Manipulation for adding and removing exp from the player to the ExpBlock
-    // Add Exp to the Block
-    public void addExpAmount(int value){
-
-        // Things tried when fixing:
-        // markDirty by itself doesnt work
-        // just value addition works but doesn't save the exp to the player cause it is client side only
-        // Network Handler fixes issue of giving the ServerPlayerEntity the exp, now to try and fix the issue with book input exp
-
-
-        experienceBlockStateData.expAmountInContainer += value;
-        markDirty();
-    }
-
-    // Take Exp from the Block
-    public void takeExpAmount(int value){
-        experienceBlockStateData.expAmountInContainer -= value;
-        markDirty();
-    }
-    //endregion
-
-
     //region Getting General Information
     public static TileEntityType<ExperienceBlockTile> getTier(ExperienceBlock.Tier tier){
         switch (tier){
@@ -390,10 +360,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
             default:
                 throw new IllegalArgumentException("Unknown tier: " + tier);
         }
-    }
-
-    public int getMaxExpAmount(){
-        return getMaxExpFromTier(tier);
     }
 
     public int getMaxExpFromTier(ExperienceBlock.Tier tier){
