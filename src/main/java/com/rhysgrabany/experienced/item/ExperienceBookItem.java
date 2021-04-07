@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class ExperienceBookItem extends Item {
 
     public static final int MAX_EXP = 315;
-    private static int currentStoredExp;
+//    private static int currentStoredExp;
 
 
     public ExperienceBookItem() {
@@ -55,6 +55,9 @@ public class ExperienceBookItem extends Item {
     // This is used for the progress bar for how much exp is in the Book
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
+        IExperienceStorage cap = stack.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+        int currentStoredExp = cap.getExperienceStored();
+
         return 1D - ((double) currentStoredExp / (double) MAX_EXP); // TODO: Kinda works now but not really
     }
 
@@ -68,40 +71,49 @@ public class ExperienceBookItem extends Item {
         IExperienceStorage cap = playerIn.getHeldItem(Hand.MAIN_HAND).getStack().getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
         // Get the stored exp from the book, or create the tag when it doesnt exist
-        currentStoredExp = stack.getOrCreateTag().getInt("exp");
-        int expLevel = playerIn.experienceTotal;
+//        currentStoredExp = stack.getOrCreateTag().getInt("exp");
+        int expTotal = playerIn.experienceTotal;
+        int expLevel = playerIn.experienceLevel;
 
         // Giving exp to the book while the player is standing upright
         // TODO: Change this from ALL EXP AT ONCE to something like a level at time
-        if ((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND && currentStoredExp < MAX_EXP) {
+        if ((!playerIn.isSneaking()) && handIn == Hand.MAIN_HAND) {
+
+            int expToStoreToPrevLevel = ExperienceHelper.takeExpToPrevLevel(expLevel, expTotal);
 
             // Get all exp if it can fit, otherwise just put as much as you can
             // TODO: This might not work so check it out for >15 exp level
-            int expToStore = (expLevel < (MAX_EXP - currentStoredExp)) ? expLevel : (MAX_EXP - currentStoredExp);
+//            int expToStore = (expTotal < (MAX_EXP - currentStoredExp)) ? expTotal : (MAX_EXP - currentStoredExp);
+
+            cap.receiveExperience(expToStoreToPrevLevel, false);
 
             // Take the exp away from the player, this updates the exp bar aswell
-            playerIn.giveExperiencePoints(-expToStore);
+            playerIn.giveExperiencePoints(-expToStoreToPrevLevel);
+//            ExperienceHelper.givePlayerExpAmount(-expToStoreToPrevLevel);
 
-            expToStore += currentStoredExp;
-            stack.getTag().putInt("exp", expToStore);
+//            expToStore += currentStoredExp;
+//            stack.getTag().putInt("exp", expToStore);
 
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
 
         // Taking exp from the book when the player is sneaking, and there is exp in the book
-        if(playerIn.isSneaking() && handIn == Hand.MAIN_HAND && currentStoredExp > 0){
-            int expToTake = ExperienceHelper.recieveExpToNextLevel(playerIn.experienceLevel);
+        if(playerIn.isSneaking() && handIn == Hand.MAIN_HAND){
+            int expToTakeToNextLevel = ExperienceHelper.recieveExpToNextLevel(playerIn.experienceLevel);
 
             // This is mostly for the dregs in the book that needs to be removed
-            if(expToTake > currentStoredExp && currentStoredExp > 0){
-                expToTake = currentStoredExp;
-            }
+//            if(expToTakeToNextLevel > currentStoredExp && currentStoredExp > 0){
+//                expToTakeToNextLevel = currentStoredExp;
+//            }
+
+            cap.extractExperience(expToTakeToNextLevel, false);
 
             // Give the exp to the player and update the amount in the book
-            playerIn.giveExperiencePoints(expToTake);
+            playerIn.giveExperiencePoints(expToTakeToNextLevel);
+//            ExperienceHelper.givePlayerExpAmount(expToTakeToNextLevel);
 
-            int expStored = currentStoredExp - expToTake;
-            stack.getTag().putInt("exp", expStored);
+//            int expStored = currentStoredExp - expToTakeToNextLevel;
+//            stack.getTag().putInt("exp", expStored);
 
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
