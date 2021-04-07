@@ -12,10 +12,11 @@ import javax.annotation.Nullable;
 
 public class CapabilityProviderExpItems extends ExperienceStorageProvider implements ICapabilitySerializable<INBT> {
 
-    private IExperienceStorage experienceItem = new ExperienceStorageProvider(1000);
+    private IExperienceStorage experienceItem;
 
     public CapabilityProviderExpItems(int capacity) {
         super(capacity);
+        experienceItem = new ExperienceStorageProvider(capacity);
     }
 
     @Nonnull

@@ -85,10 +85,10 @@ public class ExperienceBookItem extends Item {
             // TODO: This might not work so check it out for >15 exp level
 //            int expToStore = (expTotal < (MAX_EXP - currentStoredExp)) ? expTotal : (MAX_EXP - currentStoredExp);
 
-            cap.receiveExperience(expToStoreToPrevLevel, false);
+            int takenExp = cap.receiveExperience(expToStoreToPrevLevel, false);
 
             // Take the exp away from the player, this updates the exp bar aswell
-            playerIn.giveExperiencePoints(-expToStoreToPrevLevel);
+            playerIn.giveExperiencePoints(-takenExp);
 //            ExperienceHelper.givePlayerExpAmount(-expToStoreToPrevLevel);
 
 //            expToStore += currentStoredExp;
@@ -106,10 +106,10 @@ public class ExperienceBookItem extends Item {
 //                expToTakeToNextLevel = currentStoredExp;
 //            }
 
-            cap.extractExperience(expToTakeToNextLevel, false);
+            int givenExp = cap.extractExperience(expToTakeToNextLevel, false);
 
             // Give the exp to the player and update the amount in the book
-            playerIn.giveExperiencePoints(expToTakeToNextLevel);
+            playerIn.giveExperiencePoints(givenExp);
 //            ExperienceHelper.givePlayerExpAmount(expToTakeToNextLevel);
 
 //            int expStored = currentStoredExp - expToTakeToNextLevel;
