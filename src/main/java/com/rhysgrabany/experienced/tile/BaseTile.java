@@ -21,7 +21,6 @@ public class BaseTile extends TileEntity {
 
     public void readUpdate(CompoundNBT tag){ }
 
-
     @Override
     public CompoundNBT getUpdateTag() {
         return writeUpdate(super.getUpdateTag());

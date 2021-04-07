@@ -58,6 +58,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private final ExperienceBlockStateData experienceBlockStateData;
     LazyOptional<ExperienceStorageProvider> experienceStorage;
 
+    private static final String NBT_EXPERIENCE = "Experience";
+
 
     // Constructor that creates the experienceBlockTile and the input/output contents
     public ExperienceBlockTile(ExperienceBlock.Tier tier) {
@@ -133,11 +135,15 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         currentlyExtractionItemLastTick = currentExtractionItemInput.copy();
 
+        BlockState state = world.getBlockState(this.pos);
+        world.notifyBlockUpdate(this.pos, state, state, 2);
+
 //        markDirty();
     }
 
-    public static boolean doesItemHaveExpTag(ItemStack item){
-        return item.getOrCreateTag().contains("exp");
+
+    public static boolean doesItemHaveExpCap(ItemStack item){
+        return item.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).isPresent();
     }
 
     private ItemStack getCurrentInfuseItemInput(){
@@ -201,39 +207,11 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private void performExtraction(ItemStack extractItem, int extractRate){
 
         IExperienceStorage blockCap = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
-//        IExperienceStorage extractItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
+        IExperienceStorage expItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
-        // Store the amount of exp currently in the book, and also the amount of exp that will be stored
-        int expAmount = extractItem.getOrCreateTag().getInt("exp");
+        int expItemTakenExp = expItemCap.extractExperience(extractRate, false);
+        blockCap.receiveExperience(expItemTakenExp, false);
 
-//        int expBlockAmount = getExpBlockAmount();
-//        int expBlockMaxAmount = getMaxExpAmount();
-
-        int extractedExp = blockCap.receiveExperience(expAmount, false);
-
-//        // Base case for the lower, and upper end
-//        if(expAmount == 0 || expBlockAmount == expBlockMaxAmount){
-//            return;
-//        }
-
-        // If the extract rate is higher than the amount of exp stored, then it'll go into the minus territory
-        // If expAmount is less than the extractRate then the amount will be saved, otherwise just use the extractRate
-//        extractedExp = (expAmount < extractRate) ? expAmount : extractRate;
-//
-//
-//        // If the amount of exp being extracted goes over the cap in the exp block then bring it down
-//        if(expBlockAmount + extractedExp > expBlockMaxAmount){
-//            extractedExp = expBlockMaxAmount - expBlockAmount;
-//        }
-
-
-        expAmount -= extractedExp;
-
-        extractItem.getTag().putInt("exp", expAmount);
-//        addExpAmount(extractedExp);
-
-//        BlockState state = world.getBlockState(this.pos);
-//        world.notifyBlockUpdate(this.pos, state, state, 3);
         markDirty();
 
     }
@@ -303,26 +281,30 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-
-        CompoundNBT updateTagTileEntityState = getUpdateTag();
-        final int METADATA = 42;
-        return new SUpdateTileEntityPacket(this.pos, METADATA, updateTagTileEntityState);
-
+        return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
     }
+
+    public void readUpdate(CompoundNBT tag){
+        super.readUpdate(tag);
+    }
+
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT updateTagTileEntityState = pkt.getNbtCompound();
+//        CompoundNBT updateTagTileEntityState = pkt.getNbtCompound();
         BlockState state = world.getBlockState(pos);
-        handleUpdateTag(state, updateTagTileEntityState);
+//        handleUpdateTag(state, updateTagTileEntityState);
+        read(state, pkt.getNbtCompound());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        CompoundNBT nbt = new CompoundNBT();
-        write(nbt);
-        return nbt;
+//        CompoundNBT nbt = new CompoundNBT();
+//        write(nbt);
+//        return nbt;
+        return write(new CompoundNBT());
     }
+
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {

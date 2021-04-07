@@ -7,6 +7,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.concurrent.Callable;
@@ -14,6 +15,9 @@ import java.util.concurrent.Callable;
 
 public class ExperienceStorageHandler {
 
+
+    @CapabilityInject(IExperienceStorage.class)
+    public static final Capability<IExperienceStorage> EXPERIENCE_STORAGE_CAPABILITY = null;
 
     @SubscribeEvent
     public static void register(){
@@ -31,7 +35,8 @@ public class ExperienceStorageHandler {
             if(!(instance instanceof IExperienceStorage)){
                 throw new IllegalArgumentException("Can not deserialize");
             }
-            ((ExperienceStorageProvider)instance).experience = ((IntNBT)nbt).getInt();
+
+            instance.setExperience(((IntNBT)nbt).getInt());
         }
     }
 

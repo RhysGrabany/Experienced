@@ -4,6 +4,7 @@ package com.rhysgrabany.experienced.capabilities.experience;
 // Modeled after EnergyStorage from Forge cause that's basically what I want for experience
 public interface IExperienceStorage {
 
+    void setExperience(int expAmount);
 
     // Adds experience to the storage. Returns quantity of experience that was accepted
     int receiveExperience(int maxReceive, boolean simulate);

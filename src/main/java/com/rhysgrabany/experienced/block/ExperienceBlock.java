@@ -122,12 +122,5 @@ public class ExperienceBlock extends Block {
 
     }
 
-    //region Helper Methods for Block
-
-    // Method used to initialize the max amount of exp a certain block can hold
-    // For now; Small = 30, Medium = 60, Large = 100, Creative = MAX_VALUE, and default is 0 cause that might not happen
-
-
-    //endregion
 
 }

@@ -4,13 +4,11 @@ import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class ExperienceStorageProvider implements IExperienceStorage {
-
-
     protected int experience;
+
     protected int capacity;
     protected int maxReceive;
     protected int maxExtract;
-
 
     public ExperienceStorageProvider(int capacity){
         this(capacity, capacity, capacity, 0);
@@ -29,6 +27,11 @@ public class ExperienceStorageProvider implements IExperienceStorage {
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.experience = Math.max(0, Math.min(capacity, experience));
+    }
+
+    @Override
+    public void setExperience(int expAmount) {
+        this.experience = expAmount;
     }
 
     @Override

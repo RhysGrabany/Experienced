@@ -227,7 +227,7 @@ public class ExperienceBlockContainer extends BaseContainer {
                 break;
             case PLAYER_HOTBAR:
             case PLAYER_MAIN_INVENTORY:
-                if(ExperienceBlockTile.doesItemHaveExpTag(sourceItemStack)){
+                if(ExperienceBlockTile.doesItemHaveExpCap(sourceItemStack)){
                     successfulTransfer = mergeInto(SlotZone.INPUT_BOOK_ZONE, sourceItemStack, false);
                 }
                 if(!successfulTransfer){
@@ -312,9 +312,9 @@ public class ExperienceBlockContainer extends BaseContainer {
 
         // The amount of exp to take away from the player, test if they are at least 1 level,
         int expToTake = ExperienceHelper.takeExpToPrevLevel(expLevel, expTotal);
+        int expTaken = blockCap.receiveExperience(expToTake, false);
 
-        blockCap.receiveExperience(expToTake, false);
-        ExperienceHelper.givePlayerExpAmount(-expToTake);
+        ExperienceHelper.givePlayerExpAmount(-expTaken);
     }
 
     // ADDING all of the levels to the block
@@ -323,9 +323,9 @@ public class ExperienceBlockContainer extends BaseContainer {
         IExperienceStorage blockCap = experienceBlockTile.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
         int expTotal = player.experienceTotal;
+        int expToGive = blockCap.receiveExperience(expTotal, false);
 
-        blockCap.receiveExperience(expTotal, false);
-        ExperienceHelper.givePlayerExpAmount(-expTotal);
+        ExperienceHelper.givePlayerExpAmount(-expToGive);
     }
 
     // Minus Buttons TAKE AWAY experience from the block
