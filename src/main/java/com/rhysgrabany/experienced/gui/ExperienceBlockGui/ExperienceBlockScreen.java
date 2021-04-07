@@ -149,10 +149,12 @@ public class ExperienceBlockScreen extends ContainerScreen<ExperienceBlockContai
 
 
         // Drawing the ExpBar
+        // TODO: Could I possibly make this into a class so I can use it over and over in different machines?
         this.blit(matrixStack, edgeSpacingX + EXP_BAR_XPOS, edgeSpacingY + EXP_BAR_YPOS - yOffSetExp,
                 EXP_BAR_TEX_U, EXP_BAR_TEX_V - yOffSetExp, EXP_BAR_SPACING_X, EXP_BAR_SPACING_Y);
 
         // Drawing the Arrow
+        // TODO: Maybe this too?
         this.blit(matrixStack, edgeSpacingX + ARROW_BAR_XPOS, edgeSpacingY + ARROW_BAR_YPOS + arrowOffset,
                 ARROW_BAR_TEX_U, ARROW_BAR_TEX_V + arrowOffset, ARROW_BAR_SPACING_X, ARROW_BAR_SPACING_Y - arrowOffset);
 

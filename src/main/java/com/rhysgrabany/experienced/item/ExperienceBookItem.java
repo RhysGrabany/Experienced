@@ -1,6 +1,11 @@
 package com.rhysgrabany.experienced.item;
 
 import com.rhysgrabany.experienced.ModItems;
+import com.rhysgrabany.experienced.capabilities.ModCapabilities;
+import com.rhysgrabany.experienced.capabilities.experience.CapabilityProviderExpItems;
+import com.rhysgrabany.experienced.capabilities.experience.ExperienceStorageHandler;
+import com.rhysgrabany.experienced.capabilities.experience.ExperienceStorageProvider;
+import com.rhysgrabany.experienced.capabilities.experience.IExperienceStorage;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnchantingTableBlock;
@@ -27,6 +32,7 @@ public class ExperienceBookItem extends Item {
     public static final int MAX_EXP = 315;
     private static int currentStoredExp;
 
+
     public ExperienceBookItem() {
         super(new Properties()
                 .maxStackSize(1)
@@ -39,10 +45,11 @@ public class ExperienceBookItem extends Item {
         return true;
     }
 
+
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return null;
+        return new CapabilityProviderExpItems(MAX_EXP);
     }
 
     // This is used for the progress bar for how much exp is in the Book
@@ -53,14 +60,12 @@ public class ExperienceBookItem extends Item {
 
 
 
-
-
     // What happens when you right click while using the item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
-
         ItemStack stack = playerIn.getHeldItem(Hand.MAIN_HAND).getStack();
+        IExperienceStorage cap = playerIn.getHeldItem(Hand.MAIN_HAND).getStack().getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
         // Get the stored exp from the book, or create the tag when it doesnt exist
         currentStoredExp = stack.getOrCreateTag().getInt("exp");

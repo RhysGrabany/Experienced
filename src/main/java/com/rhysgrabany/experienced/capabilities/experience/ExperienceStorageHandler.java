@@ -15,15 +15,10 @@ import java.util.concurrent.Callable;
 public class ExperienceStorageHandler {
 
 
-//    @CapabilityInject(IExperienceStorage.class)
-//    public static final Capability<IExperienceStorage> EXPERIENCE_CAPABILITY = null;
-
-
     @SubscribeEvent
     public static void register(){
         CapabilityManager.INSTANCE.register(IExperienceStorage.class, new ExperienceStorage(), new ExperienceFactory());
 
-//        Preconditions.checkNotNull(EXPERIENCE_CAPABILITY, "Capability not registered");
     }
 
     private static class ExperienceStorage implements Capability.IStorage<IExperienceStorage>{

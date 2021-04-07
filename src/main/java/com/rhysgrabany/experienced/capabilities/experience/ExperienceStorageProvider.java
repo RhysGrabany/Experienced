@@ -1,5 +1,8 @@
 package com.rhysgrabany.experienced.capabilities.experience;
 
+import net.minecraft.nbt.INBT;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+
 public class ExperienceStorageProvider implements IExperienceStorage {
 
 
