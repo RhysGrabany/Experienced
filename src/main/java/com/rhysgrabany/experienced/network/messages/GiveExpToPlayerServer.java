@@ -31,6 +31,7 @@ public class GiveExpToPlayerServer {
         ctx.enqueueWork(() -> {
             ServerPlayerEntity player = ctx.getSender();
 
+
             // Check if player exists, and also if the ExperienceBlockContainer is acc open to combat cheating
             if(player == null || !(player.openContainer instanceof ExperienceBlockContainer)){
                 return;

@@ -10,6 +10,7 @@ import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContain
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockContents;
 import com.rhysgrabany.experienced.gui.ExperienceBlockGui.ExperienceBlockStateData;
 import com.rhysgrabany.experienced.network.NetworkHandler;
+import com.rhysgrabany.experienced.network.messages.GiveExpToBlockServer;
 import com.rhysgrabany.experienced.network.messages.GiveExpToPlayerServer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,7 +57,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public ExperienceBlockTile tile;
 
     private final ExperienceBlockStateData experienceBlockStateData;
-    LazyOptional<ExperienceStorageProvider> experienceStorage;
+    public LazyOptional<ExperienceStorageProvider> experienceStorage;
 
     private static final String NBT_EXPERIENCE = "Experience";
 
@@ -135,8 +136,6 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         currentlyExtractionItemLastTick = currentExtractionItemInput.copy();
 
-        BlockState state = world.getBlockState(this.pos);
-        world.notifyBlockUpdate(this.pos, state, state, 2);
 
 //        markDirty();
     }
@@ -198,6 +197,11 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return super.getCapability(cap);
     }
 
+    public void sync(int expAmount){
+        GiveExpToBlockServer sync = new GiveExpToBlockServer(expAmount, getPos());
+        NetworkHandler.channel.sendToServer(sync);
+    }
+
     @Override
     public void remove() {
         super.remove();
@@ -209,8 +213,13 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         IExperienceStorage blockCap = getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
         IExperienceStorage expItemCap = extractItem.getCapability(ModCapabilities.EXPERIENCE_STORAGE_CAPABILITY).orElse(null);
 
-        int expItemTakenExp = expItemCap.extractExperience(extractRate, false);
-        blockCap.receiveExperience(expItemTakenExp, false);
+        int expItemTakenExp = blockCap.receiveExperience(extractRate, true);
+
+        if(expItemTakenExp > 0 && expItemCap.getExperienceStored() > 0){
+            expItemCap.extractExperience(expItemTakenExp, false);
+            blockCap.receiveExperience(expItemTakenExp, false);
+//            sync(blockCap.getExperienceStored());
+        }
 
         markDirty();
 
@@ -235,6 +244,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     private final String INPUT_BOOK_SLOT_NBT = "inputBookSlot";
     private final String OUTPUT_SLOT_NBT = "outputSlot";
     private final String EXP_BAR_NBT = "expBar";
+    private final String EXP_STORAGE_NBT = "expStorage";
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
@@ -246,6 +256,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         compound.put(INPUT_BOOK_SLOT_NBT, inputBookContents.serializeNBT());
         compound.put(OUTPUT_SLOT_NBT, outputContents.serializeNBT());
         compound.put(EXP_BAR_NBT, expBarContents.serializeNBT());
+        compound.putInt(EXP_STORAGE_NBT, experienceStorage.orElse(null).getExperienceStored());
+
 
         return compound;
     }
@@ -268,6 +280,9 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
         invNBT = nbt.getCompound(EXP_BAR_NBT);
         expBarContents.deserializeNBT(invNBT);
+
+        int expStorage = nbt.getInt(EXP_STORAGE_NBT);
+        experienceStorage.orElse(null).setExperience(expStorage);
 
         if(inputContents.getSizeInventory() != INPUT_SLOTS
                 || inputBookContents.getSizeInventory() != INPUT_BOOK_SLOTS

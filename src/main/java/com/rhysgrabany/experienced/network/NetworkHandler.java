@@ -1,6 +1,7 @@
 package com.rhysgrabany.experienced.network;
 
 import com.rhysgrabany.experienced.config.Constants;
+import com.rhysgrabany.experienced.network.messages.GiveExpToBlockServer;
 import com.rhysgrabany.experienced.network.messages.GiveExpToPlayerServer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,11 +18,17 @@ public class NetworkHandler {
             () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
 
     public static void init(){
-        channel.registerMessage(0, GiveExpToPlayerServer.class, GiveExpToPlayerServer::encocde, GiveExpToPlayerServer::decode, GiveExpToPlayerServer::handle);
+        int id = 0;
+        channel.registerMessage(id, GiveExpToPlayerServer.class, GiveExpToPlayerServer::encocde, GiveExpToPlayerServer::decode, GiveExpToPlayerServer::handle);
+        channel.registerMessage(id++, GiveExpToBlockServer.class, GiveExpToBlockServer::encode, GiveExpToBlockServer::decode, GiveExpToBlockServer::handle);
     }
 
     public static void sendTo(Object msg, PlayerEntity player){
         channel.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), msg);
+    }
+
+    public static void sendToServer(Object msg){
+        channel.sendToServer(msg);
     }
 
 }

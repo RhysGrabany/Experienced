@@ -315,6 +315,8 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTaken = blockCap.receiveExperience(expToTake, false);
 
         ExperienceHelper.givePlayerExpAmount(-expTaken);
+        experienceBlockTile.markDirty();
+
     }
 
     // ADDING all of the levels to the block
@@ -326,6 +328,8 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expToGive = blockCap.receiveExperience(expTotal, false);
 
         ExperienceHelper.givePlayerExpAmount(-expToGive);
+        experienceBlockTile.markDirty();
+
     }
 
     // Minus Buttons TAKE AWAY experience from the block
@@ -340,6 +344,9 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expToTake = blockCap.extractExperience(amountNeededToNextLevel, false);
 
         ExperienceHelper.givePlayerExpAmount(expToTake);
+//        experienceBlockTile.sync(blockCap.getExperienceStored());
+        experienceBlockTile.markDirty();
+
     }
 
     // TAKING AWAY all of the levels in the block
@@ -349,6 +356,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expToTake = blockCap.extractExperience(blockCap.getExperienceStored(), false);
 
         ExperienceHelper.givePlayerExpAmount(expToTake);
+        experienceBlockTile.markDirty();
 
     }
 
