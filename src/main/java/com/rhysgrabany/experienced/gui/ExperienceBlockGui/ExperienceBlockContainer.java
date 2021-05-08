@@ -11,8 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -315,6 +315,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expTaken = blockCap.receiveExperience(expToTake, false);
 
         ExperienceHelper.givePlayerExpAmount(-expTaken);
+        experienceBlockTile.sync(experienceBlockTile);
         experienceBlockTile.markDirty();
 
     }
@@ -344,7 +345,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         int expToTake = blockCap.extractExperience(amountNeededToNextLevel, false);
 
         ExperienceHelper.givePlayerExpAmount(expToTake);
-//        experienceBlockTile.sync(blockCap.getExperienceStored());
+        experienceBlockTile.sync(experienceBlockTile);
         experienceBlockTile.markDirty();
 
     }
@@ -359,6 +360,7 @@ public class ExperienceBlockContainer extends BaseContainer {
         experienceBlockTile.markDirty();
 
     }
+
 
     //endregion
 
@@ -408,9 +410,15 @@ public class ExperienceBlockContainer extends BaseContainer {
     }
 
 
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
 
+        for(int i = 0; i < listeners.size(); ++i){
+            IContainerListener listener = this.listeners.get(i);
+        }
 
 
-
+    }
 }

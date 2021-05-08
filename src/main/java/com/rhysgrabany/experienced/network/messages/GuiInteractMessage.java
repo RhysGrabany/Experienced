@@ -30,7 +30,6 @@ public class GuiInteractMessage {
 
         EXPERIENCE_BLOCK_SINGLE_PLUS((tile, player, extra) ->{
             if(player.openContainer instanceof ExperienceBlockContainer){
-                tile.writeUpdate(extra)
             }
         });
 

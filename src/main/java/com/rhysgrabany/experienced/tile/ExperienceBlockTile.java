@@ -61,6 +61,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 
     private static final String NBT_EXPERIENCE = "Experience";
 
+    private boolean isDirty = true;
+
 
     // Constructor that creates the experienceBlockTile and the input/output contents
     public ExperienceBlockTile(ExperienceBlock.Tier tier) {
@@ -197,9 +199,27 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
         return super.getCapability(cap);
     }
 
-    public void sync(int expAmount){
-        GiveExpToBlockServer sync = new GiveExpToBlockServer(expAmount, getPos());
+    public void sync(BaseTile tile){
+        GiveExpToBlockServer sync = new GiveExpToBlockServer(tile);
         NetworkHandler.channel.sendToServer(sync);
+    }
+
+    public void sync(int expAmount){
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt(EXP_STORAGE_NBT, expAmount);
+
+        GiveExpToBlockServer sync = new GiveExpToBlockServer(getPos(), nbt);
+        NetworkHandler.channel.sendToServer(sync);
+    }
+
+    public boolean isDirty(){
+        boolean currentState = isDirty;
+        isDirty = false;
+        return currentState;
+    }
+
+    protected void onContentsChanged(){
+        isDirty = true;
     }
 
     @Override
@@ -317,7 +337,7 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
 //        CompoundNBT nbt = new CompoundNBT();
 //        write(nbt);
 //        return nbt;
-        return write(new CompoundNBT());
+        return write(this.serializeNBT());
     }
 
 
@@ -325,6 +345,8 @@ public class ExperienceBlockTile extends BaseTile implements INamedContainerProv
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
         read(state, tag);
     }
+
+
 
     public void dropContents(World world, BlockPos pos){
         InventoryHelper.dropInventoryItems(world, pos, inputContents);

@@ -32,6 +32,8 @@ public class ExperienceBookItem extends Item {
         return true;
     }
 
+
+
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {

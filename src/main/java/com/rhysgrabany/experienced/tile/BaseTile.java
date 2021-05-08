@@ -7,6 +7,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BaseTile extends TileEntity {
@@ -42,6 +43,10 @@ public class BaseTile extends TileEntity {
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
         super.read(state, tag);
         readUpdate(tag);
+    }
+
+    public void handleUpdatePacket(@Nonnull CompoundNBT nbt){
+        handleUpdateTag(getBlockState(), nbt);
     }
 
     @Override
